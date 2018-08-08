@@ -246,7 +246,7 @@ POSTSURVEY_COLUMN_DICT = {
     "GG":"satisfaction"
 }
 
-postsurvey = postsurvey.drop(POSTSURVEY_COLUMN_ORDER)
+postsurvey = postsurvey[POSTSURVEY_COLUMN_ORDER]
 postsurvey = postsurvey.rename(columns=POSTSURVEY_COLUMN_DICT)
 postsurvey.to_csv(POSTSURVEY_FILENAME, index=False)
 
@@ -265,6 +265,6 @@ POSTSURVEY2_COLUMN_DICT = {
 }
 
 postsurvey2 = postsurvey2[POSTSURVEY2_COLUMN_ORDER]
-postsurvey2 = postsurvey2.rename(columns=POSTSURVEY_COLUMN_DICT)
+postsurvey2 = postsurvey2.rename(columns=POSTSURVEY2_COLUMN_DICT)
 postsurvey2.to_csv(POSTSURVEY2_FILENAME, index=False)
 
