@@ -1,4 +1,4 @@
-subject_id,subject_language,trial_type,audio_file,S-order,A_Order,RT,order,first_sound,second_sound
+subject_id,subject_language,trial_type,tripletid,S-order,A_Order,RT,order,first_sound,second_sound
 X_NBOVZKXHYP,French_turkers,prot_catch_trial,practice_t00000009033,orderSI=8,orderAI=8,0:17.2,8;,1.0,0.0
 X_NBOVZKXHYP,French_turkers,prot_catch_trial,practice_t00000018860,orderSI=9,orderAI=9,0:7.1,9;,0.0,1.0
 X_NBOVZKXHYP,French_turkers,prot_catch_trial,practice_t00000019593,orderSI=10,orderAI=10,0:3.9,10;,0.0,1.0
