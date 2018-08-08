@@ -88,7 +88,7 @@ for f, language in file_language_tuples:
             reps += 1
 
     #read in  one of the files in the folder of subject output into a dataframe
-    thissubj = pd.read_csv(f, names=my_cols, engine='python')
+    thissubj = pd.read_csv(f, names=my_cols, engine='python', encoding='utf-8')
     #cast column B to string because we need and sometimes it's being read wrong
     thissubj.B = thissubj.B.astype(str)
     # filenames are SUBJECT_NAME.csv
@@ -141,7 +141,7 @@ RESULTS_COLUMN_DICT = {
     "subject_id": "subject_id",
     "subject_language": "subject_language",
     "B": "trial_type",
-    "G": "audio_file",
+    "G": "tripletid",
     "O": "S-order",
     "P": "A_Order",
     "S": "RT",
@@ -157,13 +157,13 @@ results = results[RESULTS_COLUMN_ORDER]
 results= results.rename(columns=RESULTS_COLUMN_DICT)
 
 # remove extra characters
-results.audio_file = results.audio_file.str.replace('[','')
-results.audio_file = results.audio_file.str.replace(']','')
+results.tripletid = results.tripletid.str.replace('[','')
+results.tripletid = results.tripletid.str.replace(']','')
 results.trial_type = results.trial_type.str.replace('[','')
 results.A_Order = results.A_Order.str.replace(']','')
 
 # write out to .csv  
-results.to_csv(RESULTS_FILENAME, index=False)
+results.to_csv(RESULTS_FILENAME, index=False, encoding='utf-8')
 
 #################################
 #CLEAN UP PRESURVEY DATAFRAME#
@@ -180,7 +180,7 @@ PRESURVEY_COLUMN_DICT = {
     "K":"40-49yrs",
     "L":"50-59yrs",
     "M":"60-69yrs",
-    "N":"plus_de_69yrs",
+    "N":"more_than_69yrs",
     "O":"handedness_L",
     "P":"handedness_R",
     "Q":"lang_0-3",
@@ -188,15 +188,16 @@ PRESURVEY_COLUMN_DICT = {
     "S":"lang_understand",
     "T":"live_with_lang_yes",
     "U":"live_with_lang_no",
-    "V":"diag_dyslexia",
-    "W":"diag_hearing_prob",
-    "X":"diag_none",
-    "Y":"ling_course_Y",
-    "Z":"ling_course_N",
-    "AA":"phonet_class_Y",
-    "BB":"phonet_class_N",
-    "CC":"phonog_class_Y",
-    "DD":"phonog_class_N"
+    "V":"hear_vis_Y",
+    "W":"hear_vis_N",
+    "X":"speech_prob_Y",
+    "Y":"speech_prob_N",
+    "Z":"ling_course_Y",
+    "AA":"ling_course_N",
+    "BB":"phonet_class_Y",
+    "CC":"phonet_class_N",
+    "DD":"phonog_class_Y",
+    "EE":"phonog_class_N"
 }
 
 #drop unneeded columns
@@ -206,7 +207,7 @@ presurvey = presurvey[PRESURVEY_COLUMN_ORDER]
 presurvey = presurvey.rename(columns=PRESURVEY_COLUMN_DICT)
 
 # write out to .csv  
-presurvey.to_csv(PRESURVEY_FILENAME, index=False)
+presurvey.to_csv(PRESURVEY_FILENAME, index=False, encoding='utf-8')
 
 ################################
 #CLEAN UP POSTSURVEY1 DATAFRAME#
@@ -248,7 +249,7 @@ POSTSURVEY_COLUMN_DICT = {
 
 postsurvey = postsurvey[POSTSURVEY_COLUMN_ORDER]
 postsurvey = postsurvey.rename(columns=POSTSURVEY_COLUMN_DICT)
-postsurvey.to_csv(POSTSURVEY_FILENAME, index=False)
+postsurvey.to_csv(POSTSURVEY_FILENAME, index=False, encoding='utf-8')
 
 ###############################
 #CLEAN UP POSTSURVEY2 DATAFRAME#
@@ -266,5 +267,5 @@ POSTSURVEY2_COLUMN_DICT = {
 
 postsurvey2 = postsurvey2[POSTSURVEY2_COLUMN_ORDER]
 postsurvey2 = postsurvey2.rename(columns=POSTSURVEY2_COLUMN_DICT)
-postsurvey2.to_csv(POSTSURVEY2_FILENAME, index=False)
+postsurvey2.to_csv(POSTSURVEY2_FILENAME, index=False, encoding='utf-8')
 
