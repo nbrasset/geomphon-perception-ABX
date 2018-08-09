@@ -1,0 +1,129 @@
+---
+title: "Summary July 2018 Pilot"
+author: "Ewan Dunbar and Amelia Kimball"
+date: "08/08/2018"
+output: html_document
+---
+
+```{r setup}
+library(magrittr)
+```
+
+## Preprocessing data
+
+Load data
+
+```{r load-data, message=FALSE, warning=FALSE}
+DATA_FOLDER <-  "../data/pilot_july_2018/"
+
+subject_info <- readr::read_csv(paste0(DATA_FOLDER, "/", "presurvey_cleaned.csv"))
+results_all <- readr::read_csv(paste0(DATA_FOLDER, "/", "Aggregated_Results.csv"))
+postsurvey <- readr::read_csv(paste0(DATA_FOLDER, "/", "postsurvey_cleaned.csv"))
+
+# Three types of acoustic distances were calculated:
+#  - the sum of the Euclidean distances along the optimal DTW path
+#  - " " divided by the length of the path (== the length of the longer item)
+#  - " " divided by the sum of the lengths of the two items
+item_info_with_dtw_sum_distances <- readr::read_csv(paste0(DATA_FOLDER, "/",
+                      "item_meta_information__DTW_SUM.csv")) %>%
+  dplyr::rename(distance_DTW_SUM_TGT=distance_TGT,
+                distance_DTW_SUM_OTH=distance_OTH)
+item_info_with_dtw_norm_distances <- readr::read_csv(paste0(DATA_FOLDER, "/",
+                      "item_meta_information__DTW_NORM_BY_PATH_LENGTH.csv")) %>%
+  dplyr::rename(distance_DTW_NORM_PATH_LENGTH_TGT=distance_TGT_norm,
+                distance_DTW_NORM_PATH_LENGTH_OTH=distance_OTH_norm)
+item_info_with_dtw_norm2_distances <- readr::read_csv(paste0(DATA_FOLDER, "/",
+                      "item_meta_information__DTW_NORM_BY_SUMMED_LENGTH.csv")) %>%
+  dplyr::rename(distance_DTW_NORM_SUMMED_LENGTH_TGT=distance_TGT_both_norm,
+                distance_DTW_NORM_SUMMED_LENGTH_OTH=distance_OTH_both_norm)
+item_info <- dplyr::left_join(item_info_with_dtw_sum_distances,
+                              item_info_with_dtw_norm_distances) %>%
+  dplyr::left_join(item_info_with_dtw_norm2_distances) %>%
+  dplyr::mutate(tripletid=sub("^", "triplet_", tripletid))
+```
+
+Process attention checks
+
+```{r attention-checks}
+#find attention trials, make them into a df called attention checks
+results_all <- results_all %>%
+  dplyr::mutate(paid_attention=ifelse(
+    grepl('^atten', tripletid),
+      ifelse(
+        (tripletid=="attention_check_English_F_normalized" | 
+         tripletid=="attention_check_francais_F_normalise") & 
+        first_sound==1,
+        'pass_f', 
+        ifelse(
+          (tripletid=="attention_check_english_J_normalise" | 
+           tripletid=="attention_check_francais_J_normalise") & 
+          second_sound==1,
+          'pass_j',
+          'fail')),
+      NA))
+```
+
+Filter subjects based on attention checks and surveys
+
+```{r filtering-subjects}
+attention_fails <- results_all %>%
+  dplyr::filter(!is.na(paid_attention)) %>%
+  dplyr::group_by(subject_id) %>%
+  dplyr::summarize(N_not_paid_attention=sum(paid_attention == "fail"))
+
+# Only subjects who are in the postsurvey file, i.e., have finished
+filtered_subjects <- dplyr::left_join(postsurvey, subject_info,
+                                      by ='subject_id') %>%
+# Filter based on native language questions
+#
+# Current logic: subjects answered whether they know any other languages,
+# for various different senses of "know", and we filter out based on these
+# questions.
+#
+# This survey is to be replaced by a set of binary questions,
+# including (1) early exposure to the "target" language,
+# (2) early exposure to other languages; (3) late exposure to
+# other languages above a certain amount and/or before a certain
+# age and/or with a certain level of fluency
+
+# Remove subjects whose response to 'languages between 0 and 3'
+# is not either 'English' or '1' or 'French'
+  dplyr::filter(toupper(`lang_0-3`) %in% c("ENGLISH", "1.0", "1",
+                                         "FRANÇAIS")) %>%
+# Phonetic training filtering - exclude anyone with any classes
+# phonet/phonol/linguistics
+  dplyr::filter(phonet_class_Y == 0,
+                phonog_class_Y == 0,
+                ling_course_Y == 0) %>%
+# Exclude speech/hearing/vision problems
+  dplyr::filter(hear_vis_Y == 0,
+                speech_prob_Y == 0) %>%
+# Allow no more than one attention check failure
+  dplyr::left_join(attention_fails, by="subject_id") %>%
+  dplyr::filter(N_not_paid_attention <= 1)
+
+```
+
+Drop filtered subjects, attention checks and practice trials, include item information,
+add columns to determine whether user response was correct, add transformed
+comparative acoustic distance columns.
+
+```{r select-items}
+results <- dplyr::left_join(filtered_subjects, results_all, by='subject_id') %>%
+  dplyr::right_join(item_info, by='tripletid') %>%
+  dplyr::filter(grepl("^triplet_", tripletid)) %>%
+  dplyr::mutate(user_resp=factor(ifelse(first_sound == "1", "A", "B")),
+                user_corr=as.integer(substr(presentation_order, 1, 1) == user_resp),
+                difference_log_distance_DTW_SUM=
+                  log(distance_DTW_SUM_TGT)-
+                  log(distance_DTW_SUM_OTH),
+                difference_log_distance_DTW_NORM_PATH_LENGTH=
+                  log(distance_DTW_NORM_PATH_LENGTH_TGT)-
+                  log(distance_DTW_NORM_PATH_LENGTH_OTH),
+                difference_log_distance_DTW_NORM_SUMMED_LENGTH=
+                  log(distance_DTW_NORM_SUMMED_LENGTH_TGT)-
+                  log(distance_DTW_NORM_SUMMED_LENGTH_OTH))
+```
+
+## Testing various models
+
