@@ -1,5 +1,3 @@
-.DEFAULT_GOAL := preprocess
-
 data/raw_anonymized:
 	python ../../src/anonymize_lmeds_data_filenames.py data/raw \
 data/raw_anonymized ../SUBJECT_ANONYMIZATION_FILE.csv
