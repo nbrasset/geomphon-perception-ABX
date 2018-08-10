@@ -1,0 +1,41 @@
+<b><font size="4">Please respond to every question, otherwise you won't get paid</font></b>
+None
+
+How old are you?:
+Choicebox 18-29 years, 30-39 years, 40-49 years, 50-59 years, 60-69 years, 70 or older
+
+
+Are you … ?
+Choice Left-handed, Right-handed
+
+What languages did you hear between 0 and 3 years old ?
+Textbox
+
+What languages can you speak ?
+Textbox
+
+What languages can you understand ?
+Textbox
+
+Do you live with people who speak other languages?
+Choice Yes, No
+
+Do you have any problems with your hearing or vision?
+Choice Yes, No
+
+Do you have any speech problems?
+Choice Yes, No
+
+Have you ever taken a linguistics course?
+Choice Yes, No
+
+<sublist>
+A phonetics course?
+Choice Yes, No
+
+A phonology course?
+Choice Yes, No
+</sublist>
+
+
+
