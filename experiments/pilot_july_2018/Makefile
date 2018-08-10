@@ -18,6 +18,12 @@ fi
 preprocess: data/Aggregated_Results.csv \
 data/presurvey_cleaned.csv data/postsurvey_cleaned.csv data/postsurvey2_cleaned.csv
 	
+geomphon-LMEDS_v-c925d74:
+	bash download_lmeds.sh
+
+deploy: geomphon-LMEDS_v-c925d74
+	bash deploy_all.sh
+	
 clean-preprocessed-data:
 	rm -f data/Aggregated_Results.csv data/postsurvey2_cleaned.csv \
 data/postsurvey_cleaned.csv data/presurvey_cleaned.csv
@@ -25,4 +31,10 @@ data/postsurvey_cleaned.csv data/presurvey_cleaned.csv
 clean-Rmd-output:
 	rm -f *.html
 
-clean: clean-Rmd-output clean-preprocessed-data
+clean-lmeds:
+	rm -rf geomphon-LMEDS_v-c925d74 
+
+clean-deploy:
+	rm -rf deploy
+
+clean: clean-Rmd-output clean-preprocessed-data clean-lmeds clean-deploy
