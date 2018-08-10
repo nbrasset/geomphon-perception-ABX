@@ -15,7 +15,7 @@ output: html_document
 Load data
 
 ```{r load-data, message=FALSE, warning=FALSE}
-DATA_FOLDER <-  "../data/pilot_july_2018/"
+DATA_FOLDER <-  "data"
 
 subject_info <- readr::read_csv(paste0(DATA_FOLDER, "/", "presurvey_cleaned.csv"))
 results_all <- readr::read_csv(paste0(DATA_FOLDER, "/", "Aggregated_Results.csv"))

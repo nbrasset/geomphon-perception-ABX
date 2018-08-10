@@ -19,6 +19,11 @@
 ## will be stripped of pathnames and ".csv" and used to generate subject
 ## ids (see below); we assume that the NAME is the Turker ID
 ##
+## SECOND ARGUMENT: main results file
+## THIRD ARGUMENT: presurvey file
+## FOURTH ARGUMENT: first postsurvey file
+## FIFTH ARGUMENT: second postsurvey file
+##
 
 ##change cleaning methods at end to ensure that they are useful for your data
 
@@ -31,13 +36,13 @@ import numpy as np
 
 ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-RESULTS_FILENAME = "Aggregated_Results.csv"
-PRESURVEY_FILENAME = "presurvey_cleaned.csv"
-POSTSURVEY_FILENAME = "postsurvey_cleaned.csv"
-POSTSURVEY2_FILENAME = "postsurvey2_cleaned.csv"
 
 # ARGUMENTS
 folderpath = sys.argv[1]
+results_filename = sys.argv[2]
+presurvey_filename = sys.argv[3]
+postsurvey_filename = sys.argv[4]
+postsurvey2_filename = sys.argv[5]
 
 #make a list of the filenames in the folder 
 file_language_tuples = []
@@ -163,7 +168,7 @@ results.trial_type = results.trial_type.str.replace('[','')
 results.A_Order = results.A_Order.str.replace(']','')
 
 # write out to .csv  
-results.to_csv(RESULTS_FILENAME, index=False, encoding='utf-8')
+results.to_csv(results_filename, index=False, encoding='utf-8')
 
 #################################
 #CLEAN UP PRESURVEY DATAFRAME#
@@ -207,7 +212,7 @@ presurvey = presurvey[PRESURVEY_COLUMN_ORDER]
 presurvey = presurvey.rename(columns=PRESURVEY_COLUMN_DICT)
 
 # write out to .csv  
-presurvey.to_csv(PRESURVEY_FILENAME, index=False, encoding='utf-8')
+presurvey.to_csv(presurvey_filename, index=False, encoding='utf-8')
 
 ################################
 #CLEAN UP POSTSURVEY1 DATAFRAME#
@@ -249,7 +254,7 @@ POSTSURVEY_COLUMN_DICT = {
 
 postsurvey = postsurvey[POSTSURVEY_COLUMN_ORDER]
 postsurvey = postsurvey.rename(columns=POSTSURVEY_COLUMN_DICT)
-postsurvey.to_csv(POSTSURVEY_FILENAME, index=False, encoding='utf-8')
+postsurvey.to_csv(postsurvey_filename, index=False, encoding='utf-8')
 
 ###############################
 #CLEAN UP POSTSURVEY2 DATAFRAME#
@@ -267,5 +272,5 @@ POSTSURVEY2_COLUMN_DICT = {
 
 postsurvey2 = postsurvey2[POSTSURVEY2_COLUMN_ORDER]
 postsurvey2 = postsurvey2.rename(columns=POSTSURVEY2_COLUMN_DICT)
-postsurvey2.to_csv(POSTSURVEY2_FILENAME, index=False, encoding='utf-8')
+postsurvey2.to_csv(postsurvey2_filename, index=False, encoding='utf-8')
 
