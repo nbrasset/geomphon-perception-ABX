@@ -1,5 +1,5 @@
-data/SUBJECT_ANONYMIZATION_FILE.csv
-data/pilot_july_2018/raw
+experiments/SUBJECT_ANONYMIZATION_FILE.csv
+experiments/pilot_july_2018/data/raw
 experiments/pilot_july_2018/deploy
 experiments/pilot_july_2018/geomphon-LMEDS_v-c925d74
 *.swp
