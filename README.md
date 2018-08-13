@@ -1,6 +1,12 @@
 # Geomphon perception experiments
 
-`experiments/pilot_july_2018` contains everything (scripts, stimuli, raw anonymized data) from the July 2018 pilot. To do the Python preprocessing on this data, change to that directory and do
+This repository contains a set of experiments, under `experiments`, each with their own independent code requirements. Code shared between the experiments is found under `shared`
+
+## July 2018 pilot
+
+Found under `experiments/pilot_july_2018`.
+
+The goal of this pilot was to collect some ABX data and develop basic tools for preprocessing data, as well as start testing the models we plan to use to analyse the data. The folder contains everything (scripts, stimuli, raw anonymized data) from this July 2018 pilot. To do the Python preprocessing on this data, change to that directory and do
 
 ```
 make preprocess
@@ -13,4 +19,11 @@ make deploy
 ```
 
 This will create a folder called `deploy` that can be copied to the server containing the pilot, ready for use.
+
+### Python requirements for the July 2018 pilot
+
+```
+- pandas
+- numpy
+```
 
