@@ -20,7 +20,11 @@ make deploy
 
 This will create a folder called `deploy` that can be copied to the server containing the pilot, ready for use.
 
+<<<<<<< HEAD
 ### Python requirements for the July 2018 pilot
+=======
+### Python requirements
+>>>>>>> eb844e0349849d9cf3ff973bfb6e78b56ba882e8
 
 ```
 - pandas
