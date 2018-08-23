@@ -1,0 +1,15 @@
+
+
+update .cgi file 
+	change file name 
+	change name of experiment 
+	(if necessary, change dict and sequence)
+	(if necessary, change randomization and relogin=true)
+	chmod 777 to allow script to run.  
+
+update sequence file 
+	change all sound files to new soundfiles 
+		audio_test
+		practice 
+		experiment files 
+	(if necessary, change surveys)
