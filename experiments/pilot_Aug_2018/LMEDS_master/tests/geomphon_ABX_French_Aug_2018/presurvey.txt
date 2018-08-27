@@ -1,0 +1,41 @@
+<b><font size="4">Veuillez répondre à toutes les questions, sous peine de ne pas être payé.</font></b>
+None
+
+Quel âge avez-vous?:
+Choicebox 18-29 ans, 30-39 ans,40-49 ans, 50-59 ans, 60-69 ans, plus de 69 ans
+
+
+Vous êtes … ?
+Choice gaucher, droitier
+
+
+
+Avez-vous une connaissance d'une langue autre que le français?
+Choicebox Je ne connais que le français., J'ai une connaissance d'une langue autre que le français
+
+Concernant la langue autre que le français avec laquelle vous avez le plus d'expérience ou avec laquelle vous êtes le plus confortable, quelle est votre expérience avec cette langue ?
+Choicebox Je me considère locuteur/locutrice natif/native, Beaucoup d'expérience. J'ai vécu ou j'ai travaillé pendant des années dans un environnement dans lequel cette langue était la langue principale.,Assez d'expérience.  J'ai vécu ou j'ai travaillé pendant des mois dans un environnement dans lequel cette langue était la langue principale., Un peu d'expérience. J'ai étudié cette langue pendant plus de deux ans.,Très peu d'expérience. J'ai étudié cette langue pendant moins de deux ans.
+
+
+Pour cette langue, à quel point vous considérez-vous compétent ?
+Choicebox Je me considère locuteur/locutrice natif/native.,Presque natif/native. Je comprends des idées complexes exprimées dans cette langue et je suis capable de tenir des conversations complexes avec des locuteurs natifs.,Avancé(e). Je comprends presque tout et je parle avec des locuteurs natifs sans trop de difficulté.,Intermédiaire. Je comprends les idées principales et je suis capable de parler de la vie quotidienne.,Débutant(e). Je comprends certaines phrases et je suis capable d'utiliser des phrases simples.
+
+Avez-vous des troubles de l'audition ou de la vision (autre que des lunettes)?
+Choice Oui, Non
+
+Avez-vouz un diagnostic des troubles du langage?
+Choice Oui, Non
+
+Avez-vous déjà suivi des cours de linguistique?
+Choice Oui, Non
+
+<sublist>
+Un cours de phonétique?
+Choice Oui, Non
+
+Un cours de phonologie?
+Choice Oui, Non
+</sublist>
+
+
+
