@@ -25,3 +25,4 @@ trips$trip_phons<-as.factor(trips$trip_phons)
 
 
 
+
