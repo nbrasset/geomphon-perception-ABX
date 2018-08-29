@@ -272,9 +272,6 @@ plusObject: "TextGrid amelia_vowels_ONLY_TARGET_CHECKED"
 		endif
 	endfor
 
-
-
-
-
-
+endeditor
 exitScript ( )
+Close
