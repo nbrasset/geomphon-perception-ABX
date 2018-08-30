@@ -1,7 +1,42 @@
 
 This folder contains the files for the Aug 2018 Pilot 
+
 This differs from the July pilot in two ways. 
     1 new stimuli 
       -stimuli recorded in sound booth by native English speakers 
       -both vowels and consonants 
     2new presurvey-  improved language in demographic questionnaire 
+
+
+Contents
+
+1. Stimuli folder containing
+	-full recordings of stimuli (ewan.wav,amelia_consonants.wav,amelia_vowels.wav)
+	-their accompanying textgrids  (amelia_consonants_ONLY_TARGET_CHECKED.TextGrid etc)
+		-these textgrids have a tier (2) with only the target word (no recording context)
+		-these textgrids have been handcheecked for accuracy after running forced aligner
+
+2. save_intervals_to_wavs.Praat :script for cutting out just target words and saving them as separate .wavs,
+
+3. Normalize_intensity.Praat: script for normalising intensity of all files in a directory 
+
+4. triplets.csv:  a list of all possible triplets 
+
+5. create_stimlist.R : a script that takes triplets.csv and filters it to create a stimuli list, then outputs a stimlist which is saved to the concatenation folder, as well as a two new LMEDs sequence file (English/French) which are saved to the two corresponding LMEDs folders 
+
+6. concatenation_of_tripets.Praat : takes the stimlist created by create_stimlist.R and the .wavs created by save_intervals_to_wavs.Praat (which have been normalised by Normalize_intensity.Praat), and creates triplet files. 
+
+
+7. Bash script geomphon_Aug_2018.sh which runs all the above 6 steps in the above order. 
+
+8. LMEDs_master directory for this implementation of LMEDs
+	for a new experiment, these 
+	[ BY HAND- LMEDS update
+		-update LMEDs dictionary (with new experiment code, if nothing else)
+		-(if necessary) update sequence
+		-(if necessary) update surveys— IF update, then update cleaning script by hand
+		-update .cgi file ]
+
+After running the bash script and updating LMEDs, need to Push updates to server  and Update server permissions to allow experiment to run (SBS)
+
+

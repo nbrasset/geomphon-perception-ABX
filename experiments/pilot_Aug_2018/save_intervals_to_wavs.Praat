@@ -33,7 +33,7 @@
 	margin = 0.001
 
 	#give the folder where to save the sound files:
-	folder$ =  "/Users/post-doc/Desktop/Praat_test/"
+	folder$ =  "/stimuli/"
 
 
 
