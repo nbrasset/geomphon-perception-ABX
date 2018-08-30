@@ -33,7 +33,7 @@
 	margin = 0.001
 
 	#give the folder where to save the sound files:
-	folder$ =  "/stimuli/"
+	folder$ = "stimuli/concatenation/intervals/"
 
 
 
@@ -263,10 +263,12 @@ plusObject: "TextGrid amelia_vowels_ONLY_TARGET_CHECKED"
 			#adds a number after each file with same interval name, starting with 1. 
 			indexnumber = 1
 			intervalfile$ = "'folder$'" + "'prefix$'" + "'filename$'" + "'suffix$''indexnumber'" + ".wav"
+
 			while fileReadable (intervalfile$)
 				indexnumber = indexnumber + 1
 				intervalfile$ = "'folder$'" + "'prefix$'" + "'filename$'" + "'suffix$''indexnumber'" + ".wav"
 			endwhile
+			Scale intensity... 70
 			Write to WAV file... 'intervalfile$'
 			Remove
 		endif
