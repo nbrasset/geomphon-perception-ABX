@@ -12,24 +12,23 @@
 #script also saves new sequence file based on this stimlst to LMEDs folders for English and french
 
 
+
 #use stimlist to run concatenation file on normalized stimuli 
 /Applications/Praat.app/Contents/MacOS/Praat --run "concatenation_of_tripets.Praat"
 
-#convert all new triplet files to .mp3 and .ogg and then save them to the LMEDs audio & video folder
+#convert all new triplet files to .mp3 and .ogg using sox 
+cd stimuli
+for i in *.wav ; do sox "$i" "$(basename -s .wav "$i").mp3"; done
+for i in *.wav ; do sox "$i" "$(basename -s .wav "$i").ogg"; done
 
-#	for f in *.wav; do ffmpeg -i "$f" -c:a libmp3lame -q:a 2 "${f/%wav/mp3}" -c:a libvorbis -q:a 4 "${f/%wav/ogg}"; done
-	#for i in `ls *.aiff`
-	#do echo -e "$i"
-	# sox $i $i.wav echo -e "$i.wav"; done;
+#move all the newly created .ogg and .mp3 files to where they need to be in the two separate LMEDs folders 
+cd ..
 
-	#for i in *.wav
-	#do
-	#    sox "$i" "stimuli/$(basename -s .mp3 "$i").mp3"
-	#done
+cp stimuli/*.ogg LMEDS_master/tests/geomphon_ABX_English_Aug_2018/audio_and_video
+cp stimuli/*.mp3 LMEDS_master/tests/geomphon_ABX_English_Aug_2018/audio_and_video
 
-
-
-
+cp stimuli/*.ogg LMEDS_master/tests/geomphon_ABX_French_Aug_2018/audio_and_video
+cp stimuli/*.mp3 LMEDS_master/tests/geomphon_ABX_French_Aug_2018/audio_and_video
 
 
 
