@@ -1,0 +1,77 @@
+#!/usr/bin/env Rscript
+
+# merge_distances.Rscript
+#
+# Merge any number of (wide-shaped) distance tables together into
+# a beefed-up item file.
+#
+# Author: Ewan Dunbar
+
+`%>%` <- magrittr::`%>%`
+
+ARGS <- commandArgs(TRUE)
+
+# Original stimulus information table:
+# e.g., "meta_information.csv"
+STIMULUS_INFORMATION <- ARGS[1] 
+
+# Name of output file 
+# e.g., "meta_information_with_distances.csv"
+OUTPUT <- ARGS[2]
+
+# Distance filenames; filenames must start with 'distances__'
+# and have the extension '.csv'
+DISTANCE_FILES <- ARGS[3:length(ARGS)]
+
+distance_column_name_ify <- function(distance_filename) {
+  result <- distance_filename %>%
+    basename %>%
+    (function(x) sub(".csv$", "", x)) %>%
+    (function(x) sub("^distances__", "distance_", x))
+  return(result)
+}
+
+DISTANCE_FILE_COL_TYPES <- readr::cols(
+  .default = readr::col_character(),
+  onset_X = readr::col_double(),
+  offset_X = readr::col_double(),
+  distance_OTH = readr::col_double(),
+  offset_OTH = readr::col_double(),
+  onset_OTH = readr::col_double(),
+  distance_TGT = readr::col_double(),
+  offset_TGT = readr::col_double(),
+  onset_TGT = readr::col_double()
+)
+
+tibble::tibble(filename=DISTANCE_FILES) %>%
+  dplyr::mutate(tbl=lapply(filename,
+                            function(x)
+                              readr::read_csv(x,
+                                     col_types=DISTANCE_FILE_COL_TYPES) %>%
+                              dplyr::rename_all(
+                                function(y)
+                                  sub("^distance",
+                                      distance_column_name_ify(x),
+                                      y)) %>%
+                              # Onset and offset can undergo minor numerical
+                              # changes and fail to match; since we only have
+                              # a unique primary key, we should use it
+                              dplyr::select(tripletid,
+                                            dplyr::starts_with("distance")))) %>% 
+  { purrr::reduce(.$tbl, dplyr::left_join, by="tripletid") } %>%
+  dplyr::right_join(readr::read_csv(STIMULUS_INFORMATION,
+    col_types=readr::cols(
+      .default = readr::col_character(),
+      onset_TGT = readr::col_double(),
+      offset_TGT = readr::col_double(),
+      onset_OTH = readr::col_double(),
+      offset_OTH = readr::col_double(),
+      onset_X = readr::col_double(),
+      offset_X = readr::col_double(),
+      Practice = readr::col_logical()
+    )), by="tripletid") %>%
+  readr::write_csv(OUTPUT)
+
+
+
+
