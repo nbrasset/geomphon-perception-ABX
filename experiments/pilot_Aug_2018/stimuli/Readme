@@ -1,0 +1,7 @@
+Contained in this folder is everything to make the stimuli 
+-the orginal recordings and text grids 
+-script to save individual .wavs from text grids 
+-script to concatenate .wavs into experiment files 
+-experiment files as .wavs
+-experiment files as .mp3s
+-experiment files as .oggs
