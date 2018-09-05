@@ -176,7 +176,7 @@ results.to_csv(results_filename, index=False, encoding='utf-8')
 
 PRESURVEY_COLUMN_ORDER = ["subject_id", "subject_language", "I",
     "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
-    "W", "X", "Y", "Z", "AA", "BB", "CC", "DD","EE","FF","GG"]
+    "W", "X", "Y", "Z", "AA", "BB", "CC", "DD","EE","FF","GG","HH","II","JJ","KK","LL","MM"]
 PRESURVEY_COLUMN_DICT = {
     "subject_id": "subject_id",
     "subject_language": "subject_language",
@@ -190,21 +190,28 @@ PRESURVEY_COLUMN_DICT = {
     "P":"handedness_R",
     "Q":"know_lang_not_targ_no",
     "R":"know_lang_not_targ_yes",
-    "S":"other_lang_natif",
-    "T":"other_lang_very_advanced",
-    "U":"other_lang_advanced",
-    "V":"other_lang_intermediate",
-    "W":"other_lang_beginner",
-    "X":"hear_vis_Y",
-    "Y":"hear_vis_N",
-    "Z":"speech_prob_Y",
-    "AA":"speech_prob_N",
-    "BB":"ling_course_Y",
-    "CC":"ling_course_N",
-    "DD":"phonet_class_Y",
-    "EE":"phonet_class_N",
-    "FF":"phonog_class_Y",
-    "GG":"phonog_class_N"
+    "R":"other_lang_exp_NA",
+    "S":"other_lang_exp_native",
+    "T":"other_lang_exp_a_lot",
+    "U":"other_lang_exp_fair_amount",
+    "V":"other_lang_exp_some",
+    "W":"other_lang_exp_very_little",
+    "X":"other_lang_prof_NA",
+    "Y":"other_lang_prof_native",
+    "Z":"other_lang_prof_very_advanced",
+    "AA":"other_lang_prof_advanced",
+    "BB":"other_lang_prof_intermediate",
+    "CC":"other_lang_prof_beginner",
+    "DD":"hear_vis_Y",
+    "EE":"hear_vis_N",
+    "FF":"speech_prob_Y",
+    "GG":"speech_prob_N",
+    "HH":"ling_course_Y",
+    "II":"ling_course_N",
+    "JJ":"phonet_class_Y",
+    "KK":"phonet_class_N",
+    "LL":"phonog_class_Y",
+    "MM":"phonog_class_N"
 }
 
 #drop unneeded columns
