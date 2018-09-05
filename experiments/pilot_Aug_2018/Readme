@@ -36,6 +36,7 @@ Contents
 		-(if necessary) update sequence
 		-(if necessary) update surveys— IF update, then update cleaning script by hand
 		-update .cgi file ]
+		-update output folder to have name that is the same as the sequence file name
 
 After running the bash script and updating LMEDs, need to Push updates to server  and Update server permissions to allow experiment to run (SBS)
 
