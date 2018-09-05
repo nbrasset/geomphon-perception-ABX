@@ -1,0 +1,39 @@
+#!/usr/bin/env Rscript
+
+# Adds the meta-information to the August 2018 pilot
+# item file
+#
+# Author: Ewan Dunbar
+
+`%>%` <- magrittr::`%>%`
+
+ARGS <- commandArgs(TRUE)
+
+# Item file generated from TextGrids
+# e.g., "ABX_ITEM_FILE.item"
+INPUT <- ARGS[1] 
+
+# Updated item file to write
+OUTPUT <- ARGS[2] 
+
+WORD_TO_TARGET_PHONE <- c(
+  APAH="p", EEPEE="p", ATAH="t", EETEE="t", AKAH="k",   
+  EEKEE="k", AFAH="f", EEFEE="f", ASSAH="s", EESSEE="s",
+  ASHAH="ʃ", EESHEE="ʃ", ATHAH="θ", EETHEE="θ", HADAH="ɑ", 
+  HADI="ɑ", HAEDAH="æ", HAEDI="æ", HEEDAH="i", HEEDI="i", 
+  HUHDAH="ʌ", HUHDI="ʌ", HOODAH="ʊ", HOODI="ʊ", WHODAH="u", 
+  WHODI="u"
+)
+
+readr::read_delim(INPUT, delim=" ", col_types=readr::cols(
+    `#file` = readr::col_character(), onset = readr::col_double(),
+    offset = readr::col_double(), `#item` = readr::col_character(),
+    word = readr::col_character())) %>%
+  dplyr::mutate(speaker=ifelse(`#file` == "stimulus_construction/ewan",
+                               "ewan", "amelia")) %>%
+  dplyr::mutate(CV=ifelse(startsWith(word, "H") | startsWith(word, "W"),
+                          "V", "C")) %>%
+  dplyr::mutate(context=ifelse(endsWith(word, "AH"), "A", "I")) %>%
+  dplyr::mutate(phone=WORD_TO_TARGET_PHONE[word]) %>%
+  readr::write_delim(OUTPUT, delim=" ")
+

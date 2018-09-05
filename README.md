@@ -49,3 +49,16 @@ This will calculate various different kinds of acoustic distances. The original 
 - tidyr
 - dplyr
 ```
+
+### Requirements for the August 2018 pilot
+
+
+**Python**
+
+```
+- h5py
+- numpy
+- pandas
+- ABXpy v0.4: pip install -e git://github.com/bootphon/ABXpy.git@v0.4#egg=ABXpy
+
+```
