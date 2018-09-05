@@ -1,8 +1,0 @@
-login,[orderSI=0,orderAI=0],None,None,0:6.9,0;,[]
-media_test,[audio,triplet_t00000000001,orderSI=1,orderAI=1],2,None,0:16.2,1;,[]
-consent,[prot_demo_consent,orderSI=2,orderAI=2],None,None,0:3.6,2;,[]
-valsurvey,[presurvey,orderSI=3,orderAI=3],None,None,0:30.1,3;,0,0,1,0,0,0,0,1,Français,Français Anglais,Français Anglais Allemand,1,0,0,1,0,1,0,1,0,1,0,1
-text_page,[prot_instr1,bindSubmitKeyIDList=,[space],orderSI=4,orderAI=4],None,None,0:5.0,4;,[]
-text_page,[prot_instr2,bindSubmitKeyIDList=,[space],orderSI=5,orderAI=5],None,None,0:7.0,5;,[]
-text_page,[prot_instr3,bindSubmitKeyIDList=,[space],orderSI=6,orderAI=6],None,None,0:3.2,6;,[]
-text_page,[prot_announcement_catch_trial,bindSubmitKeyIDList=,[space],orderSI=7,orderAI=7],None,None,0:1.2,7;,[]
