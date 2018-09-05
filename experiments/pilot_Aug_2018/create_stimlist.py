@@ -172,7 +172,7 @@ opt.Tmin = t_min
 solution = opt.anneal()
 print (solution)
 s_df = pd.DataFrame(solution[0])
-s_df.columns = ['Context', 'Seg_comp_pair', 'Emotion_Video', 'Order',\
+s_df.columns = ['Context', 'Seg_comp_pair', 'IGNORE', 'Order',\
                 'Speaker']
 s_df.to_csv(output_file, index=False)
 
