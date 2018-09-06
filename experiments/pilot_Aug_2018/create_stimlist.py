@@ -21,6 +21,8 @@ NUM_COMPARISONS = 36 # (number of segment comparisons) #EMOTIONS
 
 NUM_STIM = NUM_COMPARISONS*NUM_ORDERS
 
+MAX_REPETITIONS_WITHIN_COMPARISON = NUM_ORDERS
+
 #SAMPLED
 #for all of the above trials, we want half to be each of the following, and we don't want 
 #these two to be predictive of the fixed structure 
@@ -49,28 +51,12 @@ def num_duplicates(x):
 
 
 
-#condition here means ORDER
 #now we are defining the number of repetitions of the fixed part 
-def repetitions_within_condition(stim_list):
+def repetitions_within_comparison(stim_list):
     result = 0
     for comp in range(NUM_COMPARISONS):
-        e1_c0_match = stim_list[(stim_list[:,COL_ORDER]==0) & (stim_list[:,COL_COMPARISON]==comp),:]
-        e2_c0_match = stim_list[(stim_list[:,COL_ORDER]==0) & (stim_list[:,COL_COMPARISON]==comp),:]
-        e1_c1_match = stim_list[(stim_list[:,COL_ORDER]==1) & (stim_list[:,COL_COMPARISON]==comp),:]
-        e2_c1_match = stim_list[(stim_list[:,COL_ORDER]==1) & (stim_list[:,COL_COMPARISON]==comp),:]
-        e1_c2_match = stim_list[(stim_list[:,COL_ORDER]==2) & (stim_list[:,COL_COMPARISON]==comp),:]
-        e2_c2_match = stim_list[(stim_list[:,COL_ORDER]==2) & (stim_list[:,COL_COMPARISON]==comp),:]
-        e1_c3_match = stim_list[(stim_list[:,COL_ORDER]==3) & (stim_list[:,COL_COMPARISON]==comp),:]
-        e2_c3_match = stim_list[(stim_list[:,COL_ORDER]==3) & (stim_list[:,COL_COMPARISON]==comp),:]
-
-        result += num_duplicates(e1_c0_match[:,(COL_SENTENCE,COL_SPEAKER)]) \
-                + num_duplicates(e2_c0_match[:,(COL_SENTENCE,COL_SPEAKER)]) \
-                + num_duplicates(e1_c1_match[:,(COL_SENTENCE,COL_SPEAKER)]) \
-                + num_duplicates(e2_c1_match[:,(COL_SENTENCE,COL_SPEAKER)]) \
-                + num_duplicates(e1_c2_match[:,(COL_SENTENCE,COL_SPEAKER)]) \
-                + num_duplicates(e2_c2_match[:,(COL_SENTENCE,COL_SPEAKER)]) \
-                + num_duplicates(e1_c3_match[:,(COL_SENTENCE,COL_SPEAKER)]) \
-                + num_duplicates(e2_c3_match[:,(COL_SENTENCE,COL_SPEAKER)])
+        items_comp = stim_list[stim_list[:,COL_COMPARISON]==comp,:]
+        result += num_duplicates(items_comp[:,(COL_CONTEXT,COL_SPEAKER)])
     return result
 
 
@@ -94,6 +80,38 @@ def other(e):
 #sentence = context 
 #speakers = speakers
 
+def cost_values(solution):
+    pred_cont_from_spk = sklearn.metrics.normalized_mutual_info_score(
+            solution[:,COL_CONTEXT],
+            solution[:,COL_SPEAKER])
+    pred_comp_from_cont = sklearn.metrics.normalized_mutual_info_score(
+            solution[:,COL_COMPARISON],
+            solution[:,COL_CONTEXT])
+    pred_comp_from_spk = sklearn.metrics.normalized_mutual_info_score(
+            solution[:,COL_COMPARISON],
+            solution[:,COL_SPEAKER])
+    pred_ord_from_cont = sklearn.metrics.normalized_mutual_info_score(
+            solution[:,COL_ORDER],
+            solution[:,COL_CONTEXT])
+    pred_ord_from_spk = sklearn.metrics.normalized_mutual_info_score(
+            solution[:,COL_ORDER],
+            solution[:,COL_SPEAKER])
+    #FIXME
+    repetitions_within_comparison_ = repetitions_within_comparison(solution)
+    norm_repetitions_within_comparison = repetitions_within_comparison_\
+                                        /MAX_REPETITIONS_WITHIN_COMPARISON # FIXME
+
+    return {"Predict context from speaker": pred_cont_from_spk,
+    #double check if solutions are very different with and without next line
+            "Normalized repetitions within comparison x 10":
+                norm_repetitions_within_comparison*10,
+            "Predict comparison from context": pred_comp_from_cont,
+            "Predict comparison from speaker": pred_comp_from_spk,
+            "Predict order from context": pred_ord_from_cont,
+            "Predict order from speaker": pred_ord_from_spk}
+#        return sklearn.metrics.mutual_info_score(self.state[:,2],
+#                self.state[:,3])    
+
 class BinaryAnnealer(simanneal.Annealer):
     def move(self):
         stim = random.randrange(NUM_STIM)
@@ -101,78 +119,40 @@ class BinaryAnnealer(simanneal.Annealer):
         self.state[stim,COL_SPEAKER] = random.randrange(NUM_SPEAKERS)
 
     def energy(self):
-        pred_sent_from_spk = sklearn.metrics.normalized_mutual_info_score(
-                self.state[:,COL_CONTEXT],
-                self.state[:,COL_SPEAKER])
-        pred_comp_from_sent = sklearn.metrics.normalized_mutual_info_score(
-                self.state[:,COL_COMPARISON],
-                self.state[:,COL_CONTEXT])
-        pred_comp_from_spk = sklearn.metrics.normalized_mutual_info_score(
-                self.state[:,COL_COMPARISON],
-                self.state[:,COL_SPEAKER])
-        pred_ord_from_sent = sklearn.metrics.normalized_mutual_info_score(
-                self.state[:,COL_ORDER],
-                self.state[:,COL_CONTEXT])
-        pred_ord_from_spk = sklearn.metrics.normalized_mutual_info_score(
-                self.state[:,COL_ORDER],
-                self.state[:,COL_SPEAKER])
-        repetitions_within_cond_ = repetitions_within_condition(self.state)
-        norm_repetitions_within_cond = repetitions_within_cond_\
-                                            /MAX_REPETITIONS_WITHIN_COND
-        repetitions_global_ = repetitions_global(self.state)
-        if (MAX_REPETITIONS_GLOBAL > repetitions_within_cond_):
-            norm_repetitions_across_cond = (repetitions_global_ \
-                                            - repetitions_within_cond_) \
-                                            /(MAX_REPETITIONS_GLOBAL \
-                                            - repetitions_within_cond_)
-        else:
-            norm_repetitions_across_cond = 0.0
-#        print (pred_sent_from_spk, repetitions_within_cond_, repetitions_global_)
-        return pred_sent_from_spk \
-                + norm_repetitions_within_cond*10 \
-                + norm_repetitions_across_cond*10 \
-                + pred_comp_from_sent \
-                + pred_comp_from_spk \
-                + pred_ord_from_sent \
-                + pred_ord_from_spk
-#        return sklearn.metrics.mutual_info_score(self.state[:,2],
-#                self.state[:,3])
-
-
+        values = cost_values(self.state)
+        return sum(values.values())
 
 # PARAMS
 output_file = "stimlist.csv"
-read_from_last = False
-n_steps = 20000
+#read_from_last = True
+n_steps = 8000
 t_min = 0.00001
-
-#COND=ORDER 
-#EMOTION= COMPARISON
+seed = 24
 
 
-if not read_from_last:
-    t_max = 10
-    stim_list = np.zeros((NUM_STIM, 4)) # create an empty matrix with the right number of cols 
-    i = 0
-    for comp in range(NUM_COMPARISONS):
-            stim_list[i,COL_ORDER] = 0
-            stim_list[i,COL_COMPARISON] = comp
-            i += 1
-            stim_list[i,COL_ORDER] = 1
-            stim_list[i,COL_COMPARISON] = comp
-            i += 1
-            stim_list[i,COL_ORDER] = 2
-            stim_list[i,COL_COMPARISON] = comp
-            i += 1
-            stim_list[i,COL_ORDER] = 3
-            stim_list[i,COL_COMPARISON] = comp
-            i += 1
-else:
-    t_max = 0.04
+# if not read_from_last:
+t_max = 10
+stim_list = np.zeros((NUM_STIM, 4)) # create an empty matrix with the right number of cols 
+i = 0
+for comp in range(NUM_COMPARISONS):
+        stim_list[i,COL_ORDER] = 0
+        stim_list[i,COL_COMPARISON] = comp
+        i += 1
+        stim_list[i,COL_ORDER] = 1
+        stim_list[i,COL_COMPARISON] = comp
+        i += 1
+        stim_list[i,COL_ORDER] = 2
+        stim_list[i,COL_COMPARISON] = comp
+        i += 1
+        stim_list[i,COL_ORDER] = 3
+        stim_list[i,COL_COMPARISON] = comp
+        i += 1
+# else:
+#     t_max = 1
     
-    stim_list = pd.read_csv(output_file).as_matrix()
+#     stim_list = pd.read_csv(output_file).as_matrix()
     
-    
+random.seed(seed)
     
 opt = BinaryAnnealer(stim_list)
 opt.steps = n_steps
@@ -180,10 +160,11 @@ opt.Tmax = t_max
 opt.Tmin = t_min
 solution = opt.anneal()
 
-print (solution)
+#print(solution)
+print(cost_values(solution[0]))
 s_df = pd.DataFrame(solution[0])
 s_df.columns = ['ORDER', 'COMPARISON',  'CONTEXT','SPEAKER']
-s_df.to_csv(folder/output_file, index=False)
+s_df.to_csv(output_file, index=False)
 
 
 

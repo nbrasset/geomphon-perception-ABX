@@ -22,12 +22,14 @@ Contents
 
 4. triplets.csv:  a list of all possible triplets 
 
-5. create_stimlist.R : a script that takes triplets.csv and filters it to create a stimuli list, then outputs a stimlist which is saved to the concatenation folder (NB as a .txt file! Praat does not like .csvs in this application), as well as a two new LMEDs sequence file (English/French) which are saved to the two corresponding LMEDs folders 
+5. create_stimlist.py : a script that takes triplets.csv and filters it to create a stimuli list, then outputs a stimlist which is saved to the concatenation folder (NB as a .txt file! Praat does not like .csvs in this application), as well as a two new LMEDs sequence file (English/French) which are saved to the two corresponding LMEDs folders 
 
 6. concatenation_of_tripets.Praat : takes the stimlist created by create_stimlist.R and the .wavs created by save_intervals_to_wavs.Praat (which have been normalised by Normalize_intensity.Praat), and creates triplet files. Note that all files must be the same sampling frequency, even silences
 
 
 7. Bash script geomphon_Aug_2018.sh which runs all the above 6 steps in the above order. 
+
+
 
 8. LMEDs_master directory for this implementation of LMEDs
 	for a new experiment, these 
