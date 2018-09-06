@@ -16,31 +16,15 @@ Load data
 
 ```{r load-data, message=FALSE, warning=FALSE}
 DATA_FOLDER <-  "data"
+STIMULI_FOLDER <-  "stimuli"
 
 subject_info <- readr::read_csv(paste0(DATA_FOLDER, "/", "presurvey_cleaned.csv"))
 results_all <- readr::read_csv(paste0(DATA_FOLDER, "/", "Aggregated_Results.csv"))
 postsurvey <- readr::read_csv(paste0(DATA_FOLDER, "/", "postsurvey_cleaned.csv"))
 
-# Three types of acoustic distances were calculated:
-#  - the sum of the Euclidean distances along the optimal DTW path
-#  - " " divided by the length of the path (== the length of the longer item)
-#  - " " divided by the sum of the lengths of the two items
-item_info_with_dtw_sum_distances <- readr::read_csv(paste0(DATA_FOLDER, "/",
-                      "item_meta_information__DTW_SUM.csv")) %>%
-  dplyr::rename(distance_DTW_SUM_TGT=distance_TGT,
-                distance_DTW_SUM_OTH=distance_OTH)
-item_info_with_dtw_norm_distances <- readr::read_csv(paste0(DATA_FOLDER, "/",
-                      "item_meta_information__DTW_NORM_BY_PATH_LENGTH.csv")) %>%
-  dplyr::rename(distance_DTW_NORM_PATH_LENGTH_TGT=distance_TGT_norm,
-                distance_DTW_NORM_PATH_LENGTH_OTH=distance_OTH_norm)
-item_info_with_dtw_norm2_distances <- readr::read_csv(paste0(DATA_FOLDER, "/",
-                      "item_meta_information__DTW_NORM_BY_SUMMED_LENGTH.csv")) %>%
-  dplyr::rename(distance_DTW_NORM_SUMMED_LENGTH_TGT=distance_TGT_both_norm,
-                distance_DTW_NORM_SUMMED_LENGTH_OTH=distance_OTH_both_norm)
-item_info <- dplyr::left_join(item_info_with_dtw_sum_distances,
-                              item_info_with_dtw_norm_distances) %>%
-  dplyr::left_join(item_info_with_dtw_norm2_distances) %>%
-  dplyr::mutate(tripletid=sub("^", "triplet_", tripletid))
+item_info <- readr::read_csv(paste0(STIMULI_FOLDER, "/",
+                      "item_meta_information_with_distances.csv")) %>%
+  dplyr::mutate(tripletid=paste0("triplet_", tripletid))
 ```
 
 Process attention checks
@@ -74,7 +58,7 @@ attention_fails <- results_all %>%
 
 # Only subjects who are in the postsurvey file, i.e., have finished
 filtered_subjects <- dplyr::left_join(postsurvey, subject_info,
-                                      by ='subject_id') %>%
+                                      by =c('subject_id', 'subject_language')) %>%
 # Filter based on native language questions
 #
 # Current logic: subjects answered whether they know any other languages,
@@ -110,27 +94,65 @@ add columns to determine whether user response was correct, add transformed
 comparative acoustic distance columns.
 
 ```{r select-items}
-results <- dplyr::left_join(filtered_subjects, results_all, by='subject_id') %>%
-  dplyr::right_join(item_info, by='tripletid') %>%
+results <- dplyr::left_join(filtered_subjects, results_all,
+                            by=c('subject_id', 'subject_language')) %>%
+  dplyr::left_join(item_info, by='tripletid') %>%
   dplyr::filter(grepl("^triplet_", tripletid)) %>%
   dplyr::mutate(user_resp=factor(ifelse(first_sound == "1", "A", "B")),
-                user_corr=as.integer(substr(presentation_order, 1, 1) == user_resp),
-                difference_log_distance_DTW_SUM=
-                  log(distance_DTW_SUM_TGT)-
-                  log(distance_DTW_SUM_OTH),
-                difference_log_distance_DTW_NORM_PATH_LENGTH=
-                  log(distance_DTW_NORM_PATH_LENGTH_TGT)-
-                  log(distance_DTW_NORM_PATH_LENGTH_OTH),
-                difference_log_distance_DTW_NORM_SUMMED_LENGTH=
-                  log(distance_DTW_NORM_SUMMED_LENGTH_TGT)-
-                  log(distance_DTW_NORM_SUMMED_LENGTH_OTH))
+                user_corr=as.integer(
+                  substr(presentation_order, 1, 1) == user_resp))
+distance_types <- names(results) %>%
+  (function(x) x[grepl("^distance_", x)]) %>%
+  (function(x) sub("_TGT$", "", x)) %>%
+  (function(x) sub("_OTH$", "", x)) %>%
+  unique
+for (dt in distance_types) {
+  results[[paste0("difference_log_", dt)]] <-
+    log(results[[paste0(dt, "_TGT")]]) - 
+      log(results[[paste0(dt, "_OTH")]])
+}
+distance_difference_colnames <- names(results)[
+  grep("^difference_log", names(results))]
+pcs <- prcomp(results[,distance_difference_colnames],
+              scale=TRUE)$x 
+colnames(pcs) <- paste0(
+  "difference_log_distance_PC", 1:ncol(pcs)
+)
+results <- cbind(results, pcs)
 ```
 
 ## Testing various models
 
 **First question: what is the right way to deal with acoustic distance?**
 
-Here our goal is to find a simple model that captures a lot of the variance due to acoustic distance, even when extrapolating, or using a small number of subjects. We assume that this simple model (subject response correct ~ difference in log acoustic distance) will continue to do be appropriate when we move to a larger model that includes other predictors.
+Here our goal is to find a simple model that captures a lot of the variance due to acoustic distance, even when extrapolating, or using a small number of subjects. It seems fine to just have a look at what the accuracy ~ distance plot looks like.
+
+**Start here.** It turns out that extrapolating is really hard, and, here, extrapolation-based statistics always turn out to prefer rather poor predictors. I suggest leave-one-out or an approximation, or some better predictor (perhaps training an unsupervised multi-lingual speech embedding?), to proceed with this question. The consonant data from the second pilotwill be useful 
+
+```{r accuracy-by-distance}
+results_by_item <- results %>%
+  dplyr::group_by_at(
+    dplyr::vars(
+      "tripletid", "subject_language",
+      tidyselect::starts_with("difference_log"))) %>%
+  dplyr::summarize(accuracy=mean(user_corr)) %>%
+  dplyr::ungroup()
+distance_difference_colnames <- names(results_by_item)[
+  grep("^difference_log", names(results_by_item))]
+distance_plots <- tibble::tibble(distance=distance_difference_colnames) %>%
+  dplyr::mutate(plot=purrr::map(.$distance,
+                  function(var_name)
+                    ggplot2::ggplot(results_by_item,
+                      ggplot2::aes_string(
+                        y="accuracy", x=var_name)) +
+                    ggplot2::geom_point() +
+                    ggplot2::facet_wrap(~ subject_language) +
+                    ggplot2::coord_cartesian(ylim=c(0,1)) +
+                    ggplot2::geom_smooth()))
+print(distance_plots$plot)
+```
+
+We assume that this simple model (subject response correct ~ difference in log acoustic distance) will continue to do be appropriate when we move to a larger model that includes other predictors.
 
 First hyperparameter - type of acoustic distance
 Second hyperparameter - form of relation
@@ -170,7 +192,9 @@ refit_without <- function(fit, data, indices) {
 }
 
 loo_vanilla <- function(fit,  data) {
-  lliks <- foreach::foreach(i=1:nrow(data), .combine=c) %dopar%
+  #loo_points <- 1:nrow(data)
+  loo_points <- sample(1:nrow(data), 1000)
+  lliks <- foreach::foreach(i=loo_points, .combine=c) %dopar%
       llik_logistic(refit_without(fit, data, i), data[i,]) # FIXME
   return(mean(lliks, na.rm=TRUE))
 }
@@ -188,8 +212,11 @@ extrapolate <- function(fit, data, proportion, balanced=TRUE) {
     top_ranks <- sorted_unique_ranks[seq_len(n_top) + length(sorted_unique_ranks) - n_top]
     bottom_ranks <- sorted_unique_ranks[seq_len(n_bottom)]
     indices <- which(ranks %in% c(top_ranks, bottom_ranks))
-    return(list(score=llik_logistic(refit_without(fit, data, indices), # FIXME
-                         data[indices,]), fit_wo_edges=refit_without(fit, data, indices)) )
+    return(#tibble::tibble(score=
+           llik_logistic(refit_without(fit, data, indices), # FIXME
+                         data[indices,]) #, fit_wo_edges=refit_without(fit, data, indices
+                #)
+    ) 
   } else {
     top_ranks <- sorted_unique_ranks[seq_len(n) + length(sorted_unique_ranks) - n]
     top_indices <- which(ranks %in% top_ranks)
@@ -199,34 +226,56 @@ extrapolate <- function(fit, data, proportion, balanced=TRUE) {
     bot_indices <- which(ranks %in% bot_ranks)
     llik_without_bot <- llik_logistic(refit_without(fit, data, bot_indices),
                                       data[bot_indices,])
-    return(list(score=mean(llik_without_top, llik_without_bot),
-                fit_wo_top=refit_without(fit, data, top_indices),
-                fit_wo_bot=refit_without(fit, data, bot_indices)))
+    return(#list(score=
+                  mean(llik_without_top, llik_without_bot)
+                #,
+                #fit_wo_top=refit_without(fit, data, top_indices),
+                #fit_wo_bot=refit_without(fit, data, bot_indices)
+                #)
+    )
   }
 }
 
+FORMULAS <- list(
+  NFP="user_corr ~ difference_log_distance_normed_filterbank__dtw_pathlength",
+  NFS="user_corr ~ difference_log_distance_normed_filterbank__dtw_sum",
+  NMP="user_corr ~ difference_log_distance_normed_mfcc__dtw_pathlength",
+  NMS="user_corr ~ difference_log_distance_normed_mfcc__dtw_sum",
+  UFP="user_corr ~ difference_log_distance_unnormed_filterbank__dtw_pathlength",
+  UFS="user_corr ~ difference_log_distance_unnormed_filterbank__dtw_sum",
+  UMP="user_corr ~ difference_log_distance_unnormed_mfcc__dtw_pathlength",
+  UMS="user_corr ~ difference_log_distance_unnormed_mfcc__dtw_sum",
+  PC1="user_corr ~ difference_log_distance_PC1",
+  PC2="user_corr ~ difference_log_distance_PC2",
+  PC3="user_corr ~ difference_log_distance_PC3",
+  PC4="user_corr ~ difference_log_distance_PC4",
+  PC5="user_corr ~ difference_log_distance_PC5",
+  PC6="user_corr ~ difference_log_distance_PC6",
+  PC7="user_corr ~ difference_log_distance_PC7",
+  PC8="user_corr ~ difference_log_distance_PC8",
+  RAND="user_corr ~ fake_difference_log_distance_random",
+  NFP2="user_corr ~ difference_log_distance_normed_filterbank__dtw_pathlength + I(difference_log_distance_normed_filterbank__dtw_pathlength^2)",
+  NFS2="user_corr ~ difference_log_distance_normed_filterbank__dtw_sum + I(difference_log_distance_normed_filterbank__dtw_sum^2)",
+  NMP2="user_corr ~ difference_log_distance_normed_mfcc__dtw_pathlength + I(difference_log_distance_normed_mfcc__dtw_pathlength^2)",
+  NMS2="user_corr ~ difference_log_distance_normed_mfcc__dtw_sum + I(difference_log_distance_normed_mfcc__dtw_sum^2)",
+  UFP2="user_corr ~ difference_log_distance_unnormed_filterbank__dtw_pathlength + I(difference_log_distance_unnormed_filterbank__dtw_pathlength^2)",
+  UFS2="user_corr ~ difference_log_distance_unnormed_filterbank__dtw_sum + I(difference_log_distance_unnormed_filterbank__dtw_sum^2)",
+  UMP2="user_corr ~ difference_log_distance_unnormed_mfcc__dtw_pathlength + I(difference_log_distance_unnormed_mfcc__dtw_pathlength^2)",
+  UMS2="user_corr ~ difference_log_distance_unnormed_mfcc__dtw_sum + I(difference_log_distance_unnormed_mfcc__dtw_sum^2)",
+  RAND2="user_corr ~ fake_difference_log_distance_random + I(fake_difference_log_distance_random^2)"
+)
 prepare_model <- function(distance_predictors, d) {
-  FORMULAS <- list(
-    DTW_SUM=formula(user_corr ~ difference_log_distance_DTW_SUM),
-    DTW_NORM_PATH_LENGTH=formula(user_corr ~
-                                 difference_log_distance_DTW_NORM_PATH_LENGTH),
-    DTW_NORM_PATH_LENGTH_2=formula(user_corr ~
-                                 I(difference_log_distance_DTW_NORM_PATH_LENGTH^2)),
-    DTW_NORM_SUMMED_LENGTH=formula(user_corr ~
-                                 difference_log_distance_DTW_NORM_SUMMED_LENGTH),
-    DTW_NORM_SUMMED_LENGTH_2=formula(user_corr ~
-                                 I(difference_log_distance_DTW_NORM_SUMMED_LENGTH^2))
-  )
   spec <- FORMULAS[[distance_predictors]]
   spec_and_data <- list(spec=spec, data_indices=1:nrow(d))
   return(spec_and_data)
 }
 
-fit_model <- function(spec, data_indices, data) {
+fit_model <- function(spec_name, data_indices, data) {
   d <- data[data_indices,]
-  fit <- glm(formula=spec, data=d, family="binomial") # FIXME
-  stats <- data.frame(
-#    loo_vanilla=loo_vanilla(fit, d),
+  f <- as.formula(FORMULAS[[spec_name]])
+  fit <- glm(formula=f, data=d, family="binomial") # FIXME
+  stats <- tibble::tibble(
+    loo_vanilla=loo_vanilla(fit, d),
     extrapolate_10_balanced=extrapolate(fit, d, 0.1, balanced=TRUE),
     extrapolate_10_unbalanced=extrapolate(fit, d, 0.1, balanced=FALSE),
     extrapolate_half_balanced=extrapolate(fit, d, 0.5, balanced=TRUE),
@@ -236,26 +285,69 @@ fit_model <- function(spec, data_indices, data) {
   return(fit_and_stats)
 }
 
+results_for_testing_acoustic_distances <- results
+set.seed(100)
+results_for_testing_acoustic_distances$fake_difference_log_distance_random <- 
+  sample(results_for_testing_acoustic_distances$difference_log_distance_PC8) +
+  rnorm(nrow(results), 0, sd(results$difference_log_distance_PC8)/3)
+set.seed(NULL)
+
+
 doParallel::registerDoParallel(cores=6)
 model_info <- tibble::tibble(
-  M_distance_predictors=c("DTW_SUM", "DTW_NORM_PATH_LENGTH",
-                          "DTW_NORM_PATH_LENGTH_2",
-                          "DTW_NORM_SUMMED_LENGTH",
-                          "DTW_NORM_SUMMED_LENGTH_2"),
-  spec=vector("list", 5),
-  data_indices=vector("list", 5),
-  fit=vector("list", 5),
-  stats=vector("list", 5)
+  M_distance_predictors=names(FORMULAS),
+  data_indices=vector("list", length(FORMULAS)),
+  fit=vector("list", length(FORMULAS)),
+  stats=vector("list", length(FORMULAS))
   )
 for (i in 1:nrow(model_info)) {
   spec_and_data_i <- prepare_model(model_info[["M_distance_predictors"]][i],
-                                   results)
-  model_info[["spec"]][[i]] <- spec_and_data_i[["spec"]]
+                                   results_for_testing_acoustic_distances)
   model_info[["data_indices"]][[i]] <- spec_and_data_i[["data_indices"]]
-  fit_and_stats_i <- fit_model(spec_and_data_i[["spec"]], spec_and_data_i[["data_indices"]], results)
+  fit_and_stats_i <- fit_model(model_info[["M_distance_predictors"]][[i]], 
+                               spec_and_data_i[["data_indices"]],
+                               results_for_testing_acoustic_distances)
   model_info[["fit"]][[i]] <- fit_and_stats_i[["fit"]]
   model_info[["stats"]][[i]] <- fit_and_stats_i[["stats"]]
 }
-model_info <- model_info %>% tidyr::unnest(stats)
+model_info_simple <- model_info %>%
+  dplyr::select(-fit, -data_indices) %>%
+  tidyr::unnest()
+
+```
+
+```{r plot-model-results}
+plot(extrapolate_half_balanced ~ extrapolate_10_unbalanced,
+     type="n", data=model_info_simple)
+text(extrapolate_half_balanced ~ extrapolate_10_unbalanced, 
+     labels=M_distance_predictors, data=model_info_simple)
+plot(extrapolate_half_balanced ~ extrapolate_10_balanced,
+     type="n", data=model_info_simple)
+text(extrapolate_half_balanced ~ extrapolate_10_balanced, 
+     labels=M_distance_predictors, data=model_info_simple)
+plot(extrapolate_half_unbalanced ~ extrapolate_10_unbalanced,
+     type="n", data=model_info_simple)
+text(extrapolate_half_unbalanced ~ extrapolate_10_unbalanced, 
+     labels=M_distance_predictors, data=model_info_simple)
+plot(extrapolate_half_unbalanced ~ extrapolate_10_balanced,
+     type="n", data=model_info_simple)
+text(extrapolate_half_unbalanced ~ extrapolate_10_balanced, 
+     labels=M_distance_predictors, data=model_info_simple)
+plot(extrapolate_half_unbalanced ~ extrapolate_half_balanced,
+     type="n", data=model_info_simple)
+text(extrapolate_half_unbalanced ~ extrapolate_half_balanced, 
+     labels=M_distance_predictors, data=model_info_simple)
+plot(extrapolate_10_unbalanced ~ extrapolate_10_balanced,
+     type="n", data=model_info_simple)
+text(extrapolate_10_unbalanced ~ extrapolate_10_balanced, 
+     labels=M_distance_predictors, data=model_info_simple)
+plot(loo_vanilla ~ extrapolate_half_balanced,
+     type="n", data=model_info_simple)
+text(loo_vanilla ~ extrapolate_half_balanced, 
+     labels=M_distance_predictors, data=model_info_simple)
+plot(loo_vanilla ~ extrapolate_10_balanced,
+     type="n", data=model_info_simple)
+text(loo_vanilla ~ extrapolate_10_balanced, 
+     labels=M_distance_predictors, data=model_info_simple)
 ```
 
