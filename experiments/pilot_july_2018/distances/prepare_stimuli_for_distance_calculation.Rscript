@@ -1,0 +1,81 @@
+#!/usr/bin/env Rscript
+
+# prepare_stimuli_for_distance_calculation.Rscript
+#
+# Reshape stimulus information file to contain all and only the
+# pairs (X-TGT and X-OTH) that need acoustic distance comparisons,
+# columns being relabelled with _X -> 1 and _TGT/_OTH -> _2.
+# 
+# Strips out an odd assortment of columns from the stimulus information
+# file. Don't count on the output having all the stimulus information,
+# and don't count on it having only the essentials for the distance
+# calculation either.
+#
+# The resulting CSV column headers are in an idiosyncratic dialect of the
+# emerging 'standard_format' that we're using in this project.
+#
+# Author: Ewan Dunbar
+
+`%>%` <- magrittr::`%>%`
+
+ARGS <- commandArgs(TRUE)
+
+# Stimulus information table:
+# e.g., "meta_information.csv"
+INPUT <- ARGS[1] 
+
+# Folder containing the stimulus source files indicated
+# in the stimulus information table in the columns starting with
+# "file_" (file_X, file_TGT, file_OTH):
+# e.g., "/Users/emd/Science/_data/TIMIT/timit/TIMIT/"
+FILE_PREFIX <- paste0(ARGS[2], "/")
+
+# File extension of stimulus source audio files indicated
+# in the stimulus information table in the columns starting with
+# "file_" (file_X, file_TGT, file_OTH):
+# e.g., ".riff"
+FILE_SUFFIX <- ARGS[3]
+
+# Name of output file 
+# e.g., "pairs.csv"
+OUTPUT <- ARGS[4]
+
+stimuli <- readr::read_csv(INPUT,
+  col_types=readr::cols(
+    .default = readr::col_character(),
+    onset_TGT = readr::col_double(),
+    offset_TGT = readr::col_double(),
+    onset_OTH = readr::col_double(),
+    offset_OTH = readr::col_double(),
+    onset_X = readr::col_double(),
+    offset_X = readr::col_double(),
+    Practice = readr::col_logical()
+  )
+)
+pairs <- stimuli %>%
+  dplyr::select(-phone2_X, -Practice, -Block, -presentation_order) %>%
+  tidyr::gather(key=KEY, value=VALUE,
+                       -tripletid, -tidyselect::ends_with("_X"),
+                       -`Target phone`, -`Other phone`) %>%
+  tidyr::extract(KEY, c("COLNAME", "target_other"), "(.*)_(.*)") %>%
+  tidyr::spread(COLNAME, VALUE) %>%
+  dplyr::rename_all(dplyr::funs(
+    stringr::str_replace_all(., "_X", "_1"))) %>%
+  dplyr::rename_at(dplyr::vars(-tripletid, -tidyselect::ends_with("_1"),
+                               -`Target phone`, -`Other phone`,
+                               -target_other),
+                   dplyr::funs(paste0(., "_2"))) %>%
+  dplyr::mutate(phone_1=`Target phone`,
+                phone_2=ifelse(target_other == "OTH", `Other phone`,
+                                                        `Target phone`)) %>%
+  dplyr::select(-`Target phone`, -`Other phone`) %>%
+  dplyr::rename_at(dplyr::vars(-tidyselect::ends_with("_1"),
+                               -tidyselect::ends_with("_2")),
+                   dplyr::funs(paste0("_", .))) %>%
+  dplyr::mutate_at(dplyr::vars(tidyselect::starts_with("file_")),
+                   dplyr::funs(paste0(FILE_PREFIX, ., FILE_SUFFIX)))
+readr::write_csv(pairs, OUTPUT)
+
+
+
+

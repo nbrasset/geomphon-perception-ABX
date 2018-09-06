@@ -1,0 +1,92 @@
+#!/usr/bin/env Rscript
+
+# reshape_result_of_distance_calculation.Rscript
+#
+# Reshape result of distance calculation so that it puts back the
+# one-line-per-triplet shape, and the original _X, _TGT, and _OTH
+# column headers.
+#
+# Undoes the mutation of the filenames that yielded the full paths
+# to the source wav files.
+#
+# Undoes the munging of the column names to the idiosyncratic
+# dialect of standard format, because at this point standard format
+# has not set its tentacles out into the data analysis.
+# 
+# The result of prepare_stimuli_for_distance_calculation.Rscript
+# did *not* preserve all the meta-information; thus, neither
+# does the distance calculation, and neither does the output of
+# this script. The distance table resulting from the current script
+# needs to be re-merged with the original item meta-information
+# table in order to be useful in the analysis.
+#
+# Author: Ewan Dunbar
+
+`%>%` <- magrittr::`%>%`
+
+ARGS <- commandArgs(TRUE)
+
+# Stimulus information table:
+# e.g., "distances_by_pair.csv"
+INPUT <- ARGS[1] 
+
+# Folder containing the stimulus source files indicated
+# in the stimulus information table in the columns starting with
+# "file_" (file_X, file_TGT, file_OTH):
+# e.g., "/Users/emd/Science/_data/TIMIT/timit/TIMIT/"
+FILE_PREFIX <- paste0(ARGS[2], "/")
+
+# File extension of stimulus source audio files indicated
+# in the stimulus information table in the columns starting with
+# "file_" (file_X, file_TGT, file_OTH):
+# e.g., ".riff"
+FILE_SUFFIX <- ARGS[3]
+
+# Name of output file 
+# e.g., "distances_by_triplet.csv"
+OUTPUT <- ARGS[4]
+
+# This is used internally (see below), and is by no means guaranteed to be
+# safe.
+SAFE_SEPARATOR <- "::%_%::" 
+
+distances_by_pair <- readr::read_csv(INPUT,
+  col_types=readr::cols(
+    .default = readr::col_character(),
+    distance = readr::col_double(),
+    `_tripletid` = readr::col_character(),
+    `_file_1` = readr::col_character(),
+    `_file_2` = readr::col_character(),
+    `_onset_1` = readr::col_double(),
+    `_offset_1` = readr::col_double(),
+    `_onset_2` = readr::col_double(),
+    `_offset_2` = readr::col_double()
+  )
+)
+
+distances_by_pair_unmunged <- distances_by_pair %>%
+  dplyr::rename_all(function(x) sub("^_", "", x))
+
+# Save the original sequence of columns associated with either a 'target' or
+# an 'other' element of the triplets (i.e., the variables to spread in the
+# wide version)
+element_2_colnames <- distances_by_pair_unmunged %>%
+  dplyr::select(distance, tidyselect::ends_with("_2")) %>%
+  names
+
+distances_by_pair_unmunged %>%
+  dplyr::rename_all(function(x) sub("_1", "_X", x)) %>%
+  tidyr::unite(ELEMENT_2_COLUMNS, element_2_colnames, sep=SAFE_SEPARATOR) %>%
+  tidyr::spread(target_other, ELEMENT_2_COLUMNS) %>%
+  tidyr::separate(TGT, element_2_colnames, sep=SAFE_SEPARATOR, convert=TRUE) %>%
+  dplyr::rename_all(function(x) sub("_2", "_TGT", x)) %>%
+  dplyr::rename(distance_TGT=distance) %>%
+  tidyr::separate(OTH, element_2_colnames, sep=SAFE_SEPARATOR, convert=TRUE) %>%
+  dplyr::rename_all(function(x) sub("_2", "_OTH", x)) %>%
+  dplyr::rename(distance_OTH=distance) %>%
+  dplyr::mutate_at(dplyr::vars(tidyselect::starts_with("file_")),
+                   function(x) sub(paste0(FILE_SUFFIX, "$"), "",
+                                   sub(paste0("^", FILE_PREFIX), "", x))) %>% 
+  readr::write_csv(OUTPUT)
+
+

@@ -25,3 +25,7 @@ trips$trip_phons<-as.factor(trips$trip_phons)
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 34123c89b3a299163911dcbb37d168188b2c1935

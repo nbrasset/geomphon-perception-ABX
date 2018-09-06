@@ -32,3 +32,7 @@ cp stimuli/*.mp3 LMEDS_master/tests/geomphon_ABX_French_Aug_2018/audio_and_video
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 34123c89b3a299163911dcbb37d168188b2c1935
