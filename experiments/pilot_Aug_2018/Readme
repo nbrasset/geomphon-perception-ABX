@@ -21,7 +21,7 @@ TO CREATE STIMULI:
 
 3. scale_intensity.Praat: script for normalising intensity of all files in a directory. 
 
-4. triplets.csv:  a list of all possible triplets 
+4. generate triplet list  triplets.csv:  a list of all possible triplets 
 
 5. create_stimlist.py : a script that takes triplets.csv and filters it to create a stimuli list, then outputs a stimlist which is saved to the concatenation folder (NB as a .txt file! Praat does not like .csvs in this specific moment), as well as a two new LMEDs sequence file (English/French)
 
@@ -31,7 +31,8 @@ TO CREATE STIMULI:
 
 
 
-To create new  LMEDS setup for experiment: 
+TO CREATE NEW EXPERIMENT: 
+
 1. UPDATE BY HAND
 		-update LMEDs dictionary (with new experiment finish code for turkers, if nothing else)
 		-(if necessary update sequence file to reflect new stimuli)
