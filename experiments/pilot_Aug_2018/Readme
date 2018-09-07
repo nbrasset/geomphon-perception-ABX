@@ -5,10 +5,11 @@ This differs from the July pilot in two ways.
     1 new stimuli 
       -stimuli recorded in sound booth by native English speakers 
       -both vowels and consonants 
-    2new presurvey-  improved language in demographic questionnaire 
+    2 new presurvey-  improved language in demographic questionnaire 
 
 
-Contents
+
+TO CREATE STIMULI:
 
 1. Stimuli folder containing
 	-full recordings of stimuli (ewan.wav,amelia_consonants.wav,amelia_vowels.wav)
@@ -16,31 +17,36 @@ Contents
 		-these textgrids have a tier (2) with only the target word (no recording context)
 		-these textgrids have been handcheecked for accuracy after running forced aligner
 
-2. save_intervals_to_wavs.Praat :script for cutting out just target words and saving them as separate .wavs. NB the output directory specified here must exist already, the script will fail rather than create one if you specify a directory that does not exist
+2. save_intervals_to_wavs.Praat :script for cutting out just target words and saving them as separate .wavs. NB the output directory specified here must exist already, the script will fail rather than create one if you specify a directory that does not exist. 
 
-3. scale_intensity.Praat: script for normalising intensity of all files in a directory 
+3. scale_intensity.Praat: script for normalising intensity of all files in a directory. 
 
 4. triplets.csv:  a list of all possible triplets 
 
-5. create_stimlist.py : a script that takes triplets.csv and filters it to create a stimuli list, then outputs a stimlist which is saved to the concatenation folder (NB as a .txt file! Praat does not like .csvs in this application), as well as a two new LMEDs sequence file (English/French) which are saved to the two corresponding LMEDs folders 
+5. create_stimlist.py : a script that takes triplets.csv and filters it to create a stimuli list, then outputs a stimlist which is saved to the concatenation folder (NB as a .txt file! Praat does not like .csvs in this specific moment), as well as a two new LMEDs sequence file (English/French)
 
 6. concatenation_of_tripets.Praat : takes the stimlist created by create_stimlist.R and the .wavs created by save_intervals_to_wavs.Praat (which have been normalised by Normalize_intensity.Praat), and creates triplet files. Note that all files must be the same sampling frequency, even silences
-
 
 7. Bash script geomphon_Aug_2018.sh which runs all the above 6 steps in the above order. 
 
 
 
-8. LMEDs_master directory for this implementation of LMEDs
-	for a new experiment, these 
-	[ BY HAND- LMEDS update
-		-update LMEDs dictionary (with new experiment code, if nothing else)
-		-(if necessary) update sequence
-		-(if necessary) update surveys— IF update, then update cleaning script by hand
-		-update .cgi file ]
+To create new  LMEDS setup for experiment: 
+1. UPDATE BY HAND
+		-update LMEDs dictionary (with new experiment finish code for turkers, if nothing else)
+		-(if necessary update sequence file to reflect new stimuli)
+		-(if necessary update surveys— If update, then update cleaning script by hand)
+		-update .cgi file 
 		-update output folder to have name that is the same as the sequence file name
 
-After running the bash script and updating LMEDs, need to Push updates to server  and Update server permissions to allow experiment to run (SBS)
+2. Use makefile to add your updates to stable version of LMEDS 
+
+3. Push updates to server 
+
+4. Update server permissions to allow experiment to run
+   -cgi must be executable 
+   -output folders must have write permissions. 
+
 
 
 <<<<<<< HEAD

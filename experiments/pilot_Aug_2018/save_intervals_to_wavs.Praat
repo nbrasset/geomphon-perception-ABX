@@ -8,10 +8,11 @@
 # 
 # This script is distributed under the GNU General Public License.
 # Copyright 8.3.2002 Mietta Lennes
+
 #adapted 20 Aug 2018 by Amelia 
-#-removed form and istead saved presets.  look up Mietta's original to re-make form
+#-removed form and instead saved presets. 
 #-removed the warning of how many files will be saved
-#-now names all instances of the same interval name with a trailing index number, starting from 1. If you run the 
+#-now names all instances of the same interval name endwith a trailing index number, starting from 1. If you run the 
 #   script multiple times it will continue counting up. 
 
 
@@ -34,8 +35,6 @@
 
 	#give the folder where to save the sound files:
 	folder$ = "stimuli/concatenation/intervals/"
-
-
 
 	#comment Give an optional suffix for all filenames (.wav will be added anyway):
 	suffix$ = ""
