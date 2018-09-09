@@ -60,17 +60,17 @@ list<-list %>% mutate(
  
  list<-list %>% mutate(
     word_P = case_when(
-      V_C == "vowel"& CONTEXT == "AH"~ paste(P,"DAH", sample(1:4,1), sep=""),
-      V_C == "vowel" & CONTEXT == "EE"~ paste(P,"DI",  sample(1:4,1),sep=""),
-      V_C == "consonant" & CONTEXT == "AH"~ paste("AH",P,sample(1:4,1),"AH", sep=""),
-      V_C == "consonant" & CONTEXT == "EE"~ paste("EE",P,sample(1:4,1),"EE", sep="")))
+      V_C == "vowel"& CONTEXT == "AH"~ paste(P,"DAH",sample(1:4,1),".wav", sep=""),
+      V_C == "vowel" & CONTEXT == "EE"~ paste(P,"DI",sample(1:4,1),".wav", sep=""),
+      V_C == "consonant" & CONTEXT == "AH"~ paste("A",P,"AH",sample(1:4,1), ".wav",sep=""),
+      V_C == "consonant" & CONTEXT == "EE"~ paste("EE",P,"EE",sample(1:4,1), ".wav",sep="")))
 
  list<-list %>% mutate(
     word_Q = case_when(
-      V_C == "vowel"& CONTEXT == "AH"~ paste(Q,"DAH",sample(1:4,1), sep=""),
-      V_C == "vowel" & CONTEXT == "EE"~ paste(Q,"DI",sample(1:4,1), sep=""),
-      V_C == "consonant" & CONTEXT == "AH"~ paste("AH",Q,"AH",sample(1:4,1), sep=""),
-      V_C == "consonant" & CONTEXT == "EE"~ paste("EE",Q,"EE",sample(1:4,1), sep=""))
+      V_C == "vowel"& CONTEXT == "AH"~ paste(Q,"DAH",sample(1:4,1),".wav", sep=""),
+      V_C == "vowel" & CONTEXT == "EE"~ paste(Q,"DI",sample(1:4,1), ".wav",sep=""),
+      V_C == "consonant" & CONTEXT == "AH"~ paste("A",Q,"AH",sample(1:4,1), ".wav",sep=""),
+      V_C == "consonant" & CONTEXT == "EE"~ paste("EE",Q,"EE",sample(1:4,1), ".wav",sep=""))
     )
  
  
@@ -115,7 +115,7 @@ Stimuli_list<-list %>%
   select(File1, Silence1,File2,Silence2,File3,CORR_ANS,filename)
 
 #print df  to text file (NB NOT A CSV, Praat prefers TXT here.)  
-write.table(Stimuli_list,file="Stimuli_list.txt", sep="\t")
+write.table(Stimuli_list, file="/stimuli/concatenation/Stimuli_list.txt", sep="\t",quote = FALSE, row.names = FALSE)
 
 
 

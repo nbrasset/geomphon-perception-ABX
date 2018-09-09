@@ -8,11 +8,15 @@
 /Applications/Praat.app/Contents/MacOS/Praat --run "scale_intensity.Praat"
 
 #run create_stimlist.py to create a stimlist 
-#this script saves stimlist in correct format  to concatenation folder. 
-#script also saves new sequence file based on this stimlst to LMEDs folders for English and french
+python create_stimlist.py
 
-#use stimlist to run concatenation file on normalized stimuli 
+#change stimlist to correct format, save to concatenation folder.
+Rscript reformat_stimlist.R 
+ 
+
+#use reformatted stimlist to run concatenation file on normalized stimuli 
 /Applications/Praat.app/Contents/MacOS/Praat --run "concatenation_of_tripets.Praat"
+
 
 #convert all new triplet files to .mp3 and .ogg using sox 
 cd stimuli

@@ -1,145 +1,145 @@
-"File1"	"Silence1"	"File2"	"Silence2"	"File3"	"CORR_ANS"	"filename"
-"1"	"ewan_HADAH4"	"500ms_silence.wav"	"ewan_HAEDAH3"	"500ms_silence.wav"	"ewan_HAEDAH3"	"B"	"stimulus1"
-"2"	"amelia_HAEDI2"	"500ms_silence.wav"	"amelia_HADI1"	"500ms_silence.wav"	"amelia_HADI1"	"B"	"stimulus2"
-"3"	"ewan_HADI1"	"500ms_silence.wav"	"ewan_HAEDI2"	"500ms_silence.wav"	"ewan_HAEDI2"	"B"	"stimulus3"
-"4"	"amelia_HAEDAH3"	"500ms_silence.wav"	"amelia_HAEDAH3"	"500ms_silence.wav"	"amelia_HAEDAH3"	"A"	"stimulus4"
-"5"	"amelia_HADI1"	"500ms_silence.wav"	"amelia_HEEDI2"	"500ms_silence.wav"	"amelia_HEEDI2"	"B"	"stimulus5"
-"6"	"ewan_HEEDAH3"	"500ms_silence.wav"	"ewan_HADAH4"	"500ms_silence.wav"	"ewan_HADAH4"	"B"	"stimulus6"
-"7"	"ewan_HADAH4"	"500ms_silence.wav"	"ewan_HEEDAH3"	"500ms_silence.wav"	"ewan_HEEDAH3"	"B"	"stimulus7"
-"8"	"amelia_HEEDI2"	"500ms_silence.wav"	"amelia_HEEDI2"	"500ms_silence.wav"	"amelia_HEEDI2"	"A"	"stimulus8"
-"9"	"amelia_HADI1"	"500ms_silence.wav"	"amelia_HOODI2"	"500ms_silence.wav"	"amelia_HOODI2"	"B"	"stimulus9"
-"10"	"ewan_HOODI2"	"500ms_silence.wav"	"ewan_HADI1"	"500ms_silence.wav"	"ewan_HADI1"	"B"	"stimulus10"
-"11"	"ewan_HADAH4"	"500ms_silence.wav"	"ewan_HOODAH3"	"500ms_silence.wav"	"ewan_HOODAH3"	"B"	"stimulus11"
-"12"	"amelia_HOODAH3"	"500ms_silence.wav"	"amelia_HOODAH3"	"500ms_silence.wav"	"amelia_HOODAH3"	"A"	"stimulus12"
-"13"	"ewan_HADAH4"	"500ms_silence.wav"	"ewan_HUHDAH3"	"500ms_silence.wav"	"ewan_HUHDAH3"	"B"	"stimulus13"
-"14"	"amelia_HUHDI2"	"500ms_silence.wav"	"amelia_HADI1"	"500ms_silence.wav"	"amelia_HADI1"	"B"	"stimulus14"
-"15"	"ewan_HADAH4"	"500ms_silence.wav"	"ewan_HUHDAH3"	"500ms_silence.wav"	"ewan_HUHDAH3"	"B"	"stimulus15"
-"16"	"amelia_HUHDI2"	"500ms_silence.wav"	"amelia_HUHDI2"	"500ms_silence.wav"	"amelia_HUHDI2"	"A"	"stimulus16"
-"17"	"amelia_HADI1"	"500ms_silence.wav"	"amelia_WHODI2"	"500ms_silence.wav"	"amelia_WHODI2"	"B"	"stimulus17"
-"18"	"ewan_WHODAH3"	"500ms_silence.wav"	"ewan_HADAH4"	"500ms_silence.wav"	"ewan_HADAH4"	"B"	"stimulus18"
-"19"	"ewan_HADAH4"	"500ms_silence.wav"	"ewan_WHODAH3"	"500ms_silence.wav"	"ewan_WHODAH3"	"B"	"stimulus19"
-"20"	"amelia_WHODI2"	"500ms_silence.wav"	"amelia_WHODI2"	"500ms_silence.wav"	"amelia_WHODI2"	"A"	"stimulus20"
-"21"	"ewan_HAEDAH4"	"500ms_silence.wav"	"ewan_HEEDAH3"	"500ms_silence.wav"	"ewan_HEEDAH3"	"B"	"stimulus21"
-"22"	"amelia_HEEDI2"	"500ms_silence.wav"	"amelia_HAEDI1"	"500ms_silence.wav"	"amelia_HAEDI1"	"B"	"stimulus22"
-"23"	"amelia_HAEDI1"	"500ms_silence.wav"	"amelia_HEEDI2"	"500ms_silence.wav"	"amelia_HEEDI2"	"B"	"stimulus23"
-"24"	"ewan_HEEDAH3"	"500ms_silence.wav"	"ewan_HEEDAH3"	"500ms_silence.wav"	"ewan_HEEDAH3"	"A"	"stimulus24"
-"25"	"ewan_HAEDI1"	"500ms_silence.wav"	"ewan_HOODI2"	"500ms_silence.wav"	"ewan_HOODI2"	"B"	"stimulus25"
-"26"	"amelia_HOODI2"	"500ms_silence.wav"	"amelia_HAEDI1"	"500ms_silence.wav"	"amelia_HAEDI1"	"B"	"stimulus26"
-"27"	"amelia_HAEDAH4"	"500ms_silence.wav"	"amelia_HOODAH3"	"500ms_silence.wav"	"amelia_HOODAH3"	"B"	"stimulus27"
-"28"	"ewan_HOODAH3"	"500ms_silence.wav"	"ewan_HOODAH3"	"500ms_silence.wav"	"ewan_HOODAH3"	"A"	"stimulus28"
-"29"	"amelia_HAEDAH4"	"500ms_silence.wav"	"amelia_HUHDAH3"	"500ms_silence.wav"	"amelia_HUHDAH3"	"B"	"stimulus29"
-"30"	"ewan_HUHDI2"	"500ms_silence.wav"	"ewan_HAEDI1"	"500ms_silence.wav"	"ewan_HAEDI1"	"B"	"stimulus30"
-"31"	"ewan_HAEDI1"	"500ms_silence.wav"	"ewan_HUHDI2"	"500ms_silence.wav"	"ewan_HUHDI2"	"B"	"stimulus31"
-"32"	"amelia_HUHDAH3"	"500ms_silence.wav"	"amelia_HUHDAH3"	"500ms_silence.wav"	"amelia_HUHDAH3"	"A"	"stimulus32"
-"33"	"ewan_HAEDAH4"	"500ms_silence.wav"	"ewan_WHODAH3"	"500ms_silence.wav"	"ewan_WHODAH3"	"B"	"stimulus33"
-"34"	"amelia_WHODI2"	"500ms_silence.wav"	"amelia_HAEDI1"	"500ms_silence.wav"	"amelia_HAEDI1"	"B"	"stimulus34"
-"35"	"ewan_HAEDI1"	"500ms_silence.wav"	"ewan_WHODI2"	"500ms_silence.wav"	"ewan_WHODI2"	"B"	"stimulus35"
-"36"	"amelia_WHODAH3"	"500ms_silence.wav"	"amelia_WHODAH3"	"500ms_silence.wav"	"amelia_WHODAH3"	"A"	"stimulus36"
-"37"	"ewan_HEEDI1"	"500ms_silence.wav"	"ewan_HOODI2"	"500ms_silence.wav"	"ewan_HOODI2"	"B"	"stimulus37"
-"38"	"amelia_HOODAH3"	"500ms_silence.wav"	"amelia_HEEDAH4"	"500ms_silence.wav"	"amelia_HEEDAH4"	"B"	"stimulus38"
-"39"	"ewan_HEEDI1"	"500ms_silence.wav"	"ewan_HOODI2"	"500ms_silence.wav"	"ewan_HOODI2"	"B"	"stimulus39"
-"40"	"amelia_HOODAH3"	"500ms_silence.wav"	"amelia_HOODAH3"	"500ms_silence.wav"	"amelia_HOODAH3"	"A"	"stimulus40"
-"41"	"amelia_HEEDI1"	"500ms_silence.wav"	"amelia_HUHDI2"	"500ms_silence.wav"	"amelia_HUHDI2"	"B"	"stimulus41"
-"42"	"ewan_HUHDI2"	"500ms_silence.wav"	"ewan_HEEDI1"	"500ms_silence.wav"	"ewan_HEEDI1"	"B"	"stimulus42"
-"43"	"amelia_HEEDAH4"	"500ms_silence.wav"	"amelia_HUHDAH3"	"500ms_silence.wav"	"amelia_HUHDAH3"	"B"	"stimulus43"
-"44"	"ewan_HUHDAH3"	"500ms_silence.wav"	"ewan_HUHDAH3"	"500ms_silence.wav"	"ewan_HUHDAH3"	"A"	"stimulus44"
-"45"	"amelia_HEEDI1"	"500ms_silence.wav"	"amelia_WHODI2"	"500ms_silence.wav"	"amelia_WHODI2"	"B"	"stimulus45"
-"46"	"ewan_WHODI2"	"500ms_silence.wav"	"ewan_HEEDI1"	"500ms_silence.wav"	"ewan_HEEDI1"	"B"	"stimulus46"
-"47"	"amelia_HEEDAH4"	"500ms_silence.wav"	"amelia_WHODAH3"	"500ms_silence.wav"	"amelia_WHODAH3"	"B"	"stimulus47"
-"48"	"ewan_WHODAH3"	"500ms_silence.wav"	"ewan_WHODAH3"	"500ms_silence.wav"	"ewan_WHODAH3"	"A"	"stimulus48"
-"49"	"amelia_HOODAH4"	"500ms_silence.wav"	"amelia_HUHDAH3"	"500ms_silence.wav"	"amelia_HUHDAH3"	"B"	"stimulus49"
-"50"	"ewan_HUHDAH3"	"500ms_silence.wav"	"ewan_HOODAH4"	"500ms_silence.wav"	"ewan_HOODAH4"	"B"	"stimulus50"
-"51"	"amelia_HOODI1"	"500ms_silence.wav"	"amelia_HUHDI2"	"500ms_silence.wav"	"amelia_HUHDI2"	"B"	"stimulus51"
-"52"	"ewan_HUHDI2"	"500ms_silence.wav"	"ewan_HUHDI2"	"500ms_silence.wav"	"ewan_HUHDI2"	"A"	"stimulus52"
-"53"	"ewan_HOODI1"	"500ms_silence.wav"	"ewan_WHODI2"	"500ms_silence.wav"	"ewan_WHODI2"	"B"	"stimulus53"
-"54"	"amelia_WHODI2"	"500ms_silence.wav"	"amelia_HOODI1"	"500ms_silence.wav"	"amelia_HOODI1"	"B"	"stimulus54"
-"55"	"ewan_HOODAH4"	"500ms_silence.wav"	"ewan_WHODAH3"	"500ms_silence.wav"	"ewan_WHODAH3"	"B"	"stimulus55"
-"56"	"amelia_WHODAH3"	"500ms_silence.wav"	"amelia_WHODAH3"	"500ms_silence.wav"	"amelia_WHODAH3"	"A"	"stimulus56"
-"57"	"amelia_HOODAH4"	"500ms_silence.wav"	"amelia_WHODAH3"	"500ms_silence.wav"	"amelia_WHODAH3"	"B"	"stimulus57"
-"58"	"ewan_WHODAH3"	"500ms_silence.wav"	"ewan_HOODAH4"	"500ms_silence.wav"	"ewan_HOODAH4"	"B"	"stimulus58"
-"59"	"ewan_HOODI1"	"500ms_silence.wav"	"ewan_WHODI2"	"500ms_silence.wav"	"ewan_WHODI2"	"B"	"stimulus59"
-"60"	"amelia_WHODI2"	"500ms_silence.wav"	"amelia_WHODI2"	"500ms_silence.wav"	"amelia_WHODI2"	"A"	"stimulus60"
-"61"	"ewan_AHF3AH"	"500ms_silence.wav"	"ewan_AHKAH4"	"500ms_silence.wav"	"ewan_AHKAH4"	"B"	"stimulus61"
-"62"	"amelia_EEKEE1"	"500ms_silence.wav"	"amelia_EEF3EE"	"500ms_silence.wav"	"amelia_EEF3EE"	"B"	"stimulus62"
-"63"	"amelia_AHF3AH"	"500ms_silence.wav"	"amelia_AHKAH4"	"500ms_silence.wav"	"amelia_AHKAH4"	"B"	"stimulus63"
-"64"	"ewan_EEKEE1"	"500ms_silence.wav"	"ewan_EEKEE1"	"500ms_silence.wav"	"ewan_EEKEE1"	"A"	"stimulus64"
-"65"	"ewan_EEF3EE"	"500ms_silence.wav"	"ewan_EEPEE1"	"500ms_silence.wav"	"ewan_EEPEE1"	"B"	"stimulus65"
-"66"	"amelia_AHPAH4"	"500ms_silence.wav"	"amelia_AHF3AH"	"500ms_silence.wav"	"amelia_AHF3AH"	"B"	"stimulus66"
-"67"	"amelia_AHF3AH"	"500ms_silence.wav"	"amelia_AHPAH4"	"500ms_silence.wav"	"amelia_AHPAH4"	"B"	"stimulus67"
-"68"	"ewan_EEPEE1"	"500ms_silence.wav"	"ewan_EEPEE1"	"500ms_silence.wav"	"ewan_EEPEE1"	"A"	"stimulus68"
-"69"	"ewan_AHF3AH"	"500ms_silence.wav"	"ewan_AHSHAH4"	"500ms_silence.wav"	"ewan_AHSHAH4"	"B"	"stimulus69"
-"70"	"amelia_EESHEE1"	"500ms_silence.wav"	"amelia_EEF3EE"	"500ms_silence.wav"	"amelia_EEF3EE"	"B"	"stimulus70"
-"71"	"amelia_AHF3AH"	"500ms_silence.wav"	"amelia_AHSHAH4"	"500ms_silence.wav"	"amelia_AHSHAH4"	"B"	"stimulus71"
-"72"	"ewan_EESHEE1"	"500ms_silence.wav"	"ewan_EESHEE1"	"500ms_silence.wav"	"ewan_EESHEE1"	"A"	"stimulus72"
-"73"	"ewan_AHF3AH"	"500ms_silence.wav"	"ewan_AHSSAH4"	"500ms_silence.wav"	"ewan_AHSSAH4"	"B"	"stimulus73"
-"74"	"amelia_AHSSAH4"	"500ms_silence.wav"	"amelia_AHF3AH"	"500ms_silence.wav"	"amelia_AHF3AH"	"B"	"stimulus74"
-"75"	"ewan_EEF3EE"	"500ms_silence.wav"	"ewan_EESSEE1"	"500ms_silence.wav"	"ewan_EESSEE1"	"B"	"stimulus75"
-"76"	"amelia_EESSEE1"	"500ms_silence.wav"	"amelia_EESSEE1"	"500ms_silence.wav"	"amelia_EESSEE1"	"A"	"stimulus76"
-"77"	"ewan_EEF3EE"	"500ms_silence.wav"	"ewan_EETHEE1"	"500ms_silence.wav"	"ewan_EETHEE1"	"B"	"stimulus77"
-"78"	"ewan_AHTHAH4"	"500ms_silence.wav"	"ewan_AHF3AH"	"500ms_silence.wav"	"ewan_AHF3AH"	"B"	"stimulus78"
-"79"	"amelia_EEF3EE"	"500ms_silence.wav"	"amelia_EETHEE1"	"500ms_silence.wav"	"amelia_EETHEE1"	"B"	"stimulus79"
-"80"	"amelia_AHTHAH4"	"500ms_silence.wav"	"amelia_AHTHAH4"	"500ms_silence.wav"	"amelia_AHTHAH4"	"A"	"stimulus80"
-"81"	"amelia_EEF3EE"	"500ms_silence.wav"	"amelia_EETEE1"	"500ms_silence.wav"	"amelia_EETEE1"	"B"	"stimulus81"
-"82"	"ewan_AHTAH4"	"500ms_silence.wav"	"ewan_AHF3AH"	"500ms_silence.wav"	"ewan_AHF3AH"	"B"	"stimulus82"
-"83"	"ewan_EEF3EE"	"500ms_silence.wav"	"ewan_EETEE1"	"500ms_silence.wav"	"ewan_EETEE1"	"B"	"stimulus83"
-"84"	"amelia_AHTAH4"	"500ms_silence.wav"	"amelia_AHTAH4"	"500ms_silence.wav"	"amelia_AHTAH4"	"A"	"stimulus84"
-"85"	"amelia_AHK3AH"	"500ms_silence.wav"	"amelia_AHPAH4"	"500ms_silence.wav"	"amelia_AHPAH4"	"B"	"stimulus85"
-"86"	"ewan_EEPEE1"	"500ms_silence.wav"	"ewan_EEK3EE"	"500ms_silence.wav"	"ewan_EEK3EE"	"B"	"stimulus86"
-"87"	"ewan_AHK3AH"	"500ms_silence.wav"	"ewan_AHPAH4"	"500ms_silence.wav"	"ewan_AHPAH4"	"B"	"stimulus87"
-"88"	"amelia_EEPEE1"	"500ms_silence.wav"	"amelia_EEPEE1"	"500ms_silence.wav"	"amelia_EEPEE1"	"A"	"stimulus88"
-"89"	"amelia_AHK3AH"	"500ms_silence.wav"	"amelia_AHSHAH4"	"500ms_silence.wav"	"amelia_AHSHAH4"	"B"	"stimulus89"
-"90"	"amelia_AHSHAH4"	"500ms_silence.wav"	"amelia_AHK3AH"	"500ms_silence.wav"	"amelia_AHK3AH"	"B"	"stimulus90"
-"91"	"ewan_EEK3EE"	"500ms_silence.wav"	"ewan_EESHEE1"	"500ms_silence.wav"	"ewan_EESHEE1"	"B"	"stimulus91"
-"92"	"ewan_EESHEE1"	"500ms_silence.wav"	"ewan_EESHEE1"	"500ms_silence.wav"	"ewan_EESHEE1"	"A"	"stimulus92"
-"93"	"ewan_EEK3EE"	"500ms_silence.wav"	"ewan_EESSEE1"	"500ms_silence.wav"	"ewan_EESSEE1"	"B"	"stimulus93"
-"94"	"ewan_AHSSAH4"	"500ms_silence.wav"	"ewan_AHK3AH"	"500ms_silence.wav"	"ewan_AHK3AH"	"B"	"stimulus94"
-"95"	"amelia_AHK3AH"	"500ms_silence.wav"	"amelia_AHSSAH4"	"500ms_silence.wav"	"amelia_AHSSAH4"	"B"	"stimulus95"
-"96"	"amelia_EESSEE1"	"500ms_silence.wav"	"amelia_EESSEE1"	"500ms_silence.wav"	"amelia_EESSEE1"	"A"	"stimulus96"
-"97"	"amelia_EEK3EE"	"500ms_silence.wav"	"amelia_EETHEE1"	"500ms_silence.wav"	"amelia_EETHEE1"	"B"	"stimulus97"
-"98"	"ewan_AHTHAH4"	"500ms_silence.wav"	"ewan_AHK3AH"	"500ms_silence.wav"	"ewan_AHK3AH"	"B"	"stimulus98"
-"99"	"amelia_EEK3EE"	"500ms_silence.wav"	"amelia_EETHEE1"	"500ms_silence.wav"	"amelia_EETHEE1"	"B"	"stimulus99"
-"100"	"ewan_AHTHAH4"	"500ms_silence.wav"	"ewan_AHTHAH4"	"500ms_silence.wav"	"ewan_AHTHAH4"	"A"	"stimulus100"
-"101"	"amelia_AHK3AH"	"500ms_silence.wav"	"amelia_AHTAH4"	"500ms_silence.wav"	"amelia_AHTAH4"	"B"	"stimulus101"
-"102"	"ewan_EETEE1"	"500ms_silence.wav"	"ewan_EEK3EE"	"500ms_silence.wav"	"ewan_EEK3EE"	"B"	"stimulus102"
-"103"	"amelia_AHK3AH"	"500ms_silence.wav"	"amelia_AHTAH4"	"500ms_silence.wav"	"amelia_AHTAH4"	"B"	"stimulus103"
-"104"	"ewan_EETEE1"	"500ms_silence.wav"	"ewan_EETEE1"	"500ms_silence.wav"	"ewan_EETEE1"	"A"	"stimulus104"
-"105"	"amelia_AHP3AH"	"500ms_silence.wav"	"amelia_AHSHAH4"	"500ms_silence.wav"	"amelia_AHSHAH4"	"B"	"stimulus105"
-"106"	"amelia_AHSHAH4"	"500ms_silence.wav"	"amelia_AHP3AH"	"500ms_silence.wav"	"amelia_AHP3AH"	"B"	"stimulus106"
-"107"	"ewan_EEP3EE"	"500ms_silence.wav"	"ewan_EESHEE1"	"500ms_silence.wav"	"ewan_EESHEE1"	"B"	"stimulus107"
-"108"	"ewan_EESHEE1"	"500ms_silence.wav"	"ewan_EESHEE1"	"500ms_silence.wav"	"ewan_EESHEE1"	"A"	"stimulus108"
-"109"	"amelia_AHP3AH"	"500ms_silence.wav"	"amelia_AHSSAH4"	"500ms_silence.wav"	"amelia_AHSSAH4"	"B"	"stimulus109"
-"110"	"ewan_AHSSAH4"	"500ms_silence.wav"	"ewan_AHP3AH"	"500ms_silence.wav"	"ewan_AHP3AH"	"B"	"stimulus110"
-"111"	"amelia_EEP3EE"	"500ms_silence.wav"	"amelia_EESSEE1"	"500ms_silence.wav"	"amelia_EESSEE1"	"B"	"stimulus111"
-"112"	"ewan_EESSEE1"	"500ms_silence.wav"	"ewan_EESSEE1"	"500ms_silence.wav"	"ewan_EESSEE1"	"A"	"stimulus112"
-"113"	"ewan_EEP3EE"	"500ms_silence.wav"	"ewan_EETHEE1"	"500ms_silence.wav"	"ewan_EETHEE1"	"B"	"stimulus113"
-"114"	"ewan_AHTHAH4"	"500ms_silence.wav"	"ewan_AHP3AH"	"500ms_silence.wav"	"ewan_AHP3AH"	"B"	"stimulus114"
-"115"	"amelia_EEP3EE"	"500ms_silence.wav"	"amelia_EETHEE1"	"500ms_silence.wav"	"amelia_EETHEE1"	"B"	"stimulus115"
-"116"	"amelia_AHTHAH4"	"500ms_silence.wav"	"amelia_AHTHAH4"	"500ms_silence.wav"	"amelia_AHTHAH4"	"A"	"stimulus116"
-"117"	"amelia_AHP3AH"	"500ms_silence.wav"	"amelia_AHTAH4"	"500ms_silence.wav"	"amelia_AHTAH4"	"B"	"stimulus117"
-"118"	"amelia_EETEE1"	"500ms_silence.wav"	"amelia_EEP3EE"	"500ms_silence.wav"	"amelia_EEP3EE"	"B"	"stimulus118"
-"119"	"ewan_EEP3EE"	"500ms_silence.wav"	"ewan_EETEE1"	"500ms_silence.wav"	"ewan_EETEE1"	"B"	"stimulus119"
-"120"	"ewan_AHTAH4"	"500ms_silence.wav"	"ewan_AHTAH4"	"500ms_silence.wav"	"ewan_AHTAH4"	"A"	"stimulus120"
-"121"	"ewan_EESH3EE"	"500ms_silence.wav"	"ewan_EESSEE1"	"500ms_silence.wav"	"ewan_EESSEE1"	"B"	"stimulus121"
-"122"	"amelia_AHSSAH4"	"500ms_silence.wav"	"amelia_AHSH3AH"	"500ms_silence.wav"	"amelia_AHSH3AH"	"B"	"stimulus122"
-"123"	"ewan_AHSH3AH"	"500ms_silence.wav"	"ewan_AHSSAH4"	"500ms_silence.wav"	"ewan_AHSSAH4"	"B"	"stimulus123"
-"124"	"amelia_EESSEE1"	"500ms_silence.wav"	"amelia_EESSEE1"	"500ms_silence.wav"	"amelia_EESSEE1"	"A"	"stimulus124"
-"125"	"amelia_EESH3EE"	"500ms_silence.wav"	"amelia_EETHEE1"	"500ms_silence.wav"	"amelia_EETHEE1"	"B"	"stimulus125"
-"126"	"ewan_AHTHAH4"	"500ms_silence.wav"	"ewan_AHSH3AH"	"500ms_silence.wav"	"ewan_AHSH3AH"	"B"	"stimulus126"
-"127"	"amelia_EESH3EE"	"500ms_silence.wav"	"amelia_EETHEE1"	"500ms_silence.wav"	"amelia_EETHEE1"	"B"	"stimulus127"
-"128"	"ewan_AHTHAH4"	"500ms_silence.wav"	"ewan_AHTHAH4"	"500ms_silence.wav"	"ewan_AHTHAH4"	"A"	"stimulus128"
-"129"	"amelia_EESH3EE"	"500ms_silence.wav"	"amelia_EETEE1"	"500ms_silence.wav"	"amelia_EETEE1"	"B"	"stimulus129"
-"130"	"amelia_EETEE1"	"500ms_silence.wav"	"amelia_EESH3EE"	"500ms_silence.wav"	"amelia_EESH3EE"	"B"	"stimulus130"
-"131"	"ewan_AHSH3AH"	"500ms_silence.wav"	"ewan_AHTAH4"	"500ms_silence.wav"	"ewan_AHTAH4"	"B"	"stimulus131"
-"132"	"ewan_AHTAH4"	"500ms_silence.wav"	"ewan_AHTAH4"	"500ms_silence.wav"	"ewan_AHTAH4"	"A"	"stimulus132"
-"133"	"ewan_EESS3EE"	"500ms_silence.wav"	"ewan_EETHEE1"	"500ms_silence.wav"	"ewan_EETHEE1"	"B"	"stimulus133"
-"134"	"amelia_AHTHAH4"	"500ms_silence.wav"	"amelia_AHSS3AH"	"500ms_silence.wav"	"amelia_AHSS3AH"	"B"	"stimulus134"
-"135"	"amelia_AHSS3AH"	"500ms_silence.wav"	"amelia_AHTHAH4"	"500ms_silence.wav"	"amelia_AHTHAH4"	"B"	"stimulus135"
-"136"	"ewan_EETHEE1"	"500ms_silence.wav"	"ewan_EETHEE1"	"500ms_silence.wav"	"ewan_EETHEE1"	"A"	"stimulus136"
-"137"	"ewan_AHSS3AH"	"500ms_silence.wav"	"ewan_AHTAH4"	"500ms_silence.wav"	"ewan_AHTAH4"	"B"	"stimulus137"
-"138"	"ewan_EETEE1"	"500ms_silence.wav"	"ewan_EESS3EE"	"500ms_silence.wav"	"ewan_EESS3EE"	"B"	"stimulus138"
-"139"	"amelia_AHSS3AH"	"500ms_silence.wav"	"amelia_AHTAH4"	"500ms_silence.wav"	"amelia_AHTAH4"	"B"	"stimulus139"
-"140"	"amelia_EETEE1"	"500ms_silence.wav"	"amelia_EETEE1"	"500ms_silence.wav"	"amelia_EETEE1"	"A"	"stimulus140"
-"141"	"ewan_AHTH3AH"	"500ms_silence.wav"	"ewan_AHTAH4"	"500ms_silence.wav"	"ewan_AHTAH4"	"B"	"stimulus141"
-"142"	"amelia_AHTAH4"	"500ms_silence.wav"	"amelia_AHTH3AH"	"500ms_silence.wav"	"amelia_AHTH3AH"	"B"	"stimulus142"
-"143"	"amelia_EETH3EE"	"500ms_silence.wav"	"amelia_EETEE1"	"500ms_silence.wav"	"amelia_EETEE1"	"B"	"stimulus143"
-"144"	"ewan_EETEE1"	"500ms_silence.wav"	"ewan_EETEE1"	"500ms_silence.wav"	"ewan_EETEE1"	"A"	"stimulus144"
+File1	Silence1	File2	Silence2	File3	CORR_ANS	filename
+ewan_HADAH4.wav	500ms_silence.wav	ewan_HAEDAH2.wav	500ms_silence.wav	ewan_HAEDAH2.wav	B	stimulus1
+amelia_HAEDI1.wav	500ms_silence.wav	amelia_HADI1.wav	500ms_silence.wav	amelia_HADI1.wav	B	stimulus2
+ewan_HADI1.wav	500ms_silence.wav	ewan_HAEDI1.wav	500ms_silence.wav	ewan_HAEDI1.wav	B	stimulus3
+amelia_HAEDAH2.wav	500ms_silence.wav	amelia_HAEDAH2.wav	500ms_silence.wav	amelia_HAEDAH2.wav	A	stimulus4
+amelia_HADI1.wav	500ms_silence.wav	amelia_HEEDI1.wav	500ms_silence.wav	amelia_HEEDI1.wav	B	stimulus5
+ewan_HEEDAH2.wav	500ms_silence.wav	ewan_HADAH4.wav	500ms_silence.wav	ewan_HADAH4.wav	B	stimulus6
+ewan_HADAH4.wav	500ms_silence.wav	ewan_HEEDAH2.wav	500ms_silence.wav	ewan_HEEDAH2.wav	B	stimulus7
+amelia_HEEDI1.wav	500ms_silence.wav	amelia_HEEDI1.wav	500ms_silence.wav	amelia_HEEDI1.wav	A	stimulus8
+amelia_HADI1.wav	500ms_silence.wav	amelia_HOODI1.wav	500ms_silence.wav	amelia_HOODI1.wav	B	stimulus9
+ewan_HOODI1.wav	500ms_silence.wav	ewan_HADI1.wav	500ms_silence.wav	ewan_HADI1.wav	B	stimulus10
+ewan_HADAH4.wav	500ms_silence.wav	ewan_HOODAH2.wav	500ms_silence.wav	ewan_HOODAH2.wav	B	stimulus11
+amelia_HOODAH2.wav	500ms_silence.wav	amelia_HOODAH2.wav	500ms_silence.wav	amelia_HOODAH2.wav	A	stimulus12
+ewan_HADAH4.wav	500ms_silence.wav	ewan_HUHDAH2.wav	500ms_silence.wav	ewan_HUHDAH2.wav	B	stimulus13
+amelia_HUHDI1.wav	500ms_silence.wav	amelia_HADI1.wav	500ms_silence.wav	amelia_HADI1.wav	B	stimulus14
+ewan_HADAH4.wav	500ms_silence.wav	ewan_HUHDAH2.wav	500ms_silence.wav	ewan_HUHDAH2.wav	B	stimulus15
+amelia_HUHDI1.wav	500ms_silence.wav	amelia_HUHDI1.wav	500ms_silence.wav	amelia_HUHDI1.wav	A	stimulus16
+amelia_HADI1.wav	500ms_silence.wav	amelia_WHODI1.wav	500ms_silence.wav	amelia_WHODI1.wav	B	stimulus17
+ewan_WHODAH2.wav	500ms_silence.wav	ewan_HADAH4.wav	500ms_silence.wav	ewan_HADAH4.wav	B	stimulus18
+ewan_HADAH4.wav	500ms_silence.wav	ewan_WHODAH2.wav	500ms_silence.wav	ewan_WHODAH2.wav	B	stimulus19
+amelia_WHODI1.wav	500ms_silence.wav	amelia_WHODI1.wav	500ms_silence.wav	amelia_WHODI1.wav	A	stimulus20
+ewan_HAEDAH4.wav	500ms_silence.wav	ewan_HEEDAH2.wav	500ms_silence.wav	ewan_HEEDAH2.wav	B	stimulus21
+amelia_HEEDI1.wav	500ms_silence.wav	amelia_HAEDI1.wav	500ms_silence.wav	amelia_HAEDI1.wav	B	stimulus22
+amelia_HAEDI1.wav	500ms_silence.wav	amelia_HEEDI1.wav	500ms_silence.wav	amelia_HEEDI1.wav	B	stimulus23
+ewan_HEEDAH2.wav	500ms_silence.wav	ewan_HEEDAH2.wav	500ms_silence.wav	ewan_HEEDAH2.wav	A	stimulus24
+ewan_HAEDI1.wav	500ms_silence.wav	ewan_HOODI1.wav	500ms_silence.wav	ewan_HOODI1.wav	B	stimulus25
+amelia_HOODI1.wav	500ms_silence.wav	amelia_HAEDI1.wav	500ms_silence.wav	amelia_HAEDI1.wav	B	stimulus26
+amelia_HAEDAH4.wav	500ms_silence.wav	amelia_HOODAH2.wav	500ms_silence.wav	amelia_HOODAH2.wav	B	stimulus27
+ewan_HOODAH2.wav	500ms_silence.wav	ewan_HOODAH2.wav	500ms_silence.wav	ewan_HOODAH2.wav	A	stimulus28
+amelia_HAEDAH4.wav	500ms_silence.wav	amelia_HUHDAH2.wav	500ms_silence.wav	amelia_HUHDAH2.wav	B	stimulus29
+ewan_HUHDI1.wav	500ms_silence.wav	ewan_HAEDI1.wav	500ms_silence.wav	ewan_HAEDI1.wav	B	stimulus30
+ewan_HAEDI1.wav	500ms_silence.wav	ewan_HUHDI1.wav	500ms_silence.wav	ewan_HUHDI1.wav	B	stimulus31
+amelia_HUHDAH2.wav	500ms_silence.wav	amelia_HUHDAH2.wav	500ms_silence.wav	amelia_HUHDAH2.wav	A	stimulus32
+ewan_HAEDAH4.wav	500ms_silence.wav	ewan_WHODAH2.wav	500ms_silence.wav	ewan_WHODAH2.wav	B	stimulus33
+amelia_WHODI1.wav	500ms_silence.wav	amelia_HAEDI1.wav	500ms_silence.wav	amelia_HAEDI1.wav	B	stimulus34
+ewan_HAEDI1.wav	500ms_silence.wav	ewan_WHODI1.wav	500ms_silence.wav	ewan_WHODI1.wav	B	stimulus35
+amelia_WHODAH2.wav	500ms_silence.wav	amelia_WHODAH2.wav	500ms_silence.wav	amelia_WHODAH2.wav	A	stimulus36
+ewan_HEEDI1.wav	500ms_silence.wav	ewan_HOODI1.wav	500ms_silence.wav	ewan_HOODI1.wav	B	stimulus37
+amelia_HOODAH2.wav	500ms_silence.wav	amelia_HEEDAH4.wav	500ms_silence.wav	amelia_HEEDAH4.wav	B	stimulus38
+ewan_HEEDI1.wav	500ms_silence.wav	ewan_HOODI1.wav	500ms_silence.wav	ewan_HOODI1.wav	B	stimulus39
+amelia_HOODAH2.wav	500ms_silence.wav	amelia_HOODAH2.wav	500ms_silence.wav	amelia_HOODAH2.wav	A	stimulus40
+amelia_HEEDI1.wav	500ms_silence.wav	amelia_HUHDI1.wav	500ms_silence.wav	amelia_HUHDI1.wav	B	stimulus41
+ewan_HUHDI1.wav	500ms_silence.wav	ewan_HEEDI1.wav	500ms_silence.wav	ewan_HEEDI1.wav	B	stimulus42
+amelia_HEEDAH4.wav	500ms_silence.wav	amelia_HUHDAH2.wav	500ms_silence.wav	amelia_HUHDAH2.wav	B	stimulus43
+ewan_HUHDAH2.wav	500ms_silence.wav	ewan_HUHDAH2.wav	500ms_silence.wav	ewan_HUHDAH2.wav	A	stimulus44
+amelia_HEEDI1.wav	500ms_silence.wav	amelia_WHODI1.wav	500ms_silence.wav	amelia_WHODI1.wav	B	stimulus45
+ewan_WHODI1.wav	500ms_silence.wav	ewan_HEEDI1.wav	500ms_silence.wav	ewan_HEEDI1.wav	B	stimulus46
+amelia_HEEDAH4.wav	500ms_silence.wav	amelia_WHODAH2.wav	500ms_silence.wav	amelia_WHODAH2.wav	B	stimulus47
+ewan_WHODAH2.wav	500ms_silence.wav	ewan_WHODAH2.wav	500ms_silence.wav	ewan_WHODAH2.wav	A	stimulus48
+amelia_HOODAH4.wav	500ms_silence.wav	amelia_HUHDAH2.wav	500ms_silence.wav	amelia_HUHDAH2.wav	B	stimulus49
+ewan_HUHDAH2.wav	500ms_silence.wav	ewan_HOODAH4.wav	500ms_silence.wav	ewan_HOODAH4.wav	B	stimulus50
+amelia_HOODI1.wav	500ms_silence.wav	amelia_HUHDI1.wav	500ms_silence.wav	amelia_HUHDI1.wav	B	stimulus51
+ewan_HUHDI1.wav	500ms_silence.wav	ewan_HUHDI1.wav	500ms_silence.wav	ewan_HUHDI1.wav	A	stimulus52
+ewan_HOODI1.wav	500ms_silence.wav	ewan_WHODI1.wav	500ms_silence.wav	ewan_WHODI1.wav	B	stimulus53
+amelia_WHODI1.wav	500ms_silence.wav	amelia_HOODI1.wav	500ms_silence.wav	amelia_HOODI1.wav	B	stimulus54
+ewan_HOODAH4.wav	500ms_silence.wav	ewan_WHODAH2.wav	500ms_silence.wav	ewan_WHODAH2.wav	B	stimulus55
+amelia_WHODAH2.wav	500ms_silence.wav	amelia_WHODAH2.wav	500ms_silence.wav	amelia_WHODAH2.wav	A	stimulus56
+amelia_HOODAH4.wav	500ms_silence.wav	amelia_WHODAH2.wav	500ms_silence.wav	amelia_WHODAH2.wav	B	stimulus57
+ewan_WHODAH2.wav	500ms_silence.wav	ewan_HOODAH4.wav	500ms_silence.wav	ewan_HOODAH4.wav	B	stimulus58
+ewan_HOODI1.wav	500ms_silence.wav	ewan_WHODI1.wav	500ms_silence.wav	ewan_WHODI1.wav	B	stimulus59
+amelia_WHODI1.wav	500ms_silence.wav	amelia_WHODI1.wav	500ms_silence.wav	amelia_WHODI1.wav	A	stimulus60
+ewan_AFAH3.wav	500ms_silence.wav	ewan_AKAH3.wav	500ms_silence.wav	ewan_AKAH3.wav	B	stimulus61
+amelia_EEKEE2.wav	500ms_silence.wav	amelia_EEFEE1.wav	500ms_silence.wav	amelia_EEFEE1.wav	B	stimulus62
+amelia_AFAH3.wav	500ms_silence.wav	amelia_AKAH3.wav	500ms_silence.wav	amelia_AKAH3.wav	B	stimulus63
+ewan_EEKEE2.wav	500ms_silence.wav	ewan_EEKEE2.wav	500ms_silence.wav	ewan_EEKEE2.wav	A	stimulus64
+ewan_EEFEE1.wav	500ms_silence.wav	ewan_EEPEE2.wav	500ms_silence.wav	ewan_EEPEE2.wav	B	stimulus65
+amelia_APAH3.wav	500ms_silence.wav	amelia_AFAH3.wav	500ms_silence.wav	amelia_AFAH3.wav	B	stimulus66
+amelia_AFAH3.wav	500ms_silence.wav	amelia_APAH3.wav	500ms_silence.wav	amelia_APAH3.wav	B	stimulus67
+ewan_EEPEE2.wav	500ms_silence.wav	ewan_EEPEE2.wav	500ms_silence.wav	ewan_EEPEE2.wav	A	stimulus68
+ewan_AFAH3.wav	500ms_silence.wav	ewan_ASHAH3.wav	500ms_silence.wav	ewan_ASHAH3.wav	B	stimulus69
+amelia_EESHEE2.wav	500ms_silence.wav	amelia_EEFEE1.wav	500ms_silence.wav	amelia_EEFEE1.wav	B	stimulus70
+amelia_AFAH3.wav	500ms_silence.wav	amelia_ASHAH3.wav	500ms_silence.wav	amelia_ASHAH3.wav	B	stimulus71
+ewan_EESHEE2.wav	500ms_silence.wav	ewan_EESHEE2.wav	500ms_silence.wav	ewan_EESHEE2.wav	A	stimulus72
+ewan_AFAH3.wav	500ms_silence.wav	ewan_ASSAH3.wav	500ms_silence.wav	ewan_ASSAH3.wav	B	stimulus73
+amelia_ASSAH3.wav	500ms_silence.wav	amelia_AFAH3.wav	500ms_silence.wav	amelia_AFAH3.wav	B	stimulus74
+ewan_EEFEE1.wav	500ms_silence.wav	ewan_EESSEE2.wav	500ms_silence.wav	ewan_EESSEE2.wav	B	stimulus75
+amelia_EESSEE2.wav	500ms_silence.wav	amelia_EESSEE2.wav	500ms_silence.wav	amelia_EESSEE2.wav	A	stimulus76
+ewan_EEFEE1.wav	500ms_silence.wav	ewan_EETHEE2.wav	500ms_silence.wav	ewan_EETHEE2.wav	B	stimulus77
+ewan_ATHAH3.wav	500ms_silence.wav	ewan_AFAH3.wav	500ms_silence.wav	ewan_AFAH3.wav	B	stimulus78
+amelia_EEFEE1.wav	500ms_silence.wav	amelia_EETHEE2.wav	500ms_silence.wav	amelia_EETHEE2.wav	B	stimulus79
+amelia_ATHAH3.wav	500ms_silence.wav	amelia_ATHAH3.wav	500ms_silence.wav	amelia_ATHAH3.wav	A	stimulus80
+amelia_EEFEE1.wav	500ms_silence.wav	amelia_EETEE2.wav	500ms_silence.wav	amelia_EETEE2.wav	B	stimulus81
+ewan_ATAH3.wav	500ms_silence.wav	ewan_AFAH3.wav	500ms_silence.wav	ewan_AFAH3.wav	B	stimulus82
+ewan_EEFEE1.wav	500ms_silence.wav	ewan_EETEE2.wav	500ms_silence.wav	ewan_EETEE2.wav	B	stimulus83
+amelia_ATAH3.wav	500ms_silence.wav	amelia_ATAH3.wav	500ms_silence.wav	amelia_ATAH3.wav	A	stimulus84
+amelia_AKAH3.wav	500ms_silence.wav	amelia_APAH3.wav	500ms_silence.wav	amelia_APAH3.wav	B	stimulus85
+ewan_EEPEE2.wav	500ms_silence.wav	ewan_EEKEE1.wav	500ms_silence.wav	ewan_EEKEE1.wav	B	stimulus86
+ewan_AKAH3.wav	500ms_silence.wav	ewan_APAH3.wav	500ms_silence.wav	ewan_APAH3.wav	B	stimulus87
+amelia_EEPEE2.wav	500ms_silence.wav	amelia_EEPEE2.wav	500ms_silence.wav	amelia_EEPEE2.wav	A	stimulus88
+amelia_AKAH3.wav	500ms_silence.wav	amelia_ASHAH3.wav	500ms_silence.wav	amelia_ASHAH3.wav	B	stimulus89
+amelia_ASHAH3.wav	500ms_silence.wav	amelia_AKAH3.wav	500ms_silence.wav	amelia_AKAH3.wav	B	stimulus90
+ewan_EEKEE1.wav	500ms_silence.wav	ewan_EESHEE2.wav	500ms_silence.wav	ewan_EESHEE2.wav	B	stimulus91
+ewan_EESHEE2.wav	500ms_silence.wav	ewan_EESHEE2.wav	500ms_silence.wav	ewan_EESHEE2.wav	A	stimulus92
+ewan_EEKEE1.wav	500ms_silence.wav	ewan_EESSEE2.wav	500ms_silence.wav	ewan_EESSEE2.wav	B	stimulus93
+ewan_ASSAH3.wav	500ms_silence.wav	ewan_AKAH3.wav	500ms_silence.wav	ewan_AKAH3.wav	B	stimulus94
+amelia_AKAH3.wav	500ms_silence.wav	amelia_ASSAH3.wav	500ms_silence.wav	amelia_ASSAH3.wav	B	stimulus95
+amelia_EESSEE2.wav	500ms_silence.wav	amelia_EESSEE2.wav	500ms_silence.wav	amelia_EESSEE2.wav	A	stimulus96
+amelia_EEKEE1.wav	500ms_silence.wav	amelia_EETHEE2.wav	500ms_silence.wav	amelia_EETHEE2.wav	B	stimulus97
+ewan_ATHAH3.wav	500ms_silence.wav	ewan_AKAH3.wav	500ms_silence.wav	ewan_AKAH3.wav	B	stimulus98
+amelia_EEKEE1.wav	500ms_silence.wav	amelia_EETHEE2.wav	500ms_silence.wav	amelia_EETHEE2.wav	B	stimulus99
+ewan_ATHAH3.wav	500ms_silence.wav	ewan_ATHAH3.wav	500ms_silence.wav	ewan_ATHAH3.wav	A	stimulus100
+amelia_AKAH3.wav	500ms_silence.wav	amelia_ATAH3.wav	500ms_silence.wav	amelia_ATAH3.wav	B	stimulus101
+ewan_EETEE2.wav	500ms_silence.wav	ewan_EEKEE1.wav	500ms_silence.wav	ewan_EEKEE1.wav	B	stimulus102
+amelia_AKAH3.wav	500ms_silence.wav	amelia_ATAH3.wav	500ms_silence.wav	amelia_ATAH3.wav	B	stimulus103
+ewan_EETEE2.wav	500ms_silence.wav	ewan_EETEE2.wav	500ms_silence.wav	ewan_EETEE2.wav	A	stimulus104
+amelia_APAH3.wav	500ms_silence.wav	amelia_ASHAH3.wav	500ms_silence.wav	amelia_ASHAH3.wav	B	stimulus105
+amelia_ASHAH3.wav	500ms_silence.wav	amelia_APAH3.wav	500ms_silence.wav	amelia_APAH3.wav	B	stimulus106
+ewan_EEPEE1.wav	500ms_silence.wav	ewan_EESHEE2.wav	500ms_silence.wav	ewan_EESHEE2.wav	B	stimulus107
+ewan_EESHEE2.wav	500ms_silence.wav	ewan_EESHEE2.wav	500ms_silence.wav	ewan_EESHEE2.wav	A	stimulus108
+amelia_APAH3.wav	500ms_silence.wav	amelia_ASSAH3.wav	500ms_silence.wav	amelia_ASSAH3.wav	B	stimulus109
+ewan_ASSAH3.wav	500ms_silence.wav	ewan_APAH3.wav	500ms_silence.wav	ewan_APAH3.wav	B	stimulus110
+amelia_EEPEE1.wav	500ms_silence.wav	amelia_EESSEE2.wav	500ms_silence.wav	amelia_EESSEE2.wav	B	stimulus111
+ewan_EESSEE2.wav	500ms_silence.wav	ewan_EESSEE2.wav	500ms_silence.wav	ewan_EESSEE2.wav	A	stimulus112
+ewan_EEPEE1.wav	500ms_silence.wav	ewan_EETHEE2.wav	500ms_silence.wav	ewan_EETHEE2.wav	B	stimulus113
+ewan_ATHAH3.wav	500ms_silence.wav	ewan_APAH3.wav	500ms_silence.wav	ewan_APAH3.wav	B	stimulus114
+amelia_EEPEE1.wav	500ms_silence.wav	amelia_EETHEE2.wav	500ms_silence.wav	amelia_EETHEE2.wav	B	stimulus115
+amelia_ATHAH3.wav	500ms_silence.wav	amelia_ATHAH3.wav	500ms_silence.wav	amelia_ATHAH3.wav	A	stimulus116
+amelia_APAH3.wav	500ms_silence.wav	amelia_ATAH3.wav	500ms_silence.wav	amelia_ATAH3.wav	B	stimulus117
+amelia_EETEE2.wav	500ms_silence.wav	amelia_EEPEE1.wav	500ms_silence.wav	amelia_EEPEE1.wav	B	stimulus118
+ewan_EEPEE1.wav	500ms_silence.wav	ewan_EETEE2.wav	500ms_silence.wav	ewan_EETEE2.wav	B	stimulus119
+ewan_ATAH3.wav	500ms_silence.wav	ewan_ATAH3.wav	500ms_silence.wav	ewan_ATAH3.wav	A	stimulus120
+ewan_EESHEE1.wav	500ms_silence.wav	ewan_EESSEE2.wav	500ms_silence.wav	ewan_EESSEE2.wav	B	stimulus121
+amelia_ASSAH3.wav	500ms_silence.wav	amelia_ASHAH3.wav	500ms_silence.wav	amelia_ASHAH3.wav	B	stimulus122
+ewan_ASHAH3.wav	500ms_silence.wav	ewan_ASSAH3.wav	500ms_silence.wav	ewan_ASSAH3.wav	B	stimulus123
+amelia_EESSEE2.wav	500ms_silence.wav	amelia_EESSEE2.wav	500ms_silence.wav	amelia_EESSEE2.wav	A	stimulus124
+amelia_EESHEE1.wav	500ms_silence.wav	amelia_EETHEE2.wav	500ms_silence.wav	amelia_EETHEE2.wav	B	stimulus125
+ewan_ATHAH3.wav	500ms_silence.wav	ewan_ASHAH3.wav	500ms_silence.wav	ewan_ASHAH3.wav	B	stimulus126
+amelia_EESHEE1.wav	500ms_silence.wav	amelia_EETHEE2.wav	500ms_silence.wav	amelia_EETHEE2.wav	B	stimulus127
+ewan_ATHAH3.wav	500ms_silence.wav	ewan_ATHAH3.wav	500ms_silence.wav	ewan_ATHAH3.wav	A	stimulus128
+amelia_EESHEE1.wav	500ms_silence.wav	amelia_EETEE2.wav	500ms_silence.wav	amelia_EETEE2.wav	B	stimulus129
+amelia_EETEE2.wav	500ms_silence.wav	amelia_EESHEE1.wav	500ms_silence.wav	amelia_EESHEE1.wav	B	stimulus130
+ewan_ASHAH3.wav	500ms_silence.wav	ewan_ATAH3.wav	500ms_silence.wav	ewan_ATAH3.wav	B	stimulus131
+ewan_ATAH3.wav	500ms_silence.wav	ewan_ATAH3.wav	500ms_silence.wav	ewan_ATAH3.wav	A	stimulus132
+ewan_EESSEE1.wav	500ms_silence.wav	ewan_EETHEE2.wav	500ms_silence.wav	ewan_EETHEE2.wav	B	stimulus133
+amelia_ATHAH3.wav	500ms_silence.wav	amelia_ASSAH3.wav	500ms_silence.wav	amelia_ASSAH3.wav	B	stimulus134
+amelia_ASSAH3.wav	500ms_silence.wav	amelia_ATHAH3.wav	500ms_silence.wav	amelia_ATHAH3.wav	B	stimulus135
+ewan_EETHEE2.wav	500ms_silence.wav	ewan_EETHEE2.wav	500ms_silence.wav	ewan_EETHEE2.wav	A	stimulus136
+ewan_ASSAH3.wav	500ms_silence.wav	ewan_ATAH3.wav	500ms_silence.wav	ewan_ATAH3.wav	B	stimulus137
+ewan_EETEE2.wav	500ms_silence.wav	ewan_EESSEE1.wav	500ms_silence.wav	ewan_EESSEE1.wav	B	stimulus138
+amelia_ASSAH3.wav	500ms_silence.wav	amelia_ATAH3.wav	500ms_silence.wav	amelia_ATAH3.wav	B	stimulus139
+amelia_EETEE2.wav	500ms_silence.wav	amelia_EETEE2.wav	500ms_silence.wav	amelia_EETEE2.wav	A	stimulus140
+ewan_ATHAH3.wav	500ms_silence.wav	ewan_ATAH3.wav	500ms_silence.wav	ewan_ATAH3.wav	B	stimulus141
+amelia_ATAH3.wav	500ms_silence.wav	amelia_ATHAH3.wav	500ms_silence.wav	amelia_ATHAH3.wav	B	stimulus142
+amelia_EETHEE1.wav	500ms_silence.wav	amelia_EETEE2.wav	500ms_silence.wav	amelia_EETEE2.wav	B	stimulus143
+ewan_EETEE2.wav	500ms_silence.wav	ewan_EETEE2.wav	500ms_silence.wav	ewan_EETEE2.wav	A	stimulus144
