@@ -115,7 +115,7 @@ Stimuli_list<-list %>%
   select(File1, Silence1,File2,Silence2,File3,CORR_ANS,filename)
 
 #print df  to text file (NB NOT A CSV, Praat prefers TXT here.)  
-write.table(Stimuli_list, file="/stimuli/concatenation/Stimuli_list.txt", sep="\t",quote = FALSE, row.names = FALSE)
+write.table(Stimuli_list, file="Stimuli_list.txt", sep="\t",quote = FALSE, row.names = FALSE)
 
 
 

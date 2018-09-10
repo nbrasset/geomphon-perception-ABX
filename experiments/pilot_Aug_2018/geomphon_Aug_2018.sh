@@ -7,13 +7,16 @@
 #scale intensity of all files just created, save in stimuli/norm_intervals
 /Applications/Praat.app/Contents/MacOS/Praat --run "scale_intensity.Praat"
 
-#run create_stimlist.py to create a stimlist 
+#generate triplets.csv-contained in stimulus_construction
+
+
+#run create_stimlist.py to create an optomized stimlist
 python create_stimlist.py
 
 #change stimlist to correct format, save to concatenation folder.
 Rscript reformat_stimlist.R 
  
-
+ 
 #use reformatted stimlist to run concatenation file on normalized stimuli 
 /Applications/Praat.app/Contents/MacOS/Praat --run "concatenation_of_tripets.Praat"
 
