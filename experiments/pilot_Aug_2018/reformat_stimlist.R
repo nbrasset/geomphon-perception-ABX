@@ -5,7 +5,9 @@ library(plyr)
 library(dplyr)
 library(tidyr)
 
-list<-read.csv("stimlist.csv")
+list<-read.csv(stimlist.csv)
+
+
 
 #Using plyr mapvalues, interpret numerals output by create_stimlist 
 #as meaningful strings 
@@ -73,37 +75,44 @@ list<-list %>% mutate(
       V_C == "consonant" & CONTEXT == "EE"~ paste("EE",Q,"EE",sample(1:4,1), ".wav",sep=""))
     )
  
- 
-#Add speaker  to P and Q based on value in input 
- list<-list %>% mutate(
-   FileP = paste(SPEAKER,word_P,sep=""),
-   FileQ = paste(SPEAKER,word_Q,sep=""))
- 
- 
+
 # create file and silence columns depending on the order column Ps and Qs
  list<-list %>% mutate(
    File1 = case_when(
-     ORDER == "PQP"~FileP,
-     ORDER == "PQQ"~ FileP,
-     ORDER == "QPQ"~ FileQ,
-     ORDER == "QPP"~ FileQ),
+     ORDER == "PQP"~word_P,
+     ORDER == "PQQ"~ word_P,
+     ORDER == "QPQ"~ word_Q,
+     ORDER == "QPP"~ word_Q),
    File2 = case_when(
-     ORDER == "PQP"~FileQ,
-     ORDER == "PQQ"~FileQ,
-     ORDER == "QPQ"~FileQ,
-     ORDER == "QPP"~FileP),
+     ORDER == "PQP"~word_Q,
+     ORDER == "PQQ"~word_Q,
+     ORDER == "QPQ"~word_P,
+     ORDER == "QPP"~word_P),
    File3 = case_when(
-     ORDER == "QPQ"~FileQ,
-     ORDER == "PQQ"~FileQ,
-     ORDER == "PQP"~FileQ,
-     ORDER == "QPP"~FileP)
+     ORDER == "QPQ"~word_Q,
+     ORDER == "PQQ"~word_Q,
+     ORDER == "PQP"~word_P,
+     ORDER == "QPP"~word_P)
    )
  
+ #add correct answer-- nb do this before adding speaker because speaker will be different across these.  
  list<-list %>% mutate(
  CORR_ANS = case_when(
-   File1==File3~"A",
-   File2 == File3 ~"B"))
+   list$File1==list$File3~"A",
+   list$File2 == list$File3 ~"B"))
 
+ 
+ #Add speaker  to files-- one speaker for files 1 and 2, the other for file 3 
+ list<-list %>% mutate(
+   File1 = paste(SPEAKER,File1,sep=""),
+   File2 = paste(SPEAKER,File2,sep=""))
+
+ list<-list %>% mutate(
+   File3 = case_when(
+     SPEAKER=="amelia_"~paste("ewan_",File3,sep=""),
+     SPEAKER=="ewan_"~paste("amelia_",File3,sep="")))
+
+ 
 #add in columns with the name of the silences. 
 list$Silence1<-rep("500ms_silence.wav",length(list$File1))
 list$Silence2<-rep("500ms_silence.wav",length(list$File1))
@@ -112,7 +121,7 @@ list$Silence2<-rep("500ms_silence.wav",length(list$File1))
 list$filename<-paste("stimulus",1:length(list$File1),sep="")
 
 Stimuli_list<-list %>%
-  select(File1, Silence1,File2,Silence2,File3,CORR_ANS,filename)
+  select(File1,Silence1,File2,Silence2,File3,CORR_ANS,filename)
 
 #print df  to text file (NB NOT A CSV, Praat prefers TXT here.)  
 write.table(Stimuli_list, file="Stimuli_list.txt", sep="\t",quote = FALSE, row.names = FALSE)
