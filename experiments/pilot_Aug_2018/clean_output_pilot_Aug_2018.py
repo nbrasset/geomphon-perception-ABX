@@ -283,7 +283,4 @@ postsurvey2 = postsurvey2[POSTSURVEY2_COLUMN_ORDER]
 postsurvey2 = postsurvey2.rename(columns=POSTSURVEY2_COLUMN_DICT)
 postsurvey2.to_csv(postsurvey2_filename, index=False, encoding='utf-8')
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 34123c89b3a299163911dcbb37d168188b2c1935
