@@ -15,7 +15,7 @@ item []:
         intervals [1]:
             xmin = 0.0125 
             xmax = 3.2425 
-            text = "sp" 
+            text = "" 
         intervals [2]:
             xmin = 3.2425 
             xmax = 3.4325 
@@ -5972,10 +5972,10 @@ item []:
             text = "" 
         intervals [241]:
             xmin = 140.1325 
-            xmax = 141.3825 
+            xmax = 140.84800426034994 
             text = "WHODI" 
         intervals [242]:
-            xmin = 141.3825 
+            xmin = 140.84800426034994 
             xmax = 143.3725 
             text = "" 
         intervals [243]:

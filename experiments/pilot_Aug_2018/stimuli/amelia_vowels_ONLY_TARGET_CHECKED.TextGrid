@@ -2976,14 +2976,14 @@ item []:
             text = "" 
         intervals [166]:
             xmin = 91.5825 
-            xmax = 91.6425 
+            xmax = 91.64259375 
             text = "" 
         intervals [167]:
-            xmin = 91.6425 
-            xmax = 92.3825 
+            xmin = 91.64259375 
+            xmax = 92.38365625 
             text = "HOODAH" 
         intervals [168]:
-            xmin = 92.3825 
+            xmin = 92.38365625 
             xmax = 92.4425 
             text = "" 
         intervals [169]:
@@ -2996,14 +2996,14 @@ item []:
             text = "" 
         intervals [171]:
             xmin = 93.2425 
-            xmax = 93.76422783772688 
+            xmax = 93.76458639705882 
             text = "" 
         intervals [172]:
-            xmin = 93.76422783772688 
-            xmax = 94.5425 
+            xmin = 93.76458639705882 
+            xmax = 94.54307812500001 
             text = "HOODAH" 
         intervals [173]:
-            xmin = 94.5425 
+            xmin = 94.54307812500001 
             xmax = 94.5725 
             text = "" 
         intervals [174]:
@@ -3016,10 +3016,10 @@ item []:
             text = "" 
         intervals [176]:
             xmin = 96.4825 
-            xmax = 97.0325 
+            xmax = 97.03204227941177 
             text = "" 
         intervals [177]:
-            xmin = 97.0325 
+            xmin = 97.03204227941177 
             xmax = 97.7525 
             text = "HOODI" 
         intervals [178]:
@@ -3040,14 +3040,14 @@ item []:
             text = "" 
         intervals [182]:
             xmin = 99.3425 
-            xmax = 99.3684938739792 
+            xmax = 99.3686527777778 
             text = "" 
         intervals [183]:
-            xmin = 99.3684938739792 
-            xmax = 100.07392392966702 
+            xmin = 99.3686527777778 
+            xmax = 100.07356597222223 
             text = "HOODI" 
         intervals [184]:
-            xmin = 100.07392392966702 
+            xmin = 100.07356597222223 
             xmax = 100.6325 
             text = "" 
         intervals [185]:
@@ -3096,14 +3096,14 @@ item []:
             text = "" 
         intervals [196]:
             xmin = 106.6425 
-            xmax = 107.22984341986592 
+            xmax = 107.22875240384617 
             text = "" 
         intervals [197]:
-            xmin = 107.22984341986592 
-            xmax = 107.9625 
+            xmin = 107.22875240384617 
+            xmax = 107.96148437500001 
             text = "WHODAH" 
         intervals [198]:
-            xmin = 107.9625 
+            xmin = 107.96148437500001 
             xmax = 107.9925 
             text = "" 
         intervals [199]:
@@ -3116,14 +3116,14 @@ item []:
             text = "" 
         intervals [201]:
             xmin = 108.7125 
-            xmax = 109.25110678160448 
+            xmax = 109.2509720394737 
             text = "" 
         intervals [202]:
-            xmin = 109.25110678160448 
-            xmax = 110.0225 
+            xmin = 109.2509720394737 
+            xmax = 110.0220056818182 
             text = "WHODAH" 
         intervals [203]:
-            xmin = 110.0225 
+            xmin = 110.0220056818182 
             xmax = 110.1325 
             text = "" 
         intervals [204]:
@@ -3140,18 +3140,18 @@ item []:
             text = "" 
         intervals [207]:
             xmin = 111.4225 
-            xmax = 111.43633406740862 
+            xmax = 111.43743541666667 
             text = "" 
         intervals [208]:
-            xmin = 111.43633406740862 
-            xmax = 112.1625 
+            xmin = 111.43743541666667 
+            xmax = 112.16244791666666 
             text = "WHODAH" 
         intervals [209]:
-            xmin = 112.1625 
-            xmax = 112.1825 
+            xmin = 112.16244791666666 
+            xmax = 112.1845028409091 
             text = "" 
         intervals [210]:
-            xmin = 112.1825 
+            xmin = 112.1845028409091 
             xmax = 112.7725 
             text = "" 
         intervals [211]:
@@ -3164,14 +3164,14 @@ item []:
             text = "" 
         intervals [213]:
             xmin = 113.5025 
-            xmax = 113.5625 
+            xmax = 113.56298125 
             text = "" 
         intervals [214]:
-            xmin = 113.5625 
-            xmax = 114.3625 
+            xmin = 113.56298125 
+            xmax = 114.36258125 
             text = "WHODAH" 
         intervals [215]:
-            xmin = 114.3625 
+            xmin = 114.36258125 
             xmax = 114.4725 
             text = "" 
         intervals [216]:
