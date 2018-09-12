@@ -42,11 +42,11 @@ TO CREATE NEW EXPERIMENT:
 		-update .cgi file 
 		-update output folder to have name that is the same as the sequence file name
 
-2. Use makefile to add your updates to stable version of LMEDS 
 
-3. Push updates to server 
 
-4. Update server permissions to allow experiment to run
+2. Push updates to server 
+
+3. Update server permissions to allow experiment to run
    -cgi must be executable 
    -output folders must have write permissions. 
 
