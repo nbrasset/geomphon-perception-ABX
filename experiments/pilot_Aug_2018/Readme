@@ -23,13 +23,13 @@ TO CREATE STIMULI:
 
 4. generate triplet list  triplets.csv:  a list of all possible triplets 
 
-5. create_stimlist.py : a script that takes triplets.csv and filters it to create a stimuli list, then outputs a stimlist which is saved to the concatenation folder (NB as a .txt file! Praat does not like .csvs in this specific moment), as well as a two new LMEDs sequence file (English/French)
+5. create_stimlist.py : a script that takes triplets.csv and filters it to create an optimised stimuli list,
 
-6. 
+6. reformat_stimlist.R takes created stimuli list from create_stimlist.py and reformats to match optimised list to strings that are filenames.  This new reformatted stimuli list is saved as as a .txt file to read in to Praat (Praat script will take only txt file) 
 
-6. concatenation_of_tripets.Praat : takes the stimlist created by create_stimlist.R and the .wavs created by save_intervals_to_wavs.Praat (which have been normalised by Normalize_intensity.Praat), and creates triplet files. Note that all files must be the same sampling frequency, even silences
+7. concatenation_of_tripets.Praat : takes the stimlist created by reformat_stimlist.R and the .wavs created by save_intervals_to_wavs.Praat (which have been normalised by Normalize_intensity.Praat), and creates triplet files. Note that all files must be the same sampling frequency, even silences
 
-7. Bash script geomphon_Aug_2018.sh which runs all the above 6 steps in the above order. 
+8. Bash script geomphon_Aug_2018.sh which runs all the above 6 steps in the above order. 
 
 
 
