@@ -51,4 +51,20 @@ TO CREATE NEW EXPERIMENT:
    -output folders must have write permissions. 
 
 
+TO CLEAN DATA: 
+
+1. Run clean_output_pilot_Aug_2018.py  in python 3 
+this script assumes that you have a directory with nested subdirectories for English and French data. 
+
+It takes the following arguments: 
+folderpath = sys.argv[1]
+results_filename = sys.argv[2]
+presurvey_filename = sys.argv[3]
+postsurvey_filename = sys.argv[4]
+postsurvey2_filename = sys.argv[5]
+
+
+
+
+
 

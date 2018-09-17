@@ -50,9 +50,8 @@ for current_root, dirnames_d, filenames_d in os.walk(folderpath):
     csv_filenames = fnmatch.filter(filenames_d, "*.csv")
     if current_root == folderpath:
         if len(csv_filenames) > 0:
-            print >> sys.stderr(""), \
-                    "ERROR: need at least one level of nesting " \
-                    + "in data folder '" + folderpath + "'"
+            print("ERROR: need at least one level of nesting " \
+                    + "in data folder '" + folderpath + "'", file=sys.stderr)
             sys.exit()
         continue
     full_pathnames = [os.path.join(current_root, f) \

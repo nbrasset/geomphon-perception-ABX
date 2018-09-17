@@ -1,0 +1,8 @@
+subject_id,subject_language,18-29yrs,30-39yrs,40-49yrs,50-59yrs,60-69yrs,more_than_69yrs,handedness_L,handedness_R,know_lang_not_targ_no,other_lang_exp_NA,other_lang_exp_native,other_lang_exp_a_lot,other_lang_exp_fair_amount,other_lang_exp_some,other_lang_exp_very_little,other_lang_prof_NA,other_lang_prof_native,other_lang_prof_very_advanced,other_lang_prof_advanced,other_lang_prof_intermediate,other_lang_prof_beginner,hear_vis_Y,hear_vis_N,speech_prob_Y,speech_prob_N,ling_course_Y,ling_course_N,phonet_class_Y,phonet_class_N,phonog_class_Y,phonog_class_N
+margaretcurtis,English,0,1,0,0,0,0,0,1,0.0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+Tyler Refsland,English,0,1,0,0,0,0,1,0,0.0,1,0,0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+Francoise Charest,French,0,0,0,0,1,0,0,1,0.0,1,0,0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0
+SandyWoo,French,0,1,0,0,0,0,0,1,0.0,1,0,1,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0,1.0,0.0
+BouchardSandie,French,0,1,0,0,0,0,0,1,0.0,1,0,0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,1.0
+bernardmathieu,French,0,1,0,0,0,0,0,1,0.0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+AdmirerSecret,French,0,1,0,0,0,0,0,1,0.0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0,1.0,0.0

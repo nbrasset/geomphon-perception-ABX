@@ -1,0 +1,6 @@
+subject_id,subject_language,survey_time,chrome,firefox,IE,safari,opera,other,don't know,headphones ,speakers,earbuds,very bad,bad,normal,good,very good,distractions_yes,distractions_no,wireless,wired,very_slowly,slowly,tolerably_so,pretty_fast,no_loading_time,satisfaction
+margaretcurtis,English,0:28.0,1,0,0,0,0,0,0,0,1.0,0,0,0,0.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,95.0
+Tyler Refsland,English,0:31.9,1,0,0,0,0,0,0,0,0.0,1,0,0,0.0,1.0,0.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,50.0
+BouchardSandie,French,1:16.8,1,0,0,0,0,0,0,1,0.0,0,0,0,1.0,0.0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,51.0
+bernardmathieu,French,0:31.1,0,1,0,0,0,0,0,0,1.0,0,0,1,0.0,0.0,0.0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,83.0
+AdmirerSecret,French,0:43.2,0,1,0,0,0,0,0,1,0.0,0,0,0,0.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,100.0
