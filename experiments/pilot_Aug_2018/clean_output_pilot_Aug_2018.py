@@ -1,7 +1,7 @@
 ###########################################
 ###CLEAN PARTICIPANT OUTPUT GEOMPHON PILOT#
 ###########################################
-#last edit 5 Sept 2018 by Amelia
+#last edit 8 August 2018 by Ewan 
 #17 July 2018 by Amelia 
 
 
@@ -18,6 +18,7 @@
 ## The individual data file names (e.g. .../.../NAME.csv)
 ## will be stripped of pathnames and ".csv" and used to generate subject
 ## ids (see below); we assume that the NAME is the Turker ID
+## therefore this must be run on ANONYMIZED DATA
 ##
 ## SECOND ARGUMENT: main results file
 ## THIRD ARGUMENT: presurvey file
@@ -50,8 +51,9 @@ for current_root, dirnames_d, filenames_d in os.walk(folderpath):
     csv_filenames = fnmatch.filter(filenames_d, "*.csv")
     if current_root == folderpath:
         if len(csv_filenames) > 0:
-            print("ERROR: need at least one level of nesting " \
-                    + "in data folder '" + folderpath + "'", file=sys.stderr)
+            print >> sys.stderr(""), \
+                    "ERROR: need at least one level of nesting " \
+                    + "in data folder '" + folderpath + "'"
             sys.exit()
         continue
     full_pathnames = [os.path.join(current_root, f) \
@@ -175,7 +177,7 @@ results.to_csv(results_filename, index=False, encoding='utf-8')
 
 PRESURVEY_COLUMN_ORDER = ["subject_id", "subject_language", "I",
     "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
-    "W", "X", "Y", "Z", "AA", "BB", "CC", "DD","EE","FF","GG","HH","II","JJ","KK","LL","MM"]
+    "W", "X", "Y", "Z", "AA", "BB", "CC", "DD"]
 PRESURVEY_COLUMN_DICT = {
     "subject_id": "subject_id",
     "subject_language": "subject_language",
@@ -187,30 +189,21 @@ PRESURVEY_COLUMN_DICT = {
     "N":"more_than_69yrs",
     "O":"handedness_L",
     "P":"handedness_R",
-    "Q":"know_lang_not_targ_no",
-    "R":"know_lang_not_targ_yes",
-    "R":"other_lang_exp_NA",
-    "S":"other_lang_exp_native",
-    "T":"other_lang_exp_a_lot",
-    "U":"other_lang_exp_fair_amount",
-    "V":"other_lang_exp_some",
-    "W":"other_lang_exp_very_little",
-    "X":"other_lang_prof_NA",
-    "Y":"other_lang_prof_native",
-    "Z":"other_lang_prof_very_advanced",
-    "AA":"other_lang_prof_advanced",
-    "BB":"other_lang_prof_intermediate",
-    "CC":"other_lang_prof_beginner",
-    "DD":"hear_vis_Y",
-    "EE":"hear_vis_N",
-    "FF":"speech_prob_Y",
-    "GG":"speech_prob_N",
-    "HH":"ling_course_Y",
-    "II":"ling_course_N",
-    "JJ":"phonet_class_Y",
-    "KK":"phonet_class_N",
-    "LL":"phonog_class_Y",
-    "MM":"phonog_class_N"
+    "Q":"lang_0-3",
+    "R":"lang_speak",
+    "S":"lang_understand",
+    "T":"live_with_lang_yes",
+    "U":"live_with_lang_no",
+    "V":"hear_vis_Y",
+    "W":"hear_vis_N",
+    "X":"speech_prob_Y",
+    "Y":"speech_prob_N",
+    "Z":"ling_course_Y",
+    "AA":"ling_course_N",
+    "BB":"phonet_class_Y",
+    "CC":"phonet_class_N",
+    "DD":"phonog_class_Y",
+    "EE":"phonog_class_N"
 }
 
 #drop unneeded columns
@@ -281,5 +274,4 @@ POSTSURVEY2_COLUMN_DICT = {
 postsurvey2 = postsurvey2[POSTSURVEY2_COLUMN_ORDER]
 postsurvey2 = postsurvey2.rename(columns=POSTSURVEY2_COLUMN_DICT)
 postsurvey2.to_csv(postsurvey2_filename, index=False, encoding='utf-8')
-
 
