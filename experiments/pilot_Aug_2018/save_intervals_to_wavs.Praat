@@ -12,8 +12,8 @@
 #adapted 20 Aug 2018 by Amelia 
 #-removed form and instead saved presets. 
 #-removed the warning of how many files will be saved
-#-now names all instances of the same interval name endwith a trailing index number, starting from 1. If you run the 
-#   script multiple times it will continue counting up. 
+#-all instances of the same interval name end with a trailing index number, starting from 1. If you run the 
+#script multiple times it will continue counting up. 
 
 
 #define settings 

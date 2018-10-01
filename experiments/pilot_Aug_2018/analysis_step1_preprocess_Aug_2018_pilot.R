@@ -7,10 +7,15 @@ rm(list=ls())
 #READ in data#
 ##############
 
-subject_info <-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/presurvey_cleaned.csv")
-results_only <-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/Aggregated_Results.csv")
-postsurvey<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/postsurvey_cleaned.csv")
-postsurvey<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/postsurvey_cleaned.csv")
+
+#read in data files, which are the output of clean_output_pilot_Aug_2018.py
+subject_info <-read.csv("/Users/post-doc/Desktop/presurvey.csv")
+results_only <-read.csv("/Users/post-doc/Desktop/results.csv")
+postsurvey<-read.csv("/Users/post-doc/Desktop/postsurvey.csv")
+postsurvey2<-read.csv("/Users/post-doc/Desktop/postsurvey2.csv")
+
+
+
 item_info <-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information.csv")
 item_info2<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information_distances_norm.csv")
 item_info3<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information_distances_both_norm.csv")

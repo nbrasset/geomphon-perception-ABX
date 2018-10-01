@@ -16,7 +16,7 @@ TO CREATE STIMULI:
 		-these textgrids have a tier (2) with only the target word (no recording context)
 		-these textgrids have been handcheecked for accuracy after running forced aligner
 
-2. save_intervals_to_wavs.Praat :script for cutting out just target words and saving them as separate .wavs. NB the output directory specified here must exist already, the script will fail rather than create one if you specify a directory that does not exist. 
+2. save_intervals_to_wavs.Praat :script for cutting out just target words and saving them as separate .wavs. NB the output directory specified here must exist already, the script will fail rather than create one if you specify a directory that does not exist.  NB that this script is written for the specific files for this experiment, and must be edited for use with different sound files. 
 
 3. scale_intensity.Praat: script for normalising intensity of all files in a directory. 
 
