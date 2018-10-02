@@ -1,19 +1,19 @@
 #!/bin/bash
 
-
 #run anonymization script 
 ## FIRST ARGUMENT: the folder containing the raw LMEDS data, ending in ".csv"
 ## SECOND ARGUMENT: the folder to output to; this folder will be created if it doesn't
 ##### already exist, but it will *not* be cleaned out if it already exists,
 ##### so be careful
-## THIRD ARGUMENT: The anonymization CSV
+## THIRD ARGUMENT: The anonymization CSV to be created. 
 
 python anonymize_lmeds_data_filenames.py \
-"/Users/post-doc/Desktop/output"\
- "/Users/post-doc/Desktop/anon_output" \
- "/Users/post-doc/Desktop/anon_key.csv"
+"/Users/post-doc/Desktop/output" \
+"/Users/post-doc/Desktop/anon_output" \
+"/Users/post-doc/Desktop/anon_key.csv"
 
-#Run clean_output_pilot_Aug_2018.py  in python 3 
+
+#Run clean_output_pilot_Aug_2018.py # in python 3        FIXME make sure python 2 compatible.
 #this script takes as input a directory of raw LMEDS data files  \
 #*WITH nested subdirectories* for English and French data. 
 
@@ -24,6 +24,6 @@ python anonymize_lmeds_data_filenames.py \
 ###postsurvey_filename = sys.argv[4]
 ###postsurvey2_filename = sys.argv[5]
 
-python clean_output_pilot_Aug_2018.py "/Users/Desktop/post-doc/data_and_analysis/anon_output"
-"/Users/post-doc/data_and_analysis/results.csv" "/Users/post-doc/data_and_analysis/presurvey.csv"
-"/Users/post-doc/data_and_analysis/postsurvey.csv" "/Users/post-doc/data_and_analysis/posturvey2.csv"
+python clean_output_pilot_Aug_2018.py "/Users/post-doc/Desktop/anon_output" \
+"/Users/post-doc/Desktop/results.csv" "/Users/post-doc/Desktop/presurvey.csv" \
+"/Users/post-doc/Desktop/postsurvey.csv" "/Users/post-doc/Desktop/posturvey2.csv"

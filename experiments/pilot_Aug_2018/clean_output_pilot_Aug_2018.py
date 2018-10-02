@@ -1,7 +1,8 @@
 ###########################################
 ###CLEAN PARTICIPANT OUTPUT GEOMPHON PILOT#
 ###########################################
-#last edit 8 August 2018 by Ewan 
+#last edit 30 Sept by Amelia
+#8 August 2018 by Ewan 
 #17 July 2018 by Amelia 
 
 
@@ -39,9 +40,9 @@ ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
 # ARGUMENTS
-folderpath = sys.argv[1]
+folderpath =sys.argv[1]
 results_filename = sys.argv[2]
-presurvey_filename = sys.argv[3]
+presurvey_filename =  sys.argv[3]
 postsurvey_filename = sys.argv[4]
 postsurvey2_filename = sys.argv[5]
 
