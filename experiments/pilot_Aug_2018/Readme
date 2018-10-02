@@ -21,6 +21,7 @@ TO CREATE STIMULI:
 3. scale_intensity.Praat: script for normalising intensity of all files in a directory. 
 
 4. generate triplet list  triplets.csv:  a list of all possible triplets 
+FIXME-add
 
 5. create_stimlist.py : a script that takes triplets.csv and filters it to create an optimised stimuli list,
 
@@ -60,13 +61,17 @@ presurvey_filename = sys.argv[3]
 postsurvey_filename = sys.argv[4]
 postsurvey2_filename = sys.argv[5]
 
-
 2. Run analysis_step1_preprocess_Aug_2018_pilot.R
 
 This takes the results, combines with subject and item info, 
 
-It yields a .csv that is ready for analysis (in separate R project) 
+It yields a .csv that is ready for analysis 
 
+
+TO ANALYZE DATA
+1. Calculate Acoustic scores 
+2. Calculate Geomphon scores 
+3. Analyse in R project. 
 
 
 
