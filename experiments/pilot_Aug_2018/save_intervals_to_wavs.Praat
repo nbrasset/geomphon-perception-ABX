@@ -85,6 +85,8 @@ plusObject: "TextGrid ewan_ONLY_TARGET_CHECKED"
 	prefix$ = "ewan_" 
 
 	# Loop through all intervals in the selected tier of the TextGrid
+	indexnumber = 1
+
 	for interval from start_from to end_at
 		select TextGrid 'gridname$'
 		intname$ = ""
@@ -115,15 +117,11 @@ plusObject: "TextGrid ewan_ONLY_TARGET_CHECKED"
 			Extract part... intervalstart intervalend no
 			filename$ = intname$
 			
-			#adds a number after each file with same interval name, starting with 1. 
-			indexnumber = 1
 			intervalfile$ = "'folder$'" + "'prefix$'" + "'filename$'" + "'suffix$''indexnumber'" + ".wav"
-			while fileReadable (intervalfile$)
-				indexnumber = indexnumber + 1
-				intervalfile$ = "'folder$'" + "'prefix$'" + "'filename$'" + "'suffix$''indexnumber'" + ".wav"
-			endwhile
+			
 			Write to WAV file... 'intervalfile$'
 			Remove
+			indexnumber = indexnumber + 1
 		endif
 	endfor
 
@@ -157,6 +155,8 @@ plusObject: "TextGrid amelia_consonants_ONLY_TARGET_CHECKED"
 	prefix$ = "amelia_" 
 
 	# Loop through all intervals in the selected tier of the TextGrid
+	indexnumber = 1	
+
 	for interval from start_from to end_at
 		select TextGrid 'gridname$'
 		intname$ = ""
@@ -188,16 +188,14 @@ plusObject: "TextGrid amelia_consonants_ONLY_TARGET_CHECKED"
 			filename$ = intname$
 			
 			#adds a number after each file with same interval name, starting with 1. 
-			indexnumber = 1
 			intervalfile$ = "'folder$'" + "'prefix$'" + "'filename$'" + "'suffix$''indexnumber'" + ".wav"
-			while fileReadable (intervalfile$)
-				indexnumber = indexnumber + 1
-				intervalfile$ = "'folder$'" + "'prefix$'" + "'filename$'" + "'suffix$''indexnumber'" + ".wav"
-			endwhile
+
 			Write to WAV file... 'intervalfile$'
 			Remove
+			indexnumber = indexnumber + 1
 		endif
 	endfor
+
 
 #Iteration 3: select the third LongSound and TextGrid Pair
 selectObject: "LongSound amelia_vowels"
@@ -229,7 +227,10 @@ plusObject: "TextGrid amelia_vowels_ONLY_TARGET_CHECKED"
 	prefix$ = "amelia_" 
 
 	# Loop through all intervals in the selected tier of the TextGrid
+	indexnumber = 1
+
 	for interval from start_from to end_at
+		
 		select TextGrid 'gridname$'
 		intname$ = ""
 		intname$ = Get label of interval... tier interval
@@ -258,18 +259,14 @@ plusObject: "TextGrid amelia_vowels_ONLY_TARGET_CHECKED"
 			select LongSound 'soundname$'
 			Extract part... intervalstart intervalend no
 			filename$ = intname$
-			
-			#adds a number after each file with same interval name, starting with 1. 
-			indexnumber = 1
+		
 			intervalfile$ = "'folder$'" + "'prefix$'" + "'filename$'" + "'suffix$''indexnumber'" + ".wav"
-
-			while fileReadable (intervalfile$)
-				indexnumber = indexnumber + 1
-				intervalfile$ = "'folder$'" + "'prefix$'" + "'filename$'" + "'suffix$''indexnumber'" + ".wav"
-			endwhile
+			
 			Scale intensity... 70
 			Write to WAV file... 'intervalfile$'
+
 			Remove
+			indexnumber = indexnumber + 1
 		endif
 	endfor
 
