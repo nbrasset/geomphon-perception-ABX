@@ -51,8 +51,21 @@ TO CREATE NEW EXPERIMENT:
 
 TO CLEAN DATA: 
 
-1. Run clean_output_pilot_Aug_2018.py  in python 3
-this script takes as input a directory of raw LMEDS data files  *WITH nested subdirectories* for English and French data. 
+1. Anonymize data 
+ Run anonymize_lmeds_data_filenames.py  
+
+FIRST ARGUMENT: the folder containing the raw LMEDS data, ending in ".csv"
+SECOND ARGUMENT: the folder to output to; the internal structure of the input folder will be
+preserved; this folder will be created if it doesn't already exist, but it will *not* 
+be cleaned out if it already exists, so be careful
+THIRD ARGUMENT: The anonymization CSV to be created. This maps the real ids to anonymised one
+This CSV should be stored as individually identifiable information and never changed. 
+
+
+
+2. Run clean_output_pilot_Aug_2018.py  
+this script takes as input a directory of raw LMEDS data files  
+*WITH nested subdirectories* for English and French data. 
 
 takes the following arguments: 
 folderpath = sys.argv[1]
@@ -61,11 +74,15 @@ presurvey_filename = sys.argv[3]
 postsurvey_filename = sys.argv[4]
 postsurvey2_filename = sys.argv[5]
 
-2. Run analysis_step1_preprocess_Aug_2018_pilot.R
+
+
+3. Run analysis_step1_preprocess_Aug_2018_pilot.R
 
 This takes the results, combines with subject and item info, 
 
 It yields a .csv that is ready for analysis 
+
+
 
 
 TO ANALYZE DATA
