@@ -54,8 +54,7 @@ stimlist<-stimlist %>% mutate(
             P %in% consonants ~"consonant"))
 
 #Add the correct context, depending on whether a consonant or vowel
-#add in a random repetition number to chose one of the repetitions of the word (random value 1-4)
- 
+
 stimlist<-stimlist %>% mutate(
     word_P = case_when(
       V_C == "vowel"& CONTEXT == "AH"~ paste(P,"DAH", sep=""),
@@ -70,20 +69,52 @@ stimlist<-stimlist %>% mutate(
       V_C == "consonant" & CONTEXT == "AH"~ paste("A",Q,"AH",sep=""),
       V_C == "consonant" & CONTEXT == "EE"~ paste("EE",Q,"EE",sep=""))
     )
- 
 
-#map value of word_P and word_Q to an acutal file name 
+
+######################################################
+#chose which iteration of each sound file to use.
+######################################################
+
 #first create vector of all file names intervals 
 files_list<-dir(path ="stimuli/concatenation/intervals")
+df1 <- as.data.frame(files_list)
 
-#add column for speaker by stripping off speaker name 
+#now add a variable for speaker by stripping off all characters before _
+df1$speaker<-sub("_.*","", df1$files_list)
 
-#add column for sound by stripping off number and .csv
+#now add a variable for sound by stripping off all digits and the string .csv
+df1$sound<-sub(".*_","", df1$files_list) #remove speaker
+df1$sound<-sub("\\..*","", df1$sound) #remove .csv
+df1$sound<-gsub("[[:digit:]]", "",df1$sound) #remove number
 
 
-#group by speaker 
-#then group by 
-#then sample one in each group and return one value of file name. 
+final_files <- group_by(df1, speaker, sound) %>% 
+              sample_n(1)
+final_files$key<-paste(final_files$speaker,"_",final_files$sound,sep="")
+
+
+##################################################
+# match word P and Q to the real soundfile name
+###################################################
+
+stimlist$p_key<-paste(stimlist$SPEAKER,stimlist$word_P,sep="")
+stimlist$q_key<-paste(stimlist$SPEAKER,stimlist$word_Q,sep="")
+
+#MERGE based first on p key 
+#define p key as the key to merge on
+stimlist$key<-paste(stimlist$SPEAKER,stimlist$word_P,sep="") #define p as key 
+with_file_names<-left_join(x=stimlist, y=final_files)
+with_file_names$p_file<-with_file_names$files_list
+
+# ##################BROKEN FIX BELOW
+# stimlist$key<-paste(stimlist$SPEAKER,stimlist$word_Q,sep="") #define q as key 
+# with_file_names<-left_join(x=with_file_names, y=final_files)
+# with_file_names$p_file<-with_file_names$files_list
+# with_file_names<-left_join(x=stimlist, y=final_files)
+
+
+
+
 
 
 
