@@ -1,8 +1,65 @@
-subject_id,subject_language,18-29yrs,30-39yrs,40-49yrs,50-59yrs,60-69yrs,more_than_69yrs,handedness_L,handedness_R,know_lang_not_targ_no,other_lang_exp_NA,other_lang_exp_native,other_lang_exp_a_lot,other_lang_exp_fair_amount,other_lang_exp_some,other_lang_exp_very_little,other_lang_prof_NA,other_lang_prof_native,other_lang_prof_very_advanced,other_lang_prof_advanced,other_lang_prof_intermediate,other_lang_prof_beginner,hear_vis_Y,hear_vis_N,speech_prob_Y,speech_prob_N,ling_course_Y,ling_course_N,phonet_class_Y,phonet_class_N,phonog_class_Y,phonog_class_N
-margaretcurtis,English,0,1,0,0,0,0,0,1,0.0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
-Tyler Refsland,English,0,1,0,0,0,0,1,0,0.0,1,0,0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
-Francoise Charest,French,0,0,0,0,1,0,0,1,0.0,1,0,0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0
-SandyWoo,French,0,1,0,0,0,0,0,1,0.0,1,0,1,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0,1.0,0.0
-BouchardSandie,French,0,1,0,0,0,0,0,1,0.0,1,0,0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,1.0
-bernardmathieu,French,0,1,0,0,0,0,0,1,0.0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
-AdmirerSecret,French,0,1,0,0,0,0,0,1,0.0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0,1.0,0.0
+subject_id,subject_language,18-29yrs,30-39yrs,40-49yrs,50-59yrs,60-69yrs,more_than_69yrs,handedness_L,handedness_R,lang_0-3,lang_speak,lang_understand,live_with_lang_yes,live_with_lang_no,hear_vis_Y,hear_vis_N,speech_prob_Y,speech_prob_N,ling_course_Y,ling_course_N,phonet_class_Y,phonet_class_N,phonog_class_Y
+X_SUPZNARGBH,English,1,0,0,0,0,0,0,1,3.0,english,english,1,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_GODNFULZPC,English,1,0,0,0,0,0,1,0,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_PGBCYQEJXZ,English,1,0,0,0,0,0,0,1,1.0,0,1,0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0
+X_KGBTLSJNEX,English,1,0,0,0,0,0,0,1,english,english,english,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_LAGTCVHUYQ,English,1,0,0,0,0,0,0,1,english,english,english,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_TWFDAIXSVE,English,0,0,0,1,0,0,0,1,English,English French,English French,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_ZPXGQMIJSL,English,0,0,0,1,0,0,1,0,1.0,0,1,0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0
+X_OYEISUBJAT,English,1,0,0,0,0,0,0,1,english,english,english,1,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0
+X_MCIKVYROLX,English,1,0,0,0,0,0,0,1,1.0,0,0,1,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0
+X_LIGNDBAZKF,English,0,0,0,0,1,0,0,1,english ,english ,english ,1,0.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0,1.0,0.0
+X_HSMZVPQCYD,English,1,0,0,0,0,0,0,1,english,english spanish,english spanish,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_JBNXTGRPMK,English,0,1,0,0,0,0,0,1,1.0,0,1,0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0
+X_CAUDGVNLZH,English,0,1,0,0,0,0,1,0,1.0,0,1,0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0
+X_SJBPTLXMUG,English,0,1,0,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_WSEKLNYHZU,English,1,0,0,0,0,0,0,1,1.0,1,1,1,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0
+X_ETBFMXUWRV,English,0,1,0,0,0,0,1,0,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_LEZVMDHAPX,English,0,1,0,0,0,0,0,1,0.0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0
+X_GVWILCAOYJ,English,0,1,0,0,0,0,0,1,0.0,1,0,1,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0
+X_QIEZNXYHGF,English,1,0,0,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_BXLJSZUECD,English,0,1,0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0
+X_APZNRMYLBU,English,0,1,0,0,0,0,1,0,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_HLJETNWOIQ,English,0,0,0,1,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_AERVFQNHMC,English,0,1,0,0,0,0,0,1,english,english,english,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0
+X_HLGTEUAZKX,English,0,0,1,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,1.0,0.0,0.0,1.0,0.0,1.0,0.0
+X_MCVPJYEHAD,English,1,0,0,0,0,0,0,1,1.0,english,english,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_KHIOURSXNE,English,0,0,1,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_EFYUHBGNCM,English,0,1,0,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_KNEPLTMIUA,English,1,0,0,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_ZUASMBHEVK,English,0,0,0,0,1,0,0,1,0.0,1,0,0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0
+X_IBQAMVJCEK,English,0,1,0,0,0,0,1,0,0.0,1,0,0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0
+X_VRQALIDKBF,English,1,0,0,0,0,0,0,1,English,English,English,1,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_WJUVPKNXGR,English,0,1,0,0.0,0.0,0.0,0.0,1.0,english,english,english,1.0,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_CRQJFVDEYP,English,0,1,0,0,0,0,0,1,0.0,1,0,0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0
+X_DPYCVKOZHI,English,0,0,0,1,0,0,0,1,0.0,1,0,0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0
+X_SRBMOHPKZV,English,0,1,0,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_KTYCXZLRAU,English,0,1,0,0,0,0,1,0,english,english,english,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_AMVTXGHJCS,English,0,0,1,0,0,0,0,1,english,english,english,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_SOUKMEYZCR,English,1,0,0,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_LWRFEZKSIP,French,0,1,0,0,0,0,0,1,0.0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0
+X_LFBDGTNCEI,French,0,1,0,0,0,0,0,1,0.0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0
+X_EKDTUSQNZF,French,1,0,0,0,0,0,0,1,Français,Français Anglais Arabe Espagnol Russe,Anglais Français Espagnol Arabe Russe,1,0.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,0.0,1.0
+X_QXFNZMGORK,French,1,0,0,0,0,0,0,1,0.0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0
+X_RXQENPWTFL,French,1,0,0,0,0,0,0,1,français,français,français anglais,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_TFPXYOIHZC,French,0,1,0,0,0,0,0,1,français,français,français,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_EHPZXVRUJF,French,0,1,0,0,0,0,0,1,français arabe,français arabe anglais,français arabe anglais,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_ATISXNWBLH,French,1,0,0,0,0,0,1,0,francais,fancais ANglais Allemand Espagnol,fancais ANglais Allemand Espagnol,1,0.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0,1.0,0.0
+X_DLCWZINFQU,French,0,0,1,0,0,0,0,1,0.0,1,0,0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0
+X_MPLNBQRKCZ,French,0,1,0,0,0,0,0,1,0.0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0
+X_GBRUANVKHI,French,0,1,0,0,0,0,1,0,Français,Français Anglais,Français Anglais Allemand Espagnol,0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,0.0,0.0
+X_AMPVXYKCEU,French,0,1,0,0,0,0,0,1,0.0,1,0,0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0
+X_MLKUSFJCEH,French,0,1,0,0,0,0,0,1,1.0,Francais,Francais Anglais,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_EPYQVOJDNZ,French,1,0,0,0,0,0,0,1,0.0,1,0,0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0
+X_SYNFTUPZAM,French,0,0,0,0,1,0,0,1,0.0,1,0,0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0
+X_DNZBIOCYFH,French,0,1,0,0,0,0,0,1,0.0,1,0,1,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0
+X_UBAVSZQJWY,French,1,0,0,0,0,0,0,1,0.0,1,0,1,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0
+X_ALOHNSBMRC,French,0,1,0,0,0,0,0,1,Français,Français Anglais,Français Anglais,0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,0.0,0.0
+X_CUFMEDXPSL,French,0,0,1,0,0,0,0,1,français,français anglais allemand,français anglais allemand,1,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_ICGBEKTJVX,French,1,0,0,0,0,0,0,1,0.0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0
+X_XPIUQJLNWV,French,1,0,0,0,0,0,0,1,0.0,1,0,0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0
+X_HRSVDMWPJL,French,1,0,0,0,0,0,0,1,Français,Français,Français Anglais,0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,0.0,0.0
+X_RBTCZPQHFV,French,1,0,0,0,0,0,0,1,0.0,1,0,1,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0
+X_MSBZYRLHWG,French,0,1,0,0,0,0,1,0,ug,hio,hui,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_EOFAUIKGWV,French,1,0,0,0,0,0,1,0,français,français anglais,français anglais,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_IMHJBCKUZR,French,1,0,0,0,0,0,0,1,Français,Français Anglais Espagnol,Français Anglais Espagnol,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0

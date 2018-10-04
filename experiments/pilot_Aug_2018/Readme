@@ -23,7 +23,8 @@ TO CREATE STIMULI:
 4. generate triplet list  triplets.csv:  a list of all possible triplets 
 FIXME-add
 
-5. create_stimlist.py : a script that takes triplets.csv and filters it to create an optimised stimuli list,
+5. create_stimlist.py : a script that takes triplets.csv and filters it to create an optimised stimuli list, expressed
+As zeros and ones.
 
 6. reformat_stimlist.R takes created stimuli list from create_stimlist.py and reformats to match optimised list to strings that are filenames.  This new reformatted stimuli list is saved as as a .txt file to read in to Praat (Praat script will take only txt file) 
 
@@ -49,18 +50,20 @@ TO CREATE NEW EXPERIMENT:
    -output folders must have write permissions. 
 
 
+
 TO CLEAN DATA: 
+
+0. Download data from server. Put data in one directory, with subdirectories that name the language of the participants. 
 
 1. Anonymize data 
  Run anonymize_lmeds_data_filenames.py  
 
-FIRST ARGUMENT: the folder containing the raw LMEDS data, ending in ".csv"
+FIRST ARGUMENT: the folder containing the raw LMEDS data.  Data files should end in ".csv"
 SECOND ARGUMENT: the folder to output to; the internal structure of the input folder will be
 preserved; this folder will be created if it doesn't already exist, but it will *not* 
 be cleaned out if it already exists, so be careful
 THIRD ARGUMENT: The anonymization CSV to be created. This maps the real ids to anonymised one
-This CSV should be stored as individually identifiable information and never changed. 
-
+This CSV should be stored as individually identifiable information and never  shared 
 
 
 2. Run clean_output_pilot_Aug_2018.py  
