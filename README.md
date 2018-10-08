@@ -33,8 +33,8 @@ This will calculate various different kinds of acoustic distances. The original 
 **Python**
 
 ```
-- standard_format: pip install -e git://github.com/geomphon/standard-format.git@v0.1#egg=standard_format
-- Custom fork of python_speech_features: pip install -e git://github.com/geomphon/python_speech_features_geomphon.git@v1.0GEOMPH#egg=python_speech_features
+- standard_format: pip install git+git://github.com/geomphon/standard-format.git@v0.1#egg=standard_format
+- Custom fork of python_speech_features: pip install git+git://github.com/geomphon/python_speech_features_geomphon.git@v1.0GEOMPH#egg=python_speech_features
 - pandas==0.23.0
 - fastdtw==0.3.2
 - numpy
@@ -59,6 +59,8 @@ This will calculate various different kinds of acoustic distances. The original 
 - h5py
 - numpy
 - pandas
-- ABXpy v0.4: pip install -e git://github.com/bootphon/ABXpy.git@v0.4#egg=ABXpy
+- cython (dependency for ABXpy that's not correctly dealt with)
+- ABXpy v0.4: pip install git+git://github.com/bootphon/ABXpy.git@v0.4.1#egg=ABXpy
+- textgrid: pip install git+git://github.com/kylebgorman/textgrid.git
 
 ```
