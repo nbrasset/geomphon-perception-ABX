@@ -39,7 +39,7 @@
 	#give the name of the output file:
 	output$ = "stimuli/concatenation/intervals/meta_info_filelist.txt"
 	#add header line to output file 
-	appendFileLine: "'output$'",tab$, "orig_file" ,tab$, "indexnumber", tab$ ,"int_name", tab$, "int_filename"
+	appendFileLine: "'output$'", "orig_file" ,tab$, "indexnumber", tab$ ,"int_name", tab$, "int_filename",tab$,
 
 #set up the output text file to have useful column headers 
 #
@@ -60,6 +60,8 @@ Read from file: "stimuli/ewan_ONLY_TARGET_CHECKED.TextGrid"
 ######## NOTE on current structure: 
 ####This script is currently done three separate times instead of looping. 
 ####If you change to aloop, make sure to also change the output file names to retain original file info. 
+
+
 
 #Iteration 1: select the first LongSound and TextGrid Pair
 selectObject: "LongSound ewan"
@@ -89,6 +91,7 @@ plusObject: "TextGrid ewan_ONLY_TARGET_CHECKED"
 	endoffile = Get finishing time
 	#comment Give an optional prefix for all filenames, here used to define original file name:
 	prefix$ = "ewan" 
+
 
 	# Loop through all intervals in the selected tier of the TextGrid
 	indexnumber = 1
@@ -127,7 +130,7 @@ plusObject: "TextGrid ewan_ONLY_TARGET_CHECKED"
 			Remove
 
 			#append info to output text file, with info on longsound file, interval number, interval name, and soundfile name
-			appendFileLine: "'output$'",tab$, "'prefix$'" ,tab$, "'indexnumber'" , tab$ ,"'intname$'", tab$ ,"'prefix$''indexnumber'"
+			appendFileLine: "'output$'", "'prefix$'" ,tab$, "'indexnumber'" , tab$ ,"'intname$'", tab$ ,"'prefix$''indexnumber'"
 
 			indexnumber = indexnumber + 1
 		endif
@@ -202,7 +205,7 @@ plusObject: "TextGrid amelia_consonants_ONLY_TARGET_CHECKED"
 			Remove
 
 			#append info to output text file, with info on longsound file, interval number, interval name, and soundfile name
-			appendFileLine: "'output$'",tab$, "'prefix$'" ,tab$, "'indexnumber'" , tab$ ,"'intname$'", tab$ ,"'prefix$''indexnumber'"
+			appendFileLine: "'output$'", "'prefix$'" ,tab$, "'indexnumber'" , tab$ ,"'intname$'", tab$ ,"'prefix$''indexnumber'"
 
 			indexnumber = indexnumber + 1
 		endif
@@ -281,7 +284,7 @@ plusObject: "TextGrid amelia_vowels_ONLY_TARGET_CHECKED"
 
 
 			#append info to output text file, with info on longsound file, interval number, interval name, and soundfile name
-			appendFileLine: "'output$'",tab$, "'prefix$'" ,tab$, "'indexnumber'" , tab$ ,"'intname$'", tab$ ,"'prefix$''indexnumber'"
+			appendFileLine: "'output$'", "'prefix$'" ,tab$, "'indexnumber'" , tab$ ,"'intname$'", tab$ ,"'prefix$''indexnumber'"
 
 
 			indexnumber = indexnumber + 1
