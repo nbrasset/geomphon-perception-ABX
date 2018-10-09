@@ -4,11 +4,8 @@
 #run interval saving script, save intervals to stimuli/interval;s
 /Applications/Praat.app/Contents/MacOS/Praat --run "save_intervals_to_wavs.Praat"
 
-#scale intensity of all files just created, save in stimuli/norm_intervals
-/Applications/Praat.app/Contents/MacOS/Praat --run "scale_intensity.Praat"
-
+ #http://www.fon.hum.uva.nl/praat/manual/Scripting_6_9__Calling_from_the_command_line.html
 #generate triplets.csv-contained in stimulus_construction
-
 
 #run create_stimlist.py to create an optomized stimlist
 python create_stimlist.py
