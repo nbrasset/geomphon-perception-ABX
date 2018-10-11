@@ -1,5 +1,9 @@
 #!/bin/bash
 
+##########################
+#first anonymize the data#
+##########################
+
 #run anonymization script 
 ## FIRST ARGUMENT: the folder containing the raw LMEDS data, ending in ".csv"
 ## SECOND ARGUMENT: the folder to output to; this folder will be created if it doesn't
@@ -13,8 +17,13 @@ python anonymize_lmeds_data_filenames.py \
 "/Users/post-doc/Desktop/anon_key.csv"
 
 
-#Run clean_output_pilot_Aug_2018.py # in python 3        FIXME make sure python 2 compatible.
-#this script takes as input a directory of raw LMEDS data files  \
+
+##################################
+#divide output into results files#
+##################################
+
+#Run clean_output_pilot_Aug_2018.py #      FIXME check E's python version compatibility for Docker
+#this script takes as input a directory of anonymized LMEDS data files  \
 #*WITH nested subdirectories* for English and French data. 
 
 #takes the following arguments: 

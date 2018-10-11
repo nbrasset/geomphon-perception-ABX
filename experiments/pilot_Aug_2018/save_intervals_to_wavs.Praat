@@ -39,10 +39,7 @@
 	#give the name of the output file:
 	output$ = "stimuli/concatenation/intervals/meta_info_filelist.txt"
 	#add header line to output file 
-	appendFileLine: "'output$'", "orig_file" ,tab$, "indexnumber", tab$ ,"int_name", tab$, "int_filename",tab$,
-
-#set up the output text file to have useful column headers 
-#
+	appendFileLine: "'output$'","orig_file",tab$,"indexnumber", tab$ ,"int_name", tab$, "int_filename"
 
 
 #open .wavs as Long Sounds and TextGrids as textgrids

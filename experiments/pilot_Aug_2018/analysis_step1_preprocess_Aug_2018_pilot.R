@@ -1,5 +1,5 @@
 #data cleaning and analysis of geomphon pilot 
-#last edit 25 July 2018 by amelia 
+#last edit 11 October 2018 by amelia 
 
 rm(list=ls())
 
@@ -16,9 +16,9 @@ postsurvey2<-read.csv("/Users/post-doc/Desktop/postsurvey2.csv")
 
 
 
-item_info <-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information.csv")
-item_info2<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information_distances_norm.csv")
-item_info3<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information_distances_both_norm.csv")
+# item_info <-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information.csv")
+# item_info2<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information_distances_norm.csv")
+# item_info3<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information_distances_both_norm.csv")
 
 #add the word "triplet_" before the name of the audio file in the item info, 
 #so that it can be used as an id for the left join and so that it is interpreted as a character

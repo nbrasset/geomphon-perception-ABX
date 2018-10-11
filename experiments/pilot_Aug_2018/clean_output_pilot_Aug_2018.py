@@ -1,7 +1,8 @@
 ###########################################
 ###CLEAN PARTICIPANT OUTPUT GEOMPHON PILOT#
 ###########################################
-#last edit 30 Sept by Amelia
+#last edit
+# 30 Sept by Amelia
 #8 August 2018 by Ewan 
 #17 July 2018 by Amelia 
 
