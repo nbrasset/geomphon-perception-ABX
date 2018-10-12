@@ -35,4 +35,4 @@ python anonymize_lmeds_data_filenames.py \
 
 python clean_output_pilot_Aug_2018.py "/Users/post-doc/Desktop/anon_output" \
 "/Users/post-doc/Desktop/results.csv" "/Users/post-doc/Desktop/presurvey.csv" \
-"/Users/post-doc/Desktop/postsurvey.csv" "/Users/post-doc/Desktop/posturvey2.csv"
+"/Users/post-doc/Desktop/postsurvey.csv" "/Users/post-doc/Desktop/postsurvey2.csv"
