@@ -1,0 +1,261 @@
+---
+title: "Summary July 2018 Pilot"
+author: "Ewan Dunbar and Amelia Kimball"
+date: "08/08/2018"
+output: html_document
+---
+
+```{r setup}
+`%>%` <- magrittr::`%>%`
+`%dopar%` <- foreach::`%dopar%`
+```
+
+## Preprocessing data
+
+Load data
+
+```{r load-data, message=FALSE, warning=FALSE}
+DATA_FOLDER <-  "data"
+
+subject_info <- readr::read_csv(paste0(DATA_FOLDER, "/", "presurvey_cleaned.csv"))
+results_all <- readr::read_csv(paste0(DATA_FOLDER, "/", "Aggregated_Results.csv"))
+postsurvey <- readr::read_csv(paste0(DATA_FOLDER, "/", "postsurvey_cleaned.csv"))
+
+# Three types of acoustic distances were calculated:
+#  - the sum of the Euclidean distances along the optimal DTW path
+#  - " " divided by the length of the path (== the length of the longer item)
+#  - " " divided by the sum of the lengths of the two items
+item_info_with_dtw_sum_distances <- readr::read_csv(paste0(DATA_FOLDER, "/",
+                      "item_meta_information__DTW_SUM.csv")) %>%
+  dplyr::rename(distance_DTW_SUM_TGT=distance_TGT,
+                distance_DTW_SUM_OTH=distance_OTH)
+item_info_with_dtw_norm_distances <- readr::read_csv(paste0(DATA_FOLDER, "/",
+                      "item_meta_information__DTW_NORM_BY_PATH_LENGTH.csv")) %>%
+  dplyr::rename(distance_DTW_NORM_PATH_LENGTH_TGT=distance_TGT_norm,
+                distance_DTW_NORM_PATH_LENGTH_OTH=distance_OTH_norm)
+item_info_with_dtw_norm2_distances <- readr::read_csv(paste0(DATA_FOLDER, "/",
+                      "item_meta_information__DTW_NORM_BY_SUMMED_LENGTH.csv")) %>%
+  dplyr::rename(distance_DTW_NORM_SUMMED_LENGTH_TGT=distance_TGT_both_norm,
+                distance_DTW_NORM_SUMMED_LENGTH_OTH=distance_OTH_both_norm)
+item_info <- dplyr::left_join(item_info_with_dtw_sum_distances,
+                              item_info_with_dtw_norm_distances) %>%
+  dplyr::left_join(item_info_with_dtw_norm2_distances) %>%
+  dplyr::mutate(tripletid=sub("^", "triplet_", tripletid))
+```
+
+Process attention checks
+
+```{r attention-checks}
+#find attention trials, make them into a df called attention checks
+results_all <- results_all %>%
+  dplyr::mutate(paid_attention=ifelse(
+    grepl('^atten', tripletid),
+      ifelse(
+        (tripletid=="attention_check_English_F_normalized" | 
+         tripletid=="attention_check_francais_F_normalise") & 
+        first_sound==1,
+        'pass_f', 
+        ifelse(
+          (tripletid=="attention_check_english_J_normalise" | 
+           tripletid=="attention_check_francais_J_normalise") & 
+          second_sound==1,
+          'pass_j',
+          'fail')),
+      NA))
+```
+
+Filter subjects based on attention checks and surveys
+
+```{r filtering-subjects}
+attention_fails <- results_all %>%
+  dplyr::filter(!is.na(paid_attention)) %>%
+  dplyr::group_by(subject_id) %>%
+  dplyr::summarize(N_not_paid_attention=sum(paid_attention == "fail"))
+
+# Only subjects who are in the postsurvey file, i.e., have finished
+filtered_subjects <- dplyr::left_join(postsurvey, subject_info,
+                                      by ='subject_id') %>%
+# Filter based on native language questions
+#
+# Current logic: subjects answered whether they know any other languages,
+# for various different senses of "know", and we filter out based on these
+# questions.
+#
+# This survey is to be replaced by a set of binary questions,
+# including (1) early exposure to the "target" language,
+# (2) early exposure to other languages; (3) late exposure to
+# other languages above a certain amount and/or before a certain
+# age and/or with a certain level of fluency
+
+# Remove subjects whose response to 'languages between 0 and 3'
+# is not either 'English' or '1' or 'French'
+  dplyr::filter(toupper(`lang_0-3`) %in% c("ENGLISH", "1.0", "1",
+                                         "FRANÇAIS")) %>%
+# Phonetic training filtering - exclude anyone with any classes
+# phonet/phonol/linguistics
+  dplyr::filter(phonet_class_Y == 0,
+                phonog_class_Y == 0,
+                ling_course_Y == 0) %>%
+# Exclude speech/hearing/vision problems
+  dplyr::filter(hear_vis_Y == 0,
+                speech_prob_Y == 0) %>%
+# Allow no more than one attention check failure
+  dplyr::left_join(attention_fails, by="subject_id") %>%
+  dplyr::filter(N_not_paid_attention <= 1)
+
+```
+
+Drop filtered subjects, attention checks and practice trials, include item information,
+add columns to determine whether user response was correct, add transformed
+comparative acoustic distance columns.
+
+```{r select-items}
+results <- dplyr::left_join(filtered_subjects, results_all, by='subject_id') %>%
+  dplyr::right_join(item_info, by='tripletid') %>%
+  dplyr::filter(grepl("^triplet_", tripletid)) %>%
+  dplyr::mutate(user_resp=factor(ifelse(first_sound == "1", "A", "B")),
+                user_corr=as.integer(substr(presentation_order, 1, 1) == user_resp),
+                difference_log_distance_DTW_SUM=
+                  log(distance_DTW_SUM_TGT)-
+                  log(distance_DTW_SUM_OTH),
+                difference_log_distance_DTW_NORM_PATH_LENGTH=
+                  log(distance_DTW_NORM_PATH_LENGTH_TGT)-
+                  log(distance_DTW_NORM_PATH_LENGTH_OTH),
+                difference_log_distance_DTW_NORM_SUMMED_LENGTH=
+                  log(distance_DTW_NORM_SUMMED_LENGTH_TGT)-
+                  log(distance_DTW_NORM_SUMMED_LENGTH_OTH))
+```
+
+## Testing various models
+
+**First question: what is the right way to deal with acoustic distance?**
+
+Here our goal is to find a simple model that captures a lot of the variance due to acoustic distance, even when extrapolating, or using a small number of subjects. We assume that this simple model (subject response correct ~ difference in log acoustic distance) will continue to do be appropriate when we move to a larger model that includes other predictors.
+
+First hyperparameter - type of acoustic distance
+Second hyperparameter - form of relation
+Third hyperparameter - N (do stratified sampling)
+
+```{r TESTING-GROUND}
+hadley_update <- function(mod, formula = NULL, data = NULL) {
+  call <- getCall(mod)
+  if (is.null(call)) {
+    stop("Model object does not support updating (no call)", call. = FALSE)
+  }
+  term <- terms(mod)
+  if (is.null(term)) {
+    stop("Model object does not support updating (no terms)", call. = FALSE)
+  }
+
+  if (!is.null(data)) call$data <- data
+  if (!is.null(formula)) call$formula <- update.formula(call$formula, formula)
+  env <- attr(term, ".Environment")
+
+  eval(call, env, parent.frame())
+}
+
+llik_logistic <- function(model, newdata) {
+  yhat <- predict(model, newdata=newdata, type="response")
+  y <- newdata[[all.vars(formula(model))[1]]]
+  if (!is.numeric(y)) {
+    y <- contrasts(factor(y))[as.character(y)] # FIXME - is this what glm does?
+  }
+  return(sum(y*log(yhat) + (1-y)*log(1-yhat), na.rm=TRUE))
+}
+
+refit_without <- function(fit, data, indices) {
+   d_left_out <- data[indices,]
+   d_remaining <- data[-indices,]
+   return(hadley_update(fit, data=d_remaining))
+}
+
+loo_vanilla <- function(fit,  data) {
+  lliks <- foreach::foreach(i=1:nrow(data), .combine=c) %dopar%
+      llik_logistic(refit_without(fit, data, i), data[i,]) # FIXME
+  return(mean(lliks, na.rm=TRUE))
+}
+
+extrapolate <- function(fit, data, proportion, balanced=TRUE) {
+  # Find extreme values of X - FIXME should support multiple variables
+  x <- data[[all.vars(formula(fit))[2]]]
+  ranks <- rank(x) # FIXME - would need to apply PCA here
+  sorted_unique_ranks <- sort(unique(ranks))
+  n <- as.integer(proportion*length(sorted_unique_ranks)) # FIXME - precond. prop.
+  if (balanced) {
+    n_top = as.integer(n/2)
+    n_bottom = n - n_top
+    # FIXME - at least document weird interpretation of proportion
+    top_ranks <- sorted_unique_ranks[seq_len(n_top) + length(sorted_unique_ranks) - n_top]
+    bottom_ranks <- sorted_unique_ranks[seq_len(n_bottom)]
+    indices <- which(ranks %in% c(top_ranks, bottom_ranks))
+    return(list(score=llik_logistic(refit_without(fit, data, indices), # FIXME
+                         data[indices,]), fit_wo_edges=refit_without(fit, data, indices)) )
+  } else {
+    top_ranks <- sorted_unique_ranks[seq_len(n) + length(sorted_unique_ranks) - n]
+    top_indices <- which(ranks %in% top_ranks)
+    llik_without_top <- llik_logistic(refit_without(fit, data, top_indices),
+                                      data[top_indices,])
+    bot_ranks <- sorted_unique_ranks[seq_len(n)]
+    bot_indices <- which(ranks %in% bot_ranks)
+    llik_without_bot <- llik_logistic(refit_without(fit, data, bot_indices),
+                                      data[bot_indices,])
+    return(list(score=mean(llik_without_top, llik_without_bot),
+                fit_wo_top=refit_without(fit, data, top_indices),
+                fit_wo_bot=refit_without(fit, data, bot_indices)))
+  }
+}
+
+prepare_model <- function(distance_predictors, d) {
+  FORMULAS <- list(
+    DTW_SUM=formula(user_corr ~ difference_log_distance_DTW_SUM),
+    DTW_NORM_PATH_LENGTH=formula(user_corr ~
+                                 difference_log_distance_DTW_NORM_PATH_LENGTH),
+    DTW_NORM_PATH_LENGTH_2=formula(user_corr ~
+                                 I(difference_log_distance_DTW_NORM_PATH_LENGTH^2)),
+    DTW_NORM_SUMMED_LENGTH=formula(user_corr ~
+                                 difference_log_distance_DTW_NORM_SUMMED_LENGTH),
+    DTW_NORM_SUMMED_LENGTH_2=formula(user_corr ~
+                                 I(difference_log_distance_DTW_NORM_SUMMED_LENGTH^2))
+  )
+  spec <- FORMULAS[[distance_predictors]]
+  spec_and_data <- list(spec=spec, data_indices=1:nrow(d))
+  return(spec_and_data)
+}
+
+fit_model <- function(spec, data_indices, data) {
+  d <- data[data_indices,]
+  fit <- glm(formula=spec, data=d, family="binomial") # FIXME
+  stats <- data.frame(
+#    loo_vanilla=loo_vanilla(fit, d),
+    extrapolate_10_balanced=extrapolate(fit, d, 0.1, balanced=TRUE),
+    extrapolate_10_unbalanced=extrapolate(fit, d, 0.1, balanced=FALSE),
+    extrapolate_half_balanced=extrapolate(fit, d, 0.5, balanced=TRUE),
+    extrapolate_half_unbalanced=extrapolate(fit, d, 0.5, balanced=FALSE)
+  )
+  fit_and_stats <- list(fit=fit, stats=stats)
+  return(fit_and_stats)
+}
+
+doParallel::registerDoParallel(cores=6)
+model_info <- tibble::tibble(
+  M_distance_predictors=c("DTW_SUM", "DTW_NORM_PATH_LENGTH",
+                          "DTW_NORM_PATH_LENGTH_2",
+                          "DTW_NORM_SUMMED_LENGTH",
+                          "DTW_NORM_SUMMED_LENGTH_2"),
+  spec=vector("list", 5),
+  data_indices=vector("list", 5),
+  fit=vector("list", 5),
+  stats=vector("list", 5)
+  )
+for (i in 1:nrow(model_info)) {
+  spec_and_data_i <- prepare_model(model_info[["M_distance_predictors"]][i],
+                                   results)
+  model_info[["spec"]][[i]] <- spec_and_data_i[["spec"]]
+  model_info[["data_indices"]][[i]] <- spec_and_data_i[["data_indices"]]
+  fit_and_stats_i <- fit_model(spec_and_data_i[["spec"]], spec_and_data_i[["data_indices"]], results)
+  model_info[["fit"]][[i]] <- fit_and_stats_i[["fit"]]
+  model_info[["stats"]][[i]] <- fit_and_stats_i[["stats"]]
+}
+model_info <- model_info %>% tidyr::unnest(stats)
+```
+
