@@ -36,3 +36,14 @@ python anonymize_lmeds_data_filenames.py \
 python clean_output_pilot_Aug_2018.py "/Users/post-doc/Desktop/anon_output" \
 "/Users/post-doc/Desktop/results.csv" "/Users/post-doc/Desktop/presurvey.csv" \
 "/Users/post-doc/Desktop/postsurvey.csv" "/Users/post-doc/Desktop/postsurvey2.csv"
+
+
+####################################
+#filter out subjects based on presurvey, assemble final data. 
+####################################
+
+#subject_info <-read.csv("/Users/post-doc/Desktop/presurvey.csv")
+#results_only <-read.csv("/Users/post-doc/Desktop/results.csv")
+#postsurvey<-read.csv("/Users/post-doc/Desktop/postsurvey.csv")
+#postsurvey2<-read.csv("/Users/post-doc/Desktop/postsurvey2.csv")
+
