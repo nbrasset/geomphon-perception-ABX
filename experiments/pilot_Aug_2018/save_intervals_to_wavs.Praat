@@ -12,16 +12,16 @@
 #adapted 20 Aug 2018 by Amelia 
 #-removed form and instead saved presets. 
 #-removed the warning of how many files will be saved
-#-all instances of the same interval name end with a trailing index number, starting from 1. If you run the 
+#-all named interval are saved with a trailing index number, starting from 1. If you run the 
 #script multiple times it will continue counting up. 
 
 
 #define settings 
 
-	#comment Which IntervalTier in this TextGrid would you like to process?
+	#Which IntervalTier in this TextGrid would you like to process?
 	tier = 2
 
-	#comment Starting and ending at which interval? 
+	#Starting and ending at which interval? 
 	start_from = 1
 	#0 = end at last contour 
 	end_at = 0
@@ -36,8 +36,10 @@
 	#give the folder where to save the sound files:
 	folder$ = "stimuli/concatenation/intervals/"
 
-	#comment Give an optional suffix for all filenames (.wav will be added anyway):
-	suffix$ = ""
+	#give the name of the output file:
+	output$ = "stimuli/concatenation/intervals/meta_info_filelist.txt"
+	#add header line to output file 
+	appendFileLine: "'output$'","orig_file",tab$,"indexnumber", tab$ ,"int_name", tab$, "int_filename"
 
 
 #open .wavs as Long Sounds and TextGrids as textgrids
@@ -51,9 +53,12 @@ Read from file: "stimuli/ewan_ONLY_TARGET_CHECKED.TextGrid"
 
 
 
-##########
+##################################
+######## NOTE on current structure: 
 ####This script is currently done three separate times instead of looping. 
-####If you change to aloop, make sure to also change the output file names to retain speaker info. 
+####If you change to aloop, make sure to also change the output file names to retain original file info. 
+
+
 
 #Iteration 1: select the first LongSound and TextGrid Pair
 selectObject: "LongSound ewan"
@@ -81,8 +86,9 @@ plusObject: "TextGrid ewan_ONLY_TARGET_CHECKED"
 	intname$ = ""
 	intervalfile$ = ""
 	endoffile = Get finishing time
-	#comment Give an optional prefix for all filenames, here used to define speaker:
-	prefix$ = "ewan_" 
+	#comment Give an optional prefix for all filenames, here used to define original file name:
+	prefix$ = "ewan" 
+
 
 	# Loop through all intervals in the selected tier of the TextGrid
 	indexnumber = 1
@@ -116,11 +122,13 @@ plusObject: "TextGrid ewan_ONLY_TARGET_CHECKED"
 			select LongSound 'soundname$'
 			Extract part... intervalstart intervalend no
 			filename$ = intname$
-			
-			intervalfile$ = "'folder$'" + "'prefix$'" + "'filename$'" + "'suffix$''indexnumber'" + ".wav"
-			
+			intervalfile$ = "'folder$'" + "'prefix$'" + "'indexnumber'" + ".wav"
 			Write to WAV file... 'intervalfile$'
 			Remove
+
+			#append info to output text file, with info on longsound file, interval number, interval name, and soundfile name
+			appendFileLine: "'output$'", "'prefix$'" ,tab$, "'indexnumber'" , tab$ ,"'intname$'", tab$ ,"'prefix$''indexnumber'"
+
 			indexnumber = indexnumber + 1
 		endif
 	endfor
@@ -152,7 +160,7 @@ plusObject: "TextGrid amelia_consonants_ONLY_TARGET_CHECKED"
 	intervalfile$ = ""
 	endoffile = Get finishing time
 	#comment Give an optional prefix for all filenames, here used to define speaker:
-	prefix$ = "amelia_" 
+	prefix$ = "amelia_consonants" 
 
 	# Loop through all intervals in the selected tier of the TextGrid
 	indexnumber = 1	
@@ -188,10 +196,14 @@ plusObject: "TextGrid amelia_consonants_ONLY_TARGET_CHECKED"
 			filename$ = intname$
 			
 			#adds a number after each file with same interval name, starting with 1. 
-			intervalfile$ = "'folder$'" + "'prefix$'" + "'filename$'" + "'suffix$''indexnumber'" + ".wav"
+			intervalfile$ = "'folder$'" + "'prefix$'" + "'indexnumber'" + ".wav"
 
 			Write to WAV file... 'intervalfile$'
 			Remove
+
+			#append info to output text file, with info on longsound file, interval number, interval name, and soundfile name
+			appendFileLine: "'output$'", "'prefix$'" ,tab$, "'indexnumber'" , tab$ ,"'intname$'", tab$ ,"'prefix$''indexnumber'"
+
 			indexnumber = indexnumber + 1
 		endif
 	endfor
@@ -224,7 +236,7 @@ plusObject: "TextGrid amelia_vowels_ONLY_TARGET_CHECKED"
 	intervalfile$ = ""
 	endoffile = Get finishing time
 	#comment Give an optional prefix for all filenames, here used to define speaker:
-	prefix$ = "amelia_" 
+	prefix$ = "amelia_vowels" 
 
 	# Loop through all intervals in the selected tier of the TextGrid
 	indexnumber = 1
@@ -260,12 +272,18 @@ plusObject: "TextGrid amelia_vowels_ONLY_TARGET_CHECKED"
 			Extract part... intervalstart intervalend no
 			filename$ = intname$
 		
-			intervalfile$ = "'folder$'" + "'prefix$'" + "'filename$'" + "'suffix$''indexnumber'" + ".wav"
+			intervalfile$ = "'folder$'" + "'prefix$'" + "'indexnumber'" + ".wav"
 			
 			Scale intensity... 70
 			Write to WAV file... 'intervalfile$'
 
 			Remove
+
+
+			#append info to output text file, with info on longsound file, interval number, interval name, and soundfile name
+			appendFileLine: "'output$'", "'prefix$'" ,tab$, "'indexnumber'" , tab$ ,"'intname$'", tab$ ,"'prefix$''indexnumber'"
+
+
 			indexnumber = indexnumber + 1
 		endif
 	endfor

@@ -1,8 +1,8 @@
 #data cleaning and analysis of geomphon pilot 
-#last edit 25 July 2018 by amelia 
+#last edit 11 October 2018 by amelia 
 
 rm(list=ls())
-
+library(stringr)
 ##############
 #READ in data#
 ##############
@@ -15,52 +15,78 @@ postsurvey<-read.csv("/Users/post-doc/Desktop/postsurvey.csv")
 postsurvey2<-read.csv("/Users/post-doc/Desktop/postsurvey2.csv")
 
 
+#########
+#ITEM INFO 
+#item info commented out.  acoustic distance will go here
 
-item_info <-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information.csv")
-item_info2<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information_distances_norm.csv")
-item_info3<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information_distances_both_norm.csv")
+# item_info <-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information.csv")
+# item_info2<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information_distances_norm.csv")
+# item_info3<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information_distances_both_norm.csv")
 
-#add the word "triplet_" before the name of the audio file in the item info, 
-#so that it can be used as an id for the left join and so that it is interpreted as a character
-item_info$tripletid <- sub("^", "triplet_", item_info$tripletid)
+# #add the word "triplet_" before the name of the audio file in the item info, 
+# #so that it can be used as an id for the left join and so that it is interpreted as a character
+# item_info$tripletid <- sub("^", "triplet_", item_info$tripletid)
 
 # start with only subjects who are present in the postsurvey file (meaning presumably they finished the task).
 #first make both factors, then left join
-finishers<-dplyr::left_join(postsurvey,subject_info,by ='subject')
-
+finishers<-dplyr::left_join(postsurvey,subject_info,by ='subject_id')
 
 
 ####################################
 #EXCLUSION and FILTERING OF SUBJECTS
 ####################################
 
-## Language filtering - all this will change
-## Remove subjects whose response to 'languages between 0 and 3' is not either 'English' or '1'
-## (which we take to mean they misinterpreted the question as 'how many')
+#right now, takes only those who say they are not native speakers of another language
 subject_info_filt1 <- dplyr::filter(finishers,
-                                    toupper(lang_0_3) %in% c("ENGLISH", "1.0", "1"))
+                                    other_lang_native == 0)
 
 ## Phonetic training filtering - exclude anyone with any classes phonet/phonol/linguistics
 subject_info_filt2 <- dplyr::filter(subject_info_filt1,
-                                    phonet_class_Y == 0,
-                                    phonog_class_Y == 0,
-                                    ling_course_Y == 0)
+                                    phonet_course_yes == 0,
+                                    phonog_course_yes == 0,
+                                    ling_course_yes == 0)
 
 ## Exclude - speech/hearing/vision problems
 subject_info_filt3 <- dplyr::filter(subject_info_filt2,
-                                    hear_vis_Y == 0,
-                                    speech_prob_Y == 0)
-
-##FIXME throw an error if there are duplicates in the pre and post survey 
+                                    hear_vis_problems_yes == 0,
+                                    troubles_de_lang_yes == 0)
 
 ## Filtering finished
 subject_info_filt <- subject_info_filt3
 
 
 
-###################
-#MERGE DATA FRAMES#
-###################
+
+######
+######start delete when fixed
+######
+
+#TO BE REMOVED--ONLY FOR OCT 11 while acoustic distances are not done 
+#these steps are repeated below, so this whole chunk can be deleted
+oct_results <- dplyr::left_join(subject_info_filt, results_only, by = 'subject_id')
+oct_results<-dplyr::filter(oct_results, !grepl('attention', tripletid))
+
+#add a new user response column that maps on to answer key 
+oct_results$user_resp<-ifelse(oct_results$first_sound == "1", "A", "B")
+oct_results$corr_ans<-str_sub(oct_results$tripletid,start=-1)
+oct_results$user_corr<- ifelse(oct_results$corr_ans == oct_results$user_resp,1,0)
+
+write.csv(oct_results,"/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/filtered_results_Oct_11_2018.csv")
+
+######
+######end delete when fixed
+######
+
+
+
+
+
+
+
+
+######################################
+#ADD ACOUSTIC DISTANCES AND ITEM INFO#
+######################################
 
 #merge subject info and results
 full_results <- dplyr::left_join(subject_info_filt, results_only, by = 'subject')
@@ -104,6 +130,7 @@ unfilt_full$user_resp<-factor(ifelse(unfilt_full$first_sound == "1", "A", "B"))
 unfilt_full$user_corr<-substr(unfilt_full$presentation_order,1,1) == unfilt_full$user_resp
 unfilt_full$user_corr<-as.integer(unfilt_full$user_corr)
 write.csv(unfilt_full,"/Users/post-doc/Desktop/geomphon_pilot_analysis/unfilt_full.csv")
+
 
 
 

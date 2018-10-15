@@ -1,7 +1,8 @@
 ###########################################
 ###CLEAN PARTICIPANT OUTPUT GEOMPHON PILOT#
 ###########################################
-#last edit 30 Sept by Amelia
+#last edit
+# 30 Sept by Amelia
 #8 August 2018 by Ewan 
 #17 July 2018 by Amelia 
 
@@ -46,6 +47,16 @@ presurvey_filename =  sys.argv[3]
 postsurvey_filename = sys.argv[4]
 postsurvey2_filename = sys.argv[5]
 
+
+
+###
+#Start with only files from the Aug pilot (other files will not match
+#in columns because of different survey questions)
+
+######
+
+
+
 #make a list of the filenames in the folder 
 file_language_tuples = []
 for current_root, dirnames_d, filenames_d in os.walk(folderpath):
@@ -67,6 +78,9 @@ for current_root, dirnames_d, filenames_d in os.walk(folderpath):
             break
     curr_tuples = [(f, first_subfolder) for f in full_pathnames]
     file_language_tuples += curr_tuples
+
+
+
 
 ###START LOOP iterating through these files
 results = None
@@ -138,6 +152,8 @@ for f, language in file_language_tuples:
     ### END OF LOOP
 
 
+
+
 ##############################
 ## CLEAN UP RESULTS DATAFRAME#
 ##############################
@@ -178,7 +194,7 @@ results.to_csv(results_filename, index=False, encoding='utf-8')
 
 PRESURVEY_COLUMN_ORDER = ["subject_id", "subject_language", "I",
     "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
-    "W", "X", "Y", "Z", "AA", "BB", "CC", "DD"]
+    "W", "X", "Y", "Z", "AA", "BB", "CC", "DD", "EE","FF","GG","HH","II","JJ","KK","LL","MM","NN"]
 PRESURVEY_COLUMN_DICT = {
     "subject_id": "subject_id",
     "subject_language": "subject_language",
@@ -190,21 +206,30 @@ PRESURVEY_COLUMN_DICT = {
     "N":"more_than_69yrs",
     "O":"handedness_L",
     "P":"handedness_R",
-    "Q":"lang_0-3",
-    "R":"lang_speak",
-    "S":"lang_understand",
-    "T":"live_with_lang_yes",
-    "U":"live_with_lang_no",
-    "V":"hear_vis_Y",
-    "W":"hear_vis_N",
-    "X":"speech_prob_Y",
-    "Y":"speech_prob_N",
-    "Z":"ling_course_Y",
-    "AA":"ling_course_N",
-    "BB":"phonet_class_Y",
-    "CC":"phonet_class_N",
-    "DD":"phonog_class_Y",
-    "EE":"phonog_class_N"
+    "Q":"lang_other_target_no",
+    "R":"lang_other_target_yes",
+    "S":"other_lang_na",
+    "T":"other_lang_native",
+    "U":"other_lang_bcpdexp",
+    "V":"other_lang_assezdexp",
+    "W":"other_lang_unpeudexp",
+    "X":"other_lang_trespeudexp",
+    "Y":"other_lang_comp_na",
+    "Z":"other_lang_comp_native",
+    "AA":"other_lang_presque_native",
+    "BB":"other_lang_avancee",
+    "CC":"other_lang_intermediare",
+    "DD":"other_lang_debutant",
+    "EE":"hear_vis_problems_yes",
+    "FF":"hear_vis_problems_no",
+    "GG":"troubles_de_lang_yes",
+    "HH":"troubles_de_lang_no",
+    "II":"ling_course_yes",
+    "JJ":"ling_course_no",
+    "KK":"phonet_course_yes",
+    "LL":"phonet_course_no",
+    "MM":"phonog_course_yes",
+    "NN":"phonog_course_no"
 }
 
 #drop unneeded columns
