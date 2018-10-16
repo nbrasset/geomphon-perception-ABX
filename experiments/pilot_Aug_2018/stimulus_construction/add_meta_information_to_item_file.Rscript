@@ -29,8 +29,8 @@ readr::read_delim(INPUT, delim=" ", col_types=readr::cols(
     `#file` = readr::col_character(), onset = readr::col_double(),
     offset = readr::col_double(), `#item` = readr::col_character(),
     word = readr::col_character())) %>%
-  dplyr::mutate(speaker=ifelse(`#file` == "stimulus_construction/ewan",
-                               "ewan", "amelia")) %>%
+  dplyr::mutate(speaker=(function(x) sapply(strsplit(x, "_"),
+                                            function(y) y[[1]]))(`#item`)) %>%
   dplyr::mutate(CV=ifelse(startsWith(word, "H") | startsWith(word, "W"),
                           "V", "C")) %>%
   dplyr::mutate(context=ifelse(endsWith(word, "AH"), "A", "I")) %>%

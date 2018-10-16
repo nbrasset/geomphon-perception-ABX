@@ -1,0 +1,57 @@
+#!/usr/bin/env Rscript
+
+# Combine triplet meta information files
+#
+# The script that outputs the stimulus list (the associations of
+# triplet ids with their source files and with the correct answer)
+# does not output all the meta data combined in the main list of triplets
+# (from which the stimulus list is ultimately derived, as a subset).
+# Add this information back in.
+#
+# The final stimulus list is tab-separated.
+# 
+# Author: Ewan Dunbar
+
+`%>%` <- magrittr::`%>%`
+
+ARGS <- commandArgs(TRUE)
+
+# Final stimulus list 
+# e.g., "Stimuli_list.txt"
+FINAL_STIM_LIST <- ARGS[1] 
+
+# Original stimulus list
+# e.g., "triplets.csv"
+SOURCE_STIM_LIST <- ARGS[2] 
+
+# Complete item information file
+# e.g., "item_meta_information.csv"
+OUTPUT <- ARGS[3] 
+
+
+final_stim <- readr::read_tsv(FINAL_STIM_LIST,
+                col_types=readr::cols(
+                  .default=readr::col_character())) %>%
+  dplyr::mutate(item_TGT=ifelse(CORR_ANS=="A", File1, File2),
+                item_OTH=ifelse(CORR_ANS=="A", File2, File1),
+                item_X=File3) %>%
+  dplyr::select(-File1, -File2, -File3, -Silence1, -Silence2) %>%
+  dplyr::mutate(tripletid=paste0(filename, "_", CORR_ANS)) %>%
+  dplyr::select(-filename)
+
+source_stim <- readr::read_csv(SOURCE_STIM_LIST,
+                col_types=readr::cols(
+                  .default=readr::col_character(),
+                  onset_TGT = readr::col_double(),
+                  offset_TGT = readr::col_double(),
+                  onset_OTH = readr::col_double(),
+                  offset_OTH = readr::col_double(),
+                  onset_X = readr::col_double(),
+                  offset_X = readr::col_double()))
+
+dplyr::left_join(final_stim, source_stim,
+                 by=c("item_TGT", "item_OTH", "item_X")) %>%
+  readr::write_csv(OUTPUT)
+
+
+
