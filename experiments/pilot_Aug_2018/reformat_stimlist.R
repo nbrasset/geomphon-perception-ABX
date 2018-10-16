@@ -81,25 +81,30 @@ stimlist<-stimlist %>% mutate(
     )
 
 
+######################################################
+#create a list of filenames that randomly selects one interval filename of each type
+#from the full list_of_all_intervals
+######################################################
 
-######################################################
-#chose which iteration of each sound file to use.
-######################################################
 
 #first read in list of all intervals from interval saving script
-files_list<-read.delim("stimuli/concatenation/intervals/meta_info_filelist.txt", row.names=NULL)
+list_of_all_interval_filenames<-read.delim("stimuli/concatenation/intervals/meta_info_filelist.txt", row.names=NULL)
 
 #now add a variable for speaker by stripping off all characters before "_" in orig_file
-files_list$speaker<-sub("_.*","", files_list$orig_file)
+#(because orig_file is the FILENAME, which either Ewan or amelia_consonants)
+list_of_all_interval_filenames$speaker<-sub("_.*","", list_of_all_interval_filenames$orig_file)
 
 #now group by speaker, then by interval name, then sample one of those intervals.
-final_files <- group_by(files_list, speaker, int_name)%>% sample_n(1)
+final_files <- group_by(list_of_all_interval_filenames, speaker, int_name)%>% sample_n(1)
 final_files$key<-paste(final_files$speaker,"_",final_files$int_name,sep="")
-
 #final_files now lists the specific instance of the interval used in col int_filename.
 
 
 
+########
+#Create a key of which files to use where based on the stimlist created
+#by the optimizatiuon script
+#####
 
 # create file and silence columns depending on the order column Ps and Qs
 stimlist<-stimlist %>% mutate(
@@ -119,19 +124,46 @@ stimlist<-stimlist %>% mutate(
      ORDER == "PQP"~word_P,
      ORDER == "QPP"~word_P)
    )
- 
 
- #Add speaker  to files-- one speaker for files 1 and 2, the other for file 3 
+#add correct answer-- nb do this before adding speaker because speaker will be different across these.  
 stimlist<-stimlist %>% mutate(
-   File1 = paste(SPEAKER,File1,sep=""),
-   File2 = paste(SPEAKER,File2,sep=""))
+  CORR_ANS = case_when(
+    stimlist$File1==stimlist$File3~"A",
+    stimlist$File2 ==stimlist$File3 ~"B"))
 
+
+
+#############################
+#create file keys that will be used to look up the real file name 
+##############
+
+stimlist<-stimlist %>% mutate(
+  File1 = case_when(
+    SPEAKER=="amelia_"~paste("amelia_",File1,sep=""),
+    SPEAKER=="ewan_"~paste("ewan_",File1,sep="")))
+
+stimlist<-stimlist %>% mutate(
+  File2 = case_when(
+    SPEAKER=="amelia_"~paste("amelia_",File2,sep=""),
+    SPEAKER=="ewan_"~paste("ewan_",File2,sep="")))
+
+#put the OPPOSITE speaker for file 3
 stimlist<-stimlist %>% mutate(
    File3 = case_when(
      SPEAKER=="amelia_"~paste("ewan_",File3,sep=""),
      SPEAKER=="ewan_"~paste("amelia_",File3,sep="")))
 
+stimlist<-tibble::rowid_to_column(stimlist, "ID")
+stimlist$trial_num<-paste("trial_num",stimlist$ID, sep="")
 
+
+
+
+
+###################
+#MAP SITMLIST TO REAL FILENAMES
+#- changing format from wide to long, left join with list of
+#real filenames, and then going back to wide.
 
 
 #transform data to long version with one file per line
@@ -139,84 +171,41 @@ long<-gather(stimlist, key=file_pos, value=key, File1:File3)
 
 #use merge to add filename for each file 
 with_file_names<-left_join(x=long, y=final_files)
+
 #create a unique ID so we can use spread 
-with_file_names<-tibble::rowid_to_column(with_file_names, "ID")
+#with_file_names<-tibble::rowid_to_column(with_file_names, "ID")
+
+#select only the columns we care about to make data manipulation work
+simple_long<-with_file_names %>%
+  select(file_pos,int_filename, trial_num, CORR_ANS)
 
 #transform data back to wide version with three files per line 
-wide<-spread(with_file_names, key=file_pos, value=int_filename)
-
-
-
-
-# 
-# ##################################################
-# # match word P and Q to the real soundfile name
-# ###################################################
-# 
-# stimlist$p_key<-paste(stimlist$SPEAKER,stimlist$word_P,sep="")
-# stimlist$q_key<-paste(stimlist$SPEAKER,stimlist$word_Q,sep="")
-# 
-# #MERGE based first on p key 
-# stimlist$key<-paste(stimlist$SPEAKER,stimlist$word_P,sep="") #define p as key 
-# with_file_names<-left_join(x=stimlist, y=final_files)
-# 
-# 
-# with_file_names$p_file<-with_file_names$files_list
-# 
-# #now rename the added filename column to specify that it is file p
-# with_file_names$p_filename<-with_file_names$int_filename
-# 
-# 
-# 
-# #now define q as key 
-# with_file_names$key<-with_file_names$q_key
-# with_file_names<-left_join(x=with_file_names, y=final_files)
-# 
-# with_file_names$q_file<-with_file_names$files_list
-# # with_file_names<-left_join(x=stimlist, y=final_files)
-# 
-# 
-# 
-
-
-
-
-
-
-
-
-
-
-
-
-# #add correct answer-- nb do this before adding speaker because speaker will be different across these.  
-# stimlist<-stimlist %>% mutate(
-#   CORR_ANS = case_when(
-#     stimlist$File1==stimlist$File3~"A",
-#     stimlist$File2 ==stimlist$File3 ~"B"))
-
-
-
-
-
-
-
-
-
+wide<-spread(simple_long, key=file_pos, value=int_filename)
 
 
 #add in columns with the name of the silences. 
-stimlist$Silence1<-rep("500ms_silence.wav",length(stimlist$File1))
-stimlist$Silence2<-rep("500ms_silence.wav",length(stimlist$File1))
+wide$Silence1<-rep("500ms_silence",length(wide$File1))
+wide$Silence2<-rep("500ms_silence",length(wide$File1))
 
 #create Column that has the filename for the concatenated file
-stimlist$filename<-paste("stimulus",1:length(stimlist$File1),sep="")
+wide$filename<-paste("stimulus",1:length(wide$File1),sep="")
 
-final_stimlist<-stimlist %>%
+final_stimlist<-wide%>%
   select(File1,Silence1,File2,Silence2,File3,CORR_ANS,filename)
 
 #print df  to text file (NB NOT A CSV, Praat prefers TXT here.)  
 write.table(final_stimlist, file="Stimuli_list.txt", sep="\t",quote = FALSE, row.names = FALSE)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
