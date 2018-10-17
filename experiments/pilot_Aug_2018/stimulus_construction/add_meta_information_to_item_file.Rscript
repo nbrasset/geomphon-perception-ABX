@@ -5,6 +5,13 @@
 #
 # Author: Ewan Dunbar
 
+format_numeric <- function(x, ...) {
+  numeric_cols <- vapply(x, is.numeric, logical(1))
+  x[numeric_cols] <- lapply(x[numeric_cols], format,
+                              trim=TRUE, nsmall=6, ...)
+  return(x)
+}
+
 `%>%` <- magrittr::`%>%`
 
 ARGS <- commandArgs(TRUE)
@@ -35,5 +42,7 @@ readr::read_delim(INPUT, delim=" ", col_types=readr::cols(
                           "V", "C")) %>%
   dplyr::mutate(context=ifelse(endsWith(word, "AH"), "A", "I")) %>%
   dplyr::mutate(phone=WORD_TO_TARGET_PHONE[word]) %>%
+  format_numeric() %>% 
   readr::write_delim(OUTPUT, delim=" ")
+
 

@@ -46,7 +46,7 @@ def task2txt(task_file, out_txt_file):
                 df[['file_X', 'onset_X', 'offset_X']] = df_X[cols]
                 dfs.append(df)
     df = pandas.concat(dfs)
-    df.to_csv(out_txt_file, index=False)
+    df.to_csv(out_txt_file, index=False, float_format='%.6f')
 
 
 if __name__ == '__main__':
@@ -59,3 +59,4 @@ if __name__ == '__main__':
     assert path.isfile(args.task_file), ("No such file "
                                          "{}".format(args.task_file))
     task2txt(args.task_file, args.out_txt_file)
+
