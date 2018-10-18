@@ -3,38 +3,44 @@
 
 rm(list=ls())
 library(stringr)
+library(dplyr)
+
+
 ##############
 #READ in data#
 ##############
 
+#FIXME turn these into arguments to run from command line
 
 #read in data files, which are the output of clean_output_pilot_Aug_2018.py
-subject_info <-read.csv("/Users/post-doc/Desktop/presurvey.csv")
-results_only <-read.csv("/Users/post-doc/Desktop/results.csv")
-postsurvey<-read.csv("/Users/post-doc/Desktop/postsurvey.csv")
-postsurvey2<-read.csv("/Users/post-doc/Desktop/postsurvey2.csv")
+subject_info <-read.csv("/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/presurvey.csv")
+results_only <-read.csv("/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/results.csv")
+postsurvey<-read.csv("/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/postsurvey.csv")
+postsurvey2<-read.csv("/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/postsurvey2.csv")
 
-
+####
+#add correct/wrong column in results
+results_only$user_resp<-ifelse(results_only$first_sound == "1", "A", "B")
+results_only$corr_ans<-str_sub(results_only$tripletid,start=-1)
+results_only$user_corr<- ifelse(results_only$corr_ans == results_only$user_resp,1,0)
 #########
+
+
 #ITEM INFO 
 #item info commented out.  acoustic distance will go here
 
-# item_info <-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information.csv")
+item_info <-read.csv("/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/distances/distances__normed_filterbank__dtw_pathlength.csv")
 # item_info2<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information_distances_norm.csv")
 # item_info3<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_analysis/meta_information_distances_both_norm.csv")
 
-# #add the word "triplet_" before the name of the audio file in the item info, 
-# #so that it can be used as an id for the left join and so that it is interpreted as a character
-# item_info$tripletid <- sub("^", "triplet_", item_info$tripletid)
+####################################
+#EXCLUSION and FILTERING OF SUBJECTS
+####################################
 
 # start with only subjects who are present in the postsurvey file (meaning presumably they finished the task).
 #first make both factors, then left join
 finishers<-dplyr::left_join(postsurvey,subject_info,by ='subject_id')
 
-
-####################################
-#EXCLUSION and FILTERING OF SUBJECTS
-####################################
 
 #right now, takes only those who say they are not native speakers of another language
 subject_info_filt1 <- dplyr::filter(finishers,
@@ -56,40 +62,12 @@ subject_info_filt <- subject_info_filt3
 
 
 
-
-######
-######start delete when fixed
-######
-
-#TO BE REMOVED--ONLY FOR OCT 11 while acoustic distances are not done 
-#these steps are repeated below, so this whole chunk can be deleted
-oct_results <- dplyr::left_join(subject_info_filt, results_only, by = 'subject_id')
-oct_results<-dplyr::filter(oct_results, !grepl('attention', tripletid))
-
-#add a new user response column that maps on to answer key 
-oct_results$user_resp<-ifelse(oct_results$first_sound == "1", "A", "B")
-oct_results$corr_ans<-str_sub(oct_results$tripletid,start=-1)
-oct_results$user_corr<- ifelse(oct_results$corr_ans == oct_results$user_resp,1,0)
-
-write.csv(oct_results,"/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/filtered_results_Oct_11_2018.csv")
-
-######
-######end delete when fixed
-######
-
-
-
-
-
-
-
-
 ######################################
 #ADD ACOUSTIC DISTANCES AND ITEM INFO#
 ######################################
 
 #merge subject info and results
-full_results <- dplyr::left_join(subject_info_filt, results_only, by = 'subject')
+full_results <- dplyr::left_join(subject_info_filt, results_only, by = 'subject_id')
 
 #unfiltered<- dplyr::left_join(finishers, results_only, by = 'subject')
 
@@ -132,8 +110,6 @@ unfilt_full$user_corr<-as.integer(unfilt_full$user_corr)
 write.csv(unfilt_full,"/Users/post-doc/Desktop/geomphon_pilot_analysis/unfilt_full.csv")
 
 
-
-
 #remove practice trials and attention trials
 trials_only<-dplyr::filter(full_results, !grepl('practice_|attention', tripletid))
 
@@ -150,6 +126,12 @@ trials_only$delta_dist_div<-trials_only$distance_TGT/trials_only$distance_OTH
 trials_only$log_delta_dist_div<-log(trials_only$delta_dist_div)
 
 #add column that says whether the participant response matches the correct answer
+
+trials_only$USER_CORR<- case_when(
+                            trials_only$user_resp==trials_only$CORR_ANS~1,
+                            trials_only$user_resp!=trials_only$CORR_ANS~0)
+
+
 trials_only$user_corr<-substr(trials_only$presentation_order,1,1) == trials_only$user_resp
 trials_only$user_corr<-as.integer(trials_only$user_corr)
 
