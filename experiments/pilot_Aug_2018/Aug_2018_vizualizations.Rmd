@@ -1,0 +1,65 @@
+---
+title: "Summary of Aug 2018 pilot results with distances"
+author: "Amelia"
+date: "10/18/2018"
+output: html_document
+---
+
+## R Markdown
+```{r accuracy}
+rm(list=ls())
+library(dplyr)
+data<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_results_for_analysis.csv")
+
+#group by tripletid, which is the stimulus, then summarise how many correct answers for that triplet
+grouped<- dplyr::group_by(data,tripletid,log_delta_dist_div) %>%
+  summarise(num_corr = sum(user_corr))
+
+#add accuracy by dividing by the number of subjects that passed filtering.
+#17 = total number of subjects left after filtering
+grouped$accuracy<-grouped$num_corr/17
+
+```
+Overall accuracy, English and French pooled
+
+-->NOTE that right now, this includes a few outliers with more than 100% accuracy.  These are files that were used in practice trials, and so the accuracy calculation is off.  I will fix this ASAP when back. 
+
+
+```{r graph, echo=FALSE}
+hist(grouped$accuracy)
+plot(grouped$tripletid, grouped$accuracy, ylab="Proportion Correct")
+
+plot(grouped$log_delta_dist_div, grouped$accuracy)
+
+```
+
+
+Accuracy by language group
+
+```{r accuracy_by_lang}
+lang_Eng<-filter(data,subject_language.y=="English")
+lang_French<-filter(data,subject_language.y=="French")
+
+English_acc<-group_by(lang_Eng,tripletid) %>%
+        summarise(num_corr = sum(user_corr))
+
+#8 English subjects left after filtering
+English_acc$accuracy<-English_acc$num_corr/8
+  
+
+French_acc<-group_by(lang_French,tripletid) %>%
+        summarise(num_corr = sum(user_corr))
+
+#9 French subjects left after filtering
+French_acc$accuracy<-French_acc$num_corr/9  
+
+```
+
+
+```{r language graphs}
+hist(English_acc$accuracy, xlab="Proportion Correct", main="Accuracy by stimulus for English participants")
+plot(English_acc$tripletid, English_acc$accuracy,ylab="Proportion Correct")
+
+hist(French_acc$accuracy,xlab="Proportion Correct",main="Accuracy by stimulus for French participants")
+plot(French_acc$tripletid, French_acc$accuracy,ylab="Proportion Correct")
+```

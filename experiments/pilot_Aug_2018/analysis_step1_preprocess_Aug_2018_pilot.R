@@ -91,11 +91,11 @@ full_results<- dplyr::left_join(full_results,attention_checks)
 
 
 #FIXME  these are additional lines added to test the different types of acoustic distance
-#add new distances 
-item_info$distance_TGT_norm<-item_info2$distance_TGT_norm
-item_info$distance_OTH_norm<-item_info2$distance_OTH_norm
-item_info$distance_TGT_both_norm<-item_info3$distance_TGT_both_norm
-item_info$distance_OTH_both_norm<-item_info3$distance_OTH_both_norm
+# #add new distances 
+# item_info$distance_TGT_norm<-item_info2$distance_TGT_norm
+# item_info$distance_OTH_norm<-item_info2$distance_OTH_norm
+# item_info$distance_TGT_both_norm<-item_info3$distance_TGT_both_norm
+# item_info$distance_OTH_both_norm<-item_info3$distance_OTH_both_norm
 
 
 
@@ -125,15 +125,10 @@ trials_only$delta_dist_div<-trials_only$distance_TGT/trials_only$distance_OTH
 # add a column that takes the log 
 trials_only$log_delta_dist_div<-log(trials_only$delta_dist_div)
 
-#add column that says whether the participant response matches the correct answer
-
-trials_only$USER_CORR<- case_when(
-                            trials_only$user_resp==trials_only$CORR_ANS~1,
-                            trials_only$user_resp!=trials_only$CORR_ANS~0)
-
-
-trials_only$user_corr<-substr(trials_only$presentation_order,1,1) == trials_only$user_resp
 trials_only$user_corr<-as.integer(trials_only$user_corr)
 
-write.csv(trials_only,"/Users/post-doc/Desktop/geomphon_pilot_analysis/geomphon_pilot_results_for_analysis.csv")
+#make sure trials is an integer, important for later statistical models. 
+summary(trials_only$user_corr)
+
+write.csv(trials_only,"/Users/post-doc/Desktop/geomphon_pilot_results_for_analysis.csv")
 
