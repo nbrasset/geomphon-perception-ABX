@@ -3,7 +3,7 @@ library(dplyr)
 library(tidyr)
 library(lme4)
 
-results<-read.csv("/Users/post-doc/Desktop/geomphon_pilot_results_for_analysis.csv")
+results<-read.csv("geomphon_pilot_results_for_analysis.csv")
 results<-select(results, subject_id, tripletid, delta_dist_sub, subject_language, user_corr)
 
 
@@ -19,15 +19,24 @@ geom_scores<-as.data.frame(geom_scores)
 
 m1_dat <- dplyr::left_join(geom_scores,results,by="tripletid")
 
+m1_dat$var1 <- as.numeric(as.character(m1_dat$var1))
+m1_dat$var2 <- as.numeric(as.character(m1_dat$var2))
+m1_dat$var3 <- as.numeric(as.character(m1_dat$var3))
 
 ##### Frequentist model #####
-m_1 <- glmer(user_corr ~ delta_dist_sub+var1+var2+var3+subject_language+
+m_1 <- glmer(user_corr ~ delta_dist_sub+(var1+var2+var3)*subject_language+
                (1+delta_dist_sub+var1+var2+var3|subject_id)+(1+subject_language|tripletid), 
              data = m1_dat,
              family = binomial,
              control = glmerControl(optimizer = "bobyqa"))
 
-print(summary(m_1),cor=F)
+m_2 <- glmer(user_corr ~ delta_dist_sub+(var1+var2+var3)*subject_language+
+               (1|subject_id)+(1|tripletid), 
+             data = m1_dat,
+             family = binomial,
+             control = glmerControl(optimizer = "bobyqa"))
+
+print(summary(m_2),cor=F)
 
 
 
@@ -41,21 +50,22 @@ print(summary(m_1),cor=F)
 
 
 # creating model matrices, model 1
-x <- unname(model.matrix(~1+delta_dist_sub, data)) # matrix for fixed effects
+x <- unname(model.matrix(~1+delta_dist_sub+(var1+var2+var3)*subject_language, m1_dat)) # matrix for fixed effects
 attr(x, "assign") <- NULL
-x_u <- unname(model.matrix(~1, data)) # matrix for random effects for subjects
+x_u <- unname(model.matrix(~1, m1_dat)) # matrix for random effects for subjects
 attr(x_u, "assign") <- NULL
-x_w <- unname(model.matrix(~1, data)) # matrix for items random effects
+x_w <- unname(model.matrix(~1, m1_dat)) # matrix for random effects for items 
 attr(x_w, "assign") <- NULL
 
 
+
 # data list, model 1
-stanDat <- list(accuracy = as.integer(data$user_corr),         # dependent variable
+stanDat <- list(accuracy = as.integer(m1_dat$user_corr),         # dependent variable
                 
-                subj=as.numeric(factor(data$subject)),  # subject id
-                item=as.numeric(factor(data$tripletid)),   # item id
+                subj=as.numeric(factor(m1_dat$subject_id)),  # subject id
+                item=as.numeric(factor(m1_dat$tripletid)),   # item id
                 
-                N_obs = nrow(data),                     # number of observations
+                N_obs = nrow(m1_dat),                     # number of observations
                 
                 N_coef = ncol(x),                      # number of fixed effects
                 N_coef_u = ncol(x_u),                    # number of random effects for subjects
@@ -65,8 +75,10 @@ stanDat <- list(accuracy = as.integer(data$user_corr),         # dependent varia
                 x_u = x_u,                               # random effects matrix - subjects
                 x_w = x_w,                               # random effects matrix - items
                 
-                N_subj=length(unique(data$subject)),         # number of subjects
-                N_item=length(unique(data$tripletid)) )  # number of items
+                N_subj=length(unique(m1_dat$subject_id)),         # number of subjects
+                N_item=length(unique(m1_dat$tripletid)) )  # number of items
+
+
 
 
 
@@ -189,13 +201,12 @@ log_lik[i] = bernoulli_logit_lpmf(accuracy[i]|mu[i]);
 
 
 library(rstan)
-options(mc.cores= parallel::detectCores())
+#options(mc.cores= parallel::detectCores())
 fit <- stan(model_code=model_code_glmm, 
             data=stanDat,
             iter=3000, # number of iterations in each chain
-            chains=4, # number of chains
-            control=list(adapt_delta=0.99, max_treedepth = 15) # this is not obligatory, only in order to facilitate model convergence and avoid divergent transitions
-)
+            chains=4) # number of chains
+            #control=list(adapt_delta=0.99, max_treedepth = 15) # this is not obligatory, only in order to facilitate model convergence and avoid divergent transitions
 
 
 #######################
