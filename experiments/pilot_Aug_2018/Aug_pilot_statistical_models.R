@@ -1,6 +1,5 @@
 rm(list=ls())
 library(dplyr)
-library(tidyr)
 library(lme4)
 
 results<-read.csv("geomphon_pilot_results_for_analysis.csv")
@@ -39,7 +38,6 @@ m_2 <- glmer(user_corr ~ delta_dist_sub+(var1+var2+var3)*subject_language+
 print(summary(m_2),cor=F)
 
 
-
 ##########################
 ##### Bayesian model #####
 ##########################
@@ -52,7 +50,7 @@ print(summary(m_2),cor=F)
 # creating model matrices, model 1
 x <- unname(model.matrix(~1+delta_dist_sub+(var1+var2+var3)*subject_language, m1_dat)) # matrix for fixed effects
 attr(x, "assign") <- NULL
-x_u <- unname(model.matrix(~1, m1_dat)) # matrix for random effects for subjects
+x_u <- unname(model.matrix(~1, m1_dat)) # matrix for random effects for subjects, 
 attr(x_u, "assign") <- NULL
 x_w <- unname(model.matrix(~1, m1_dat)) # matrix for random effects for items 
 attr(x_w, "assign") <- NULL
@@ -77,8 +75,6 @@ stanDat <- list(accuracy = as.integer(m1_dat$user_corr),         # dependent var
                 
                 N_subj=length(unique(m1_dat$subject_id)),         # number of subjects
                 N_item=length(unique(m1_dat$tripletid)) )  # number of items
-
-
 
 
 
@@ -196,15 +192,18 @@ log_lik[i] = bernoulli_logit_lpmf(accuracy[i]|mu[i]);
 }
 }"
 
+
 ####################
 # fitting model 1
 
 
 library(rstan)
+#rstan_options(auto_write = TRUE)
 #options(mc.cores= parallel::detectCores())
+
 fit <- stan(model_code=model_code_glmm, 
             data=stanDat,
-            iter=3000, # number of iterations in each chain
+            iter=1000, # number of iterations in each chain
             chains=4) # number of chains
             #control=list(adapt_delta=0.99, max_treedepth = 15) # this is not obligatory, only in order to facilitate model convergence and avoid divergent transitions
 

@@ -2,9 +2,9 @@
 #args = commandArgs(trailingOnly=TRUE)
 
 
+
 #data cleaning and analysis of geomphon pilot 
 #last edit 23 October 2018 by amelia 
-
 
 rm(list=ls())
 library(stringr)
@@ -31,16 +31,16 @@ library(dplyr)
 
 #read in data files, which are the output of clean_output_pilot_Aug_2018.py
 #ARGUMENT 1:  presurvey file
-subject_info <-read.csv("/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/presurvey.csv")
+subject_info <-read.csv("/Users/post-doc/Desktop/presurvey.csv")
 
 #ARGUMENT 2:  results file
-results_only <-read.csv("/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/results.csv")
+results_only <-read.csv("/Users/post-doc/Desktop/results.csv")
 
 #ARGUMENT 3:  postsurvey file
-postsurvey<-read.csv("/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/postsurvey.csv")
+postsurvey<-read.csv("/Users/post-doc/Desktop/postsurvey.csv")
 
 #ARGUMENT 4:  postsurvey2 file 
-postsurvey2<-read.csv("/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/postsurvey2.csv")
+postsurvey2<-read.csv("/Users/post-doc/Desktop/postsurvey2.csv")
 
 #ARGUMENT 5: ITEM INFO 
 item_info <-read.csv("/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/distances/distances__normed_filterbank__dtw_pathlength.csv")
@@ -51,36 +51,38 @@ item_info <-read.csv("/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/e
 ####################################
 
 # start with only subjects who are present in the postsurvey file (meaning presumably they finished the task).
-#first make both factors, then left join
 finishers<-dplyr::left_join(postsurvey,subject_info,by ='subject_id')
 
-#remove anyone who said native in either column 
+#take only people wwith a numeric value for lang_other_target, which 
+#indicates they are from the Aug pilot, which had this column. 
 
-#remove anyone who said they were advancee, presque native, in competence 
-
-#remove anyone who said they were intermediate (2) AND had assez, beaucoup, or native experience 
-
-
-
-#right now, takes only those who say they are not native speakers of another language
 subject_info_filt1 <- dplyr::filter(finishers,
-                                    other_lang_native == 0)
+        lang_other_target_no=="1.0"|lang_other_target_no=="0.0")
 
 
+#take only people who said no to being native in experience or competence.
+subject_info_filt2 <- dplyr::filter(subject_info_filt1,
+                                    other_lang_native == 0 & other_lang_comp_native==0)
+
+#of the people left, keep only the following people: 
+#anyone who said their competence was beginner, regardless of their experience
+#anyone who said their competence was intermediate,AND had only un peu or tres peu d'exp 
+#subject_info_filt3 <- dplyr::filter(subject_info_filt2,
+                                    other_lang_debutant==1|(other_lang_intermediare==1 & (other_lang_trespeudexp==1|other_lang_unpeudexp==1)))
 
 ## Phonetic training filtering - exclude anyone with any classes phonet/phonol/linguistics
-subject_info_filt2 <- dplyr::filter(subject_info_filt1,
+subject_info_filt3 <- dplyr::filter(subject_info_filt2,
                                     phonet_course_yes == 0,
                                     phonog_course_yes == 0,
                                     ling_course_yes == 0)
 
 ## Exclude - speech/hearing/vision problems
-subject_info_filt3 <- dplyr::filter(subject_info_filt2,
+subject_info_filt4 <- dplyr::filter(subject_info_filt3,
                                     hear_vis_problems_yes == 0,
                                     troubles_de_lang_yes == 0)
 
 ## Filtering finished
-subject_info_filt <- subject_info_filt3
+subject_info_filt <- subject_info_filt4
 
 
 
@@ -135,21 +137,20 @@ full_results<- dplyr::left_join(full_results,item_info)
 ######################
 
 #add correct/wrong column in results
-results_only$user_resp<-ifelse(results_only$first_sound == "1", "A", "B")
-results_only$corr_ans<-str_sub(results_only$tripletid,start=-1)
+full_results$user_resp<-ifelse(full_results$first_sound == "1", "A", "B")
+full_results$corr_ans<-str_sub(full_results$tripletid,start=-1)
 #make sure user corr is an integer, important for later statistical models.
-results_only$user_corr<-as.integer(results_only$corr_ans == results_only$user_resp)
+full_results$user_corr<-as.integer(full_results$corr_ans == full_results$user_resp)
 
 #items 49,50,100,104 were used as practice so they have twice as many trials. 
 #remove all trials of these items 
-trials_only<-dplyr::filter(full_results, !grepl('stimulus49_A', tripletid))
-trials_only<-dplyr::filter(full_results, !grepl('stimulus_50_B', tripletid))
-trials_only<-dplyr::filter(full_results, !grepl('stimulus100_A', tripletid))
-trials_only<-dplyr::filter(full_results, !grepl('stimulus104_A', tripletid))
+trials_only<-dplyr::filter(full_results, !grepl('stimulus49', tripletid))
+trials_only<-dplyr::filter(trials_only, !grepl('stimulus50', tripletid))
+trials_only<-dplyr::filter(trials_only, !grepl('stimulus100', tripletid))
+trials_only<-dplyr::filter(trials_only, !grepl('stimulus104', tripletid))
 
 #remove attention trials
-trials_only<-dplyr::filter(full_results, !grepl('attention', tripletid))
-
+trials_only<-dplyr::filter(trials_only, !grepl('attention', tripletid))
 
 
 
