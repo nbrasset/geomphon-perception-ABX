@@ -16,12 +16,11 @@ TO CREATE STIMULI:
 		-these textgrids have a tier (2) with only the target word (no recording context)
 		-these textgrids have been handcheecked for accuracy after running forced aligner
 
-2. save_intervals_to_wavs.Praat :script for cutting out just target words and saving them as separate .wavs.  Each .wav is scaled to 70 dB intensity. 
- NB the output directory specified here must exist already, the script will fail rather than create one if you specify a directory that does not exist.  
- NB that this script is written for the specific files for this experiment, and must be edited for use with different sound files. 
+2. save_intervals_to_wavs.py :script for cutting out just target words and saving them as separate .wavs.  
+
 
 3. generate triplet list  triplets.csv:  a list of all possible triplets 
-FIXME-add
+
 
 4. create_stimlist.py : a script that takes triplets.csv and filters it to create an optimised stimuli list, expressed
 As zeros and ones.
@@ -59,15 +58,16 @@ TO CLEAN DATA:
  Run anonymize_lmeds_data_filenames.py  
 
 FIRST ARGUMENT: the folder containing the raw LMEDS data.  Data files should end in ".csv"
-SECOND ARGUMENT: the folder to output to; the internal structure of the input folder will be
-preserved; this folder will be created if it doesn't already exist, but it will *not* 
-be cleaned out if it already exists, so be careful
+SECOND ARGUMENT: 
+	the folder to output to; the internal structure of the input folder will be
+	preserved; this folder will be created if it doesn't already exist, but it will *not* 
+	be cleaned out if it already exists, so be careful
 THIRD ARGUMENT: The anonymization CSV to be created. This maps the real ids to anonymised one
-This CSV should be stored as individually identifiable information and never  shared 
+This CSV should be stored as individually identifiable information and never shared or synced to git
 
 
 2. Run clean_output_pilot_Aug_2018.py  
-this script takes as input a directory of raw LMEDS data files  
+this script takes as input a directory of raw anonymized LMEDS data files  
 *WITH nested subdirectories* for English and French data. 
 
 takes the following arguments: 
@@ -86,12 +86,6 @@ It yields a .csv that is ready for analysis
 
 
 
-TO ANALYZE DATA
-1. Calculate Acoustic scores 
-
-2. Calculate Geomphon scores 
-
-3. 
 
 
 
