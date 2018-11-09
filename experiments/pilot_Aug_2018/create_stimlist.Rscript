@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # Generates stimulus list from design and interval meta information file
-
+rm(list=ls())
 library(plyr)
 library(dplyr)
 library(tidyr)
@@ -9,10 +9,11 @@ library(magrittr)
 
 ARGS <- commandArgs(TRUE)
 
-seed <- ARGS[1] # 567
-design_file <- ARGS[2] # design.csv
-interval_meta_info_file <- ARGS[3]
-output_file <- ARGS[4]
+
+seed <- 567 # ARGS[1] # 567
+design_file <- 'design.csv' #ARGS[2] # design.csv
+interval_meta_info_file <- 'stimuli/meta_info_filelist.csv'#ARGS[3]
+output_file<- 'stimulus_list.csv'# ARGS[4]
 
 
 set.seed(seed)
@@ -82,8 +83,10 @@ stimlist<-stimlist %>% mutate(
       V_C == "vowel"& CONTEXT == "AH"~ paste(Q,"DAH", sep=""),
       V_C == "vowel" & CONTEXT == "EE"~ paste(Q,"DI",sep=""),
       V_C == "consonant" & CONTEXT == "AH"~ paste("A",Q,"AH",sep=""),
-      V_C == "consonant" & CONTEXT == "EE"~ paste("EE",Q,"EE",sep=""))
-    )
+      V_C == "consonant" & CONTEXT == "EE"~ paste("EE",Q,"EE",sep="")))
+
+
+
 
 
 ######################################################
@@ -91,15 +94,17 @@ stimlist<-stimlist %>% mutate(
 #from the full list_of_all_intervals
 ######################################################
 
-
 #first read in list of all intervals from interval saving script
 list_of_all_interval_filenames <- read.csv(interval_meta_info_file,
                                            stringsAsFactors=FALSE) 
 
 #now add a variable for speaker by stripping off all characters before "_" in orig_file
 #(because orig_file is the FILENAME, which either Ewan or amelia_consonants)
-list_of_all_interval_filenames$speaker<-sub("_.*","",
-            basename(list_of_all_interval_filenames$orig_file))
+list_of_all_interval_filenames$speaker<-basename(list_of_all_interval_filenames$orig_file)
+list_of_all_interval_filenames$speaker<-sub('_.*','',list_of_all_interval_filenames$speaker)
+list_of_all_interval_filenames$speaker<-sub('\\.wav$', '', list_of_all_interval_filenames$speaker)
+
+
 
 #now group by speaker, then by interval name, then sample one of those intervals.
 final_files <- group_by(list_of_all_interval_filenames, speaker, int_name)%>% sample_n(1)
@@ -184,7 +189,9 @@ wide$filename<-paste("stimulus",1:length(wide$File1),sep="")
 final_stimlist<-wide%>%
   select(File1,File2,File3,CORR_ANS,filename)
 
-write.csv(final_stimlist, file=output_file,quote = FALSE,
+write.csv(final_stimlist, 
+          file=output_file,
+          quote = FALSE,
           row.names=FALSE)
 
 
