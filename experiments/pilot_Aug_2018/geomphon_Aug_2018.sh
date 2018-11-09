@@ -14,7 +14,7 @@
 #generate triplets.csv-contained in stimulus_construction
 
 #run create_stimlist.py to create an optomized stimlist
-python create_stimlist.py
+#python create_stimlist.py
 
 #change stimlist to correct format, save to concatenation folder.
 Rscript reformat_stimlist.R 
