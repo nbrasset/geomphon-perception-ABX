@@ -52,6 +52,7 @@ This will calculate various different kinds of acoustic distances. The original 
 
 ### Requirements for the August 2018 pilot
 
+ ffmpeg ---with -libvorbis
 
 **Python**
 
