@@ -8,6 +8,7 @@ import sklearn.metrics
 import pandas as pd
 import collections
 import os
+import sys
 
 
 #first, define the fixed structure. This is the part of the design
@@ -123,11 +124,13 @@ class BinaryAnnealer(simanneal.Annealer):
         return sum(values.values())
 
 # PARAMS
-output_file = "stimlist.csv"
+
 #read_from_last = True
-n_steps = 8000
-t_min = 0.00001
-seed = 24
+n_steps = int(sys.argv[1]) # 8000
+t_min = float(sys.argv[2]) # 0.00001
+seed = int(sys.argv[3]) # 24
+
+output_file = sys.argv[4] 
 
 
 # if not read_from_last:

@@ -84,11 +84,12 @@ distances/distances__normed_mfcc__dtw_sum.csv \
 distances/distances__unnormed_mfcc__dtw_sum.csv \
 clean-distances-tmp
 
-clean-distances-tmp:
-	rm -rf distances/tmp
+design.csv:
+	python generate_design.py 8000 0.00001 24 design.csv
 
-clean-distances: clean-distances-tmp
-	rm -f distances/distances_*.csv
+stimulus_list.csv: design.csv
+	Rscript --vanilla create_stimlist.Rscript \
+567 design.csv stimuli/meta_info_filelist.csv stimulus_list.csv
 
 stimuli/item_meta_information_with_distances.csv: distances
 	Rscript --vanilla \
@@ -100,15 +101,27 @@ distances/distances__*.csv
 stimuli/stimuli_intervals:
 	python stimuli/save_intervals_to_wavs.py word stimuli/stimuli_intervals \
 stimuli/meta_info_filelist.csv \
-stimuli/amelia_consonants_ONLY_TARGET_CHECKED.TextGrid,stimuli/amelia_consonants.wav \
-stimuli/amelia_vowels_ONLY_TARGET_CHECKED.TextGrid,stimuli/amelia_vowels.wav \
-stimuli/ewan_ONLY_TARGET_CHECKED.TextGrid,stimuli/ewan.wav
+stimuli/raw/amelia_consonants_ONLY_TARGET_CHECKED.TextGrid,stimuli/raw/amelia_consonants.wav \
+stimuli/raw/amelia_vowels_ONLY_TARGET_CHECKED.TextGrid,stimuli/raw/amelia_vowels.wav \
+stimuli/raw/ewan_ONLY_TARGET_CHECKED.TextGrid,stimuli/raw/ewan.wav
+
+
+clean-design:
+	rm design.csv
+
+clean-stimulus-list:
+	rm stimulus_list.csv
+
+clean-distances-tmp:
+	rm -rf distances/tmp
+
+clean-distances: clean-distances-tmp
+	rm -f distances/distances_*.csv
 
 clean-stimuli-intervals:
 	rm -rf stimuli/stimuli_intervals
 
 clean-stimuli-construction: clean-stimuli-intervals
-
 
 
 

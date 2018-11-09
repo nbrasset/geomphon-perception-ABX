@@ -26,6 +26,9 @@ def get_intervals(textgrid_fn, tier_name):
         raise TextGridError("Cannot find tier named " + tier_name)
     return tg[tier_i]
 
+def normalize_amplitude(sound, target_dbfs):
+    return sound.apply_gain(target_dbfs - sound.dBFS)
+
 
 def BUILD_ARGPARSE():
     parser = argparse.ArgumentParser(
@@ -95,6 +98,7 @@ if __name__ == "__main__":
                 start_time_ms = int(interval.minTime*1000)
                 end_time_ms = int(interval.maxTime*1000)
                 segment = audio[start_time_ms:(end_time_ms+1)]
+                segment = normalize_amplitude(segment, -20)
                 segment.export(args.output_folder + "/" + item_filename,
                                format="wav")
 

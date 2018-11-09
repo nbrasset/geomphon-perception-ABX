@@ -1,24 +1,23 @@
-#this takes as input the output of the script "create_stimlist.py"  and the textfile
-#meta info from save_intervals_to_wavs.Praat and puts it
-#in the format needed for "concatenation_of_wavs.Praat"
+#!/usr/bin/env Rscript
+
+# Generates stimulus list from design and interval meta information file
 
 library(plyr)
 library(dplyr)
 library(tidyr)
-set.seed(567)
+library(magrittr)
 
-#arguments 
-#working directory 
-#stimlist to reformat
-#meta_info_ from save_intervals to wavs
-#output 
+ARGS <- commandArgs(TRUE)
+
+seed <- ARGS[1] # 567
+design_file <- ARGS[2] # design.csv
+interval_meta_info_file <- ARGS[3]
+output_file <- ARGS[4]
 
 
-setwd("/Users/post-doc/GitHub/Documents/geomphon-perception-ABX/experiments/pilot_Aug_2018")  #FIXme  add command line argument 
+set.seed(seed)
 
-stimlist<-read.csv("stimlist.csv")
-#Using plyr mapvalues, interpret numerals output by create_stimlist 
-#as meaningful strings 
+stimlist <- read.csv(design_file)
 
 stimlist$COMPARISON<-
   mapvalues(stimlist$COMPARISON,
@@ -34,10 +33,16 @@ stimlist$ORDER<-
             to = c("PQP","QPP","PQQ","QPQ"),
             warn_missing = TRUE)
 
-stimlist$SPEAKER<-
+stimlist$SPEAKER_AB <-
   mapvalues(stimlist$SPEAKER,
             from=c(0,1),
-            to=c('ewan_','amelia_'),
+            to=c('ewan','amelia'),
+            warn_missing = TRUE)
+            
+stimlist$SPEAKER_X <-
+  mapvalues(stimlist$SPEAKER,
+            from=c(1,0),
+            to=c('ewan','amelia'),
             warn_missing = TRUE)
 
 stimlist$CONTEXT<-
@@ -88,11 +93,13 @@ stimlist<-stimlist %>% mutate(
 
 
 #first read in list of all intervals from interval saving script
-list_of_all_interval_filenames<-read.delim("stimuli/concatenation/intervals/meta_info_filelist.txt", row.names=NULL)
+list_of_all_interval_filenames <- read.csv(interval_meta_info_file,
+                                           stringsAsFactors=FALSE) 
 
 #now add a variable for speaker by stripping off all characters before "_" in orig_file
 #(because orig_file is the FILENAME, which either Ewan or amelia_consonants)
-list_of_all_interval_filenames$speaker<-sub("_.*","", list_of_all_interval_filenames$orig_file)
+list_of_all_interval_filenames$speaker<-sub("_.*","",
+            basename(list_of_all_interval_filenames$orig_file))
 
 #now group by speaker, then by interval name, then sample one of those intervals.
 final_files <- group_by(list_of_all_interval_filenames, speaker, int_name)%>% sample_n(1)
@@ -108,17 +115,17 @@ final_files$key<-paste(final_files$speaker,"_",final_files$int_name,sep="")
 
 # create file and silence columns depending on the order column Ps and Qs
 stimlist<-stimlist %>% mutate(
-   File1 = case_when(
+   word_A = case_when(
      ORDER == "PQP"~word_P,
      ORDER == "PQQ"~ word_P,
      ORDER == "QPQ"~ word_Q,
      ORDER == "QPP"~ word_Q),
-   File2 = case_when(
+   word_B = case_when(
      ORDER == "PQP"~word_Q,
      ORDER == "PQQ"~word_Q,
      ORDER == "QPQ"~word_P,
      ORDER == "QPP"~word_P),
-   File3 = case_when(
+   word_X = case_when(
      ORDER == "QPQ"~word_Q,
      ORDER == "PQQ"~word_Q,
      ORDER == "PQP"~word_P,
@@ -128,8 +135,8 @@ stimlist<-stimlist %>% mutate(
 #add correct answer-- nb do this before adding speaker because speaker will be different across these.  
 stimlist<-stimlist %>% mutate(
   CORR_ANS = case_when(
-    stimlist$File1==stimlist$File3~"A",
-    stimlist$File2 ==stimlist$File3 ~"B"))
+    ORDER %in% c("QPQ", "PQP") ~"A",
+    ORDER %in% c("QPP", "PQQ") ~"B"))
 
 
 
@@ -138,21 +145,10 @@ stimlist<-stimlist %>% mutate(
 ##############
 
 stimlist<-stimlist %>% mutate(
-  File1 = case_when(
-    SPEAKER=="amelia_"~paste("amelia_",File1,sep=""),
-    SPEAKER=="ewan_"~paste("ewan_",File1,sep="")))
-
-stimlist<-stimlist %>% mutate(
-  File2 = case_when(
-    SPEAKER=="amelia_"~paste("amelia_",File2,sep=""),
-    SPEAKER=="ewan_"~paste("ewan_",File2,sep="")))
-
-#put the OPPOSITE speaker for file 3
-stimlist<-stimlist %>% mutate(
-   File3 = case_when(
-     SPEAKER=="amelia_"~paste("ewan_",File3,sep=""),
-     SPEAKER=="ewan_"~paste("amelia_",File3,sep="")))
-
+  File1 = paste(SPEAKER_AB, word_A, sep="_"),
+  File2 = paste(SPEAKER_AB, word_B, sep="_"),
+  File3 = paste(SPEAKER_X, word_X, sep="_"))
+  
 stimlist<-tibble::rowid_to_column(stimlist, "ID")
 stimlist$trial_num<-paste("trial_num",stimlist$ID, sep="")
 
@@ -182,19 +178,14 @@ simple_long<-with_file_names %>%
 #transform data back to wide version with three files per line 
 wide<-spread(simple_long, key=file_pos, value=int_filename)
 
-
-#add in columns with the name of the silences. 
-wide$Silence1<-rep("500ms_silence",length(wide$File1))
-wide$Silence2<-rep("500ms_silence",length(wide$File1))
-
 #create Column that has the filename for the concatenated file
 wide$filename<-paste("stimulus",1:length(wide$File1),sep="")
 
 final_stimlist<-wide%>%
-  select(File1,Silence1,File2,Silence2,File3,CORR_ANS,filename)
+  select(File1,File2,File3,CORR_ANS,filename)
 
-#print df  to text file (NB NOT A CSV, Praat prefers TXT here.)  
-write.table(final_stimlist, file="Stimuli_list.txt", sep="\t",quote = FALSE, row.names = FALSE)
+write.csv(final_stimlist, file=output_file,quote = FALSE,
+          row.names=FALSE)
 
 
 
