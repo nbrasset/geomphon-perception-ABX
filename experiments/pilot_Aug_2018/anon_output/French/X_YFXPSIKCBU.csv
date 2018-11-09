@@ -1,0 +1,10 @@
+login,[orderSI=0,orderAI=0],None,None,0:34.2,0;,[]
+media_test,[audio,stimulus1_A,orderSI=1,orderAI=1],2,None,0:16.6,1;,[]
+consent,[prot_demo_consent,orderSI=2,orderAI=2],None,None,0:17.4,2;,[]
+valsurvey,[presurvey,orderSI=3,orderAI=3],None,None,0:50.2,3;,1,0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,1,0,1,1,0,0,1
+login,[orderSI=0,orderAI=0],None,None,0:3.9,0;,[]
+text_page,[prot_instr1,bindSubmitKeyIDList=,[space],orderSI=4,orderAI=4],None,None,0:2.9,4;,[]
+text_page,[prot_instr2,bindSubmitKeyIDList=,[space],orderSI=5,orderAI=5],None,None,0:12.1,5;,[]
+text_page,[prot_instr2,bindSubmitKeyIDList=,[space],orderSI=5,orderAI=5],None,None,0:9.8,5;,[]
+text_page,[prot_instr3,bindSubmitKeyIDList=,[space],orderSI=6,orderAI=6],None,None,0:3.9,6;,[]
+text_page,[prot_announcement_catch_trial,bindSubmitKeyIDList=,[space],orderSI=7,orderAI=7],None,None,0:1.8,7;,[]

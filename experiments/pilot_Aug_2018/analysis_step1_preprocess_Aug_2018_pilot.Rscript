@@ -1,24 +1,23 @@
 #!/usr/bin/env Rscript
 #args = commandArgs(trailingOnly=TRUE)
 
-
-
 #data cleaning and analysis of geomphon pilot 
 #last edit 23 October 2018 by amelia 
 
 rm(list=ls())
-library(stringr)
+
 library(dplyr)
+library(stringr)
+
+ARGS <- commandArgs(TRUE)
 
 #Arguments 
-###### 1 presurvey 
-###### 2 results
-###### 3 postsurvey
-###### 4 posrtsurvey2
-###### 5 all acoustic distances- item info
-
-###### 6 output: csv of merged but unfiltered data for modeling
-###### 7 output: csv of filtered data for analysis
+presurvey_file <-ARGS[1] 
+results_file<- ARGS[2]
+postsurvey_file<-ARGS[3]
+postsurvey2_file<- ARGS[4]
+acoustic_dist_file<-ARGS[5]
+output_file<-ARGS[6]#csv of filtered data for analysis
 
 
 
@@ -31,19 +30,19 @@ library(dplyr)
 
 #read in data files, which are the output of clean_output_pilot_Aug_2018.py
 #ARGUMENT 1:  presurvey file
-subject_info <-read.csv("/Users/post-doc/Desktop/presurvey.csv")
+subject_info <-read.csv(presurvey_file)
 
 #ARGUMENT 2:  results file
-results_only <-read.csv("/Users/post-doc/Desktop/results.csv")
+results_only <-read.csv(results_file)
 
 #ARGUMENT 3:  postsurvey file
-postsurvey<-read.csv("/Users/post-doc/Desktop/postsurvey.csv")
+postsurvey<-read.csv(postsurvey_file)
 
 #ARGUMENT 4:  postsurvey2 file 
-postsurvey2<-read.csv("/Users/post-doc/Desktop/postsurvey2.csv")
+postsurvey2<-read.csv(postsurvey2_file)
 
 #ARGUMENT 5: ITEM INFO 
-item_info <-read.csv("/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/distances/distances__normed_filterbank__dtw_pathlength.csv")
+item_info <-read.csv(acoustic_dist_file) # distances__normed_filterbank__dtw_pathlength.csv"
 
 
 ####################################
@@ -68,7 +67,7 @@ subject_info_filt2 <- dplyr::filter(subject_info_filt1,
 #anyone who said their competence was beginner, regardless of their experience
 #anyone who said their competence was intermediate,AND had only un peu or tres peu d'exp 
 #subject_info_filt3 <- dplyr::filter(subject_info_filt2,
-                                    other_lang_debutant==1|(other_lang_intermediare==1 & (other_lang_trespeudexp==1|other_lang_unpeudexp==1)))
+                            #        other_lang_debutant==1|(other_lang_intermediare==1 & (other_lang_trespeudexp==1|other_lang_unpeudexp==1)))
 
 ## Phonetic training filtering - exclude anyone with any classes phonet/phonol/linguistics
 subject_info_filt3 <- dplyr::filter(subject_info_filt2,
@@ -93,7 +92,6 @@ subject_info_filt <- subject_info_filt4
 #merge subject info and results
 full_results <- dplyr::left_join(subject_info_filt, results_only, by = 'subject_id')
 
-unfiltered<- dplyr::left_join(finishers, results_only, by = 'subject_id')
 
 ###########
 ##check for failed attention checks
@@ -118,18 +116,6 @@ full_results<- dplyr::left_join(full_results,attention_checks)
 full_results<- dplyr::left_join(full_results,item_info)
 
 
-
-# #####################################################
-# #####BUILD UNFILTERED DATA FOR USE IN MODELING-IGNORE
-#  unfilt_full<- dplyr::left_join(unfiltered,item_info)
-#  unfilt_full$user_resp<-factor(ifelse(unfilt_full$first_sound == "1", "A", "B"))
-#  unfilt_full$user_corr<-substr(unfilt_full$presentation_order,1,1) == unfilt_full$user_resp
-#  unfilt_full$user_corr<-as.integer(unfilt_full$user_corr)
-#  #Argument 6
-#  write.csv(unfilt_full,"/Users/post-doc/Desktop/geomphon_pilot_analysis/unfilt_full.csv")
-# #########################################################
- 
- 
  
 
 ######################
@@ -164,8 +150,6 @@ trials_only$delta_dist_div<-trials_only$distance_TGT/trials_only$distance_OTH
 trials_only$log_delta_dist_div<-log(trials_only$delta_dist_div)
 
 
-
-
 #ARGUMENT 7
-write.csv(trials_only,"/Users/post-doc/Desktop/geomphon_pilot_results_for_analysis.csv")
+write.csv(trials_only,output_file)
 

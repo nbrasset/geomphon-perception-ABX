@@ -10,6 +10,7 @@ library(magrittr)
 ARGS <- commandArgs(TRUE)
 
 
+
 seed <- 567 # ARGS[1] # 567
 design_file <- 'design.csv' #ARGS[2] # design.csv
 interval_meta_info_file <- 'stimuli/meta_info_filelist.csv'#ARGS[3]

@@ -105,20 +105,30 @@ stimuli/raw/amelia_consonants_ONLY_TARGET_CHECKED.TextGrid,stimuli/raw/amelia_co
 stimuli/raw/amelia_vowels_ONLY_TARGET_CHECKED.TextGrid,stimuli/raw/amelia_vowels.wav \
 stimuli/raw/ewan_ONLY_TARGET_CHECKED.TextGrid,stimuli/raw/ewan.wav
 
+#NB- this step ONLY takes absolute paths to raw data files. raw data files contain
+#personally identifiable information and  should never be shared or synced to git 
 anonymize_data: 
 	python anonymize_lmeds_data_filenames.py \
-	/Users/post-doc/Desktop/output \
-	/Users/post-doc/Desktop/anon_output \
-	/Users/post-doc/Desktop/anon_key.csv
+/Users/post-doc/Desktop/output \
+/Users/post-doc/Documents/GitHub/geomphon-perception-ABX/experiments/pilot_Aug_2018/anon_output \
+/Users/post-doc/Desktop/anon_key.csv
 
-split_output_to_results_files:
-	python clean_output_pilot_Aug_2018.py \
-	"/Users/post-doc/Desktop/anon_output" \
-	"/Users/post-doc/Desktop/results.csv" \
-	"/Users/post-doc/Desktop/presurvey.csv" \
-	"/Users/post-doc/Desktop/postsurvey.csv" \
-	"/Users/post-doc/Desktop/postsurvey2.csv"
+split_output_to_results_files:anonymize_data
+	python split_output_to_results_files.py \
+anon_output \
+anon_output/results.csv \
+anon_output/presurvey.csv \
+anon_output/postsurvey.csv \
+anon_output/postsurvey2.csv
 
+filter_data:
+	Rscript --vanilla analysis_step1_preprocess_Aug_2018_pilot.Rscript \
+anon_output/presurvey.csv \
+anon_output/results.csv \
+anon_output/postsurvey.csv \
+anon_output/postsurvey2.csv \
+distances/distances__normed_filterbank__dtw_pathlength.csv \
+analysis/geomphon_pilot_results_for_analysis.csv
 
 clean-design:
 	rm design.csv
