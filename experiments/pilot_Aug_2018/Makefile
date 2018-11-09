@@ -105,6 +105,20 @@ stimuli/raw/amelia_consonants_ONLY_TARGET_CHECKED.TextGrid,stimuli/raw/amelia_co
 stimuli/raw/amelia_vowels_ONLY_TARGET_CHECKED.TextGrid,stimuli/raw/amelia_vowels.wav \
 stimuli/raw/ewan_ONLY_TARGET_CHECKED.TextGrid,stimuli/raw/ewan.wav
 
+anonymize_data: 
+	python anonymize_lmeds_data_filenames.py \
+	/Users/post-doc/Desktop/output \
+	/Users/post-doc/Desktop/anon_output \
+	/Users/post-doc/Desktop/anon_key.csv
+
+split_output_to_results_files:
+	python clean_output_pilot_Aug_2018.py \
+	"/Users/post-doc/Desktop/anon_output" \
+	"/Users/post-doc/Desktop/results.csv" \
+	"/Users/post-doc/Desktop/presurvey.csv" \
+	"/Users/post-doc/Desktop/postsurvey.csv" \
+	"/Users/post-doc/Desktop/postsurvey2.csv"
+
 
 clean-design:
 	rm design.csv
