@@ -97,7 +97,17 @@ stimuli/item_meta_information.csv \
 stimuli/item_meta_information_with_distances.csv \
 distances/distances__*.csv
 
+stimuli/stimuli_intervals:
+	python stimuli/save_intervals_to_wavs.py word stimuli/stimuli_intervals \
+stimuli/meta_info_filelist.csv \
+stimuli/amelia_consonants_ONLY_TARGET_CHECKED.TextGrid,stimuli/amelia_consonants.wav \
+stimuli/amelia_vowels_ONLY_TARGET_CHECKED.TextGrid,stimuli/amelia_vowels.wav \
+stimuli/ewan_ONLY_TARGET_CHECKED.TextGrid,stimuli/ewan.wav
 
+clean-stimuli-intervals:
+	rm -rf stimuli/stimuli_intervals
+
+clean-stimuli-construction: clean-stimuli-intervals
 
 
 
