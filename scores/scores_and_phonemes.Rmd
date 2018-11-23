@@ -1,0 +1,239 @@
+---
+title: "Scores and phonemes"
+output: html_document
+---
+
+```{r setup,}
+`%>%` <- magrittr::`%>%`
+```
+
+```{r data, include=FALSE, cache=TRUE}
+VAR_PATH <- "inventrry/cons_variants"
+
+cons_base <- readr::read_csv("inventrry/eng_CONSONANTS_neg.csv",
+                 col_types=readr::cols(.default=readr::col_character())) %>% 
+              dplyr::select(-`_segment`)
+
+feature_names <- colnames(cons_base)
+
+segment_table <- readr::read_csv("all_modified.csv",
+                 col_types=readr::cols(.default=readr::col_character())) %>%
+  dplyr::group_by_at(dplyr::vars(feature_names)) %>%
+  dplyr::summarize(labels=paste(`_segment`, collapse=';')) %>%
+  dplyr::ungroup()
+
+invs <- feather::read_feather("contrastive-symmetry/inventories.feather") %>%
+  dplyr::filter(segment_type == "Whole", inventory_type=="Natural") %>%
+  dplyr::select(-segment_type, -inventory_type) %>%
+  dplyr::left_join(segment_table, by=feature_names) %>%
+  dplyr::distinct() %>%
+  dplyr::select(language, labels)
+
+freq <- invs %>%
+  dplyr::group_by(labels) %>%
+  dplyr::summarize(freq=n()) %>%
+  dplyr::ungroup() 
+
+langs <- invs %>%
+  dplyr::mutate(DUMMY=1) %>%
+  tidyr::spread(language, DUMMY, fill=0) 
+
+
+english_scores <- readr::read_csv("inventrry/scores_cons.csv",
+            col_types=readr::cols(`_segment` = readr::col_character(),
+                                  `_spec_id` = readr::col_character(),
+                                  econ = readr::col_double(),
+                                  loc = readr::col_double(),
+                                  glob = readr::col_double())) %>%
+            dplyr::select(-`_segment`)
+
+all_files <- dir(path=VAR_PATH, pattern="^cons_*")
+added_segments <- NULL
+for (f in all_files) {
+  added_segment_f <- readr::read_csv(paste0(VAR_PATH, "/", f),
+           col_types=readr::cols(.default=readr::col_character())) %>% 
+    dplyr::select(-`_segment`) %>%
+    dplyr::anti_join(cons_base, by=feature_names) %>%
+    dplyr::left_join(segment_table, by=feature_names) %>%
+    dplyr::left_join(freq, by="labels") %>%
+    dplyr::left_join(langs, by="labels") %>%
+    dplyr::mutate(`filename`=paste0(VAR_PATH, "/", "SCORE_", f))
+  assertthat::are_equal(1, nrow(added_segment_f))
+  added_segments <- dplyr::bind_rows(added_segments,
+                                     added_segment_f)
+}
+```
+
+```{r scores, include=FALSE}
+added_consonants <- added_segments %>%
+  dplyr::mutate(
+    scores=purrr::map(filename,
+     function(f)
+        readr::read_csv(f, 
+          col_types=readr::cols(.default=readr::col_character(),
+                                econ=readr::col_double(),
+                                loc=readr::col_double(),
+                                glob=readr::col_double())) %>% 
+        dplyr::select(-`_segment`)
+      )) %>%
+  dplyr::select(-filename) %>%
+  dplyr::filter(syllabic == "-") %>%
+  dplyr::filter(consonantal == "+") %>%
+  dplyr::filter(LONG == "-") %>% 
+  dplyr::filter(!(nasal == "+" & sonorant == "-")) %>% 
+  dplyr::filter(freq >= 5) %>%
+  dplyr::select_at(dplyr::vars(-feature_names))
+```
+
+Definition of delta statistic
+
+```{r statistic}
+stat_auc <- function(x, y) {
+  measure <- c(x, y)
+  classes <- c(rep("X", length(x)), rep("Y", length(y)))
+  return(rocauc::auc_by(measure, classes, "Y") - 0.5)
+}
+apply_stat <- function(dx, dy, var, stat) return(stat(dx[[var]], dy[[var]]))
+```
+
+
+
+```{r delta-stats, echo=FALSE}
+stats <- added_consonants %>%
+  dplyr::mutate(stat_econ=purrr::map_dbl(scores, apply_stat, english_scores,
+                                         "econ", stat_auc),
+                stat_loc=purrr::map_dbl(scores, apply_stat, english_scores,
+                                         "loc", stat_auc),
+                stat_glob=purrr::map_dbl(scores, apply_stat, english_scores,
+                                         "glob", stat_auc))
+```
+
+Plot of English statistics for segments attested with frequency >= 5
+
+```{r plot-stats, echo=FALSE}
+stats %>%
+  plotly::plot_ly(x=~stat_econ,
+                y=~stat_loc,
+                z=~stat_glob,
+                text=~labels,
+                color=~log(freq),
+                type="scatter3d", mode="text") %>%
+  plotly::add_markers()
+```
+
+Number of potential consonants by language
+
+```{r ncons-by-lang}
+ncons_by_lang <- added_consonants %>% 
+  dplyr::select_at(dplyr::vars(-labels, -freq, -scores)) %>% 
+  apply(2, sum) %>%
+  (function(x) tibble::tibble(nsegs=x, language=names(x)))
+```
+
+Top N languages
+
+```{r}
+N_LANG <- 10
+dplyr::arrange(ncons_by_lang, -nsegs) %>% head(N_LANG) %>% print
+```
+
+```{r plot-stats-bylang, echo=FALSE, warning=FALSE}
+htmltools::tagList(lapply(1:N_LANG,
+  function(i)
+  stats %>%
+    dplyr::filter(!!(rlang::sym(dplyr::arrange(ncons_by_lang, -nsegs)[i,][["language"]])) == 1) %>%
+    plotly::plot_ly(x=~stat_econ,
+                  y=~stat_loc,
+                  z=~stat_glob,
+                  text=~labels,
+                  color=~log(freq),
+                  type="scatter3d", mode="text") %>%
+    plotly::add_markers()
+))
+```
+
+
+```{r cor-by-lang, echo=FALSE, warning=FALSE}
+lapply(1:N_LANG,
+  function(i)
+  stats %>%
+    dplyr::filter(!!(rlang::sym(dplyr::arrange(ncons_by_lang, -nsegs)[i,][["language"]])) == 1) %>%
+    dplyr::select(dplyr::starts_with("stat_")) %>%
+    cor
+) %>% print
+```
+
+Merge the five "common" languages that would work OK (Hindi, Malayalam, Venda, Ndebele, and Kabardian)
+
+```{r superlang}
+stats %>%
+  dplyr::filter(hin == 1 | mal == 1 | ven == 1 | nbl == 1 | kbd == 1) %>%
+  plotly::plot_ly(x=~stat_econ,
+                  y=~stat_loc,
+                  z=~stat_glob,
+                  text=~labels,
+                  color=~log(freq),
+                  type="scatter3d", mode="text") %>%
+  plotly::add_markers()
+```
+
+
+Hindi by itself
+
+```{r}
+stats %>%
+  dplyr::filter(hin == 1) %>%
+  plotly::plot_ly(x=~stat_econ,
+                  y=~stat_loc,
+                  z=~stat_glob,
+                  text=~labels,
+                  color=~log(freq),
+                  type="scatter3d", mode="text") %>%
+  plotly::add_markers()
+```
+
+
+Hindi and Malayalam
+
+```{r}
+stats %>%
+  dplyr::filter(hin == 1 | mal == 1) %>%
+  plotly::plot_ly(x=~stat_econ,
+                  y=~stat_loc,
+                  z=~stat_glob,
+                  text=~labels,
+                  color=~log(freq),
+                  type="scatter3d", mode="text") %>%
+  plotly::add_markers()
+```
+
+
+Hindi and Kabardian
+
+```{r}
+stats %>%
+  dplyr::filter(hin == 1 | kbd == 1) %>%
+  plotly::plot_ly(x=~stat_econ,
+                  y=~stat_loc,
+                  z=~stat_glob,
+                  text=~labels,
+                  color=~log(freq),
+                  type="scatter3d", mode="text") %>%
+  plotly::add_markers()
+```
+
+Hindi, Malayalam, and Georgian
+
+```{r}
+stats %>%
+  dplyr::filter(hin == 1 | kat == 1 | mal == 1) %>%
+  plotly::plot_ly(x=~stat_econ,
+                  y=~stat_loc,
+                  z=~stat_glob,
+                  text=~labels,
+                  color=~log(freq),
+                  type="scatter3d", mode="text") %>%
+  plotly::add_markers()
+```
+
+
