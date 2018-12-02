@@ -29,13 +29,13 @@ SOURCE_STIM_LIST <- ARGS[2]
 OUTPUT <- ARGS[3] 
 
 
-final_stim <- readr::read_tsv(FINAL_STIM_LIST,
+final_stim <- readr::read_csv(FINAL_STIM_LIST,
                 col_types=readr::cols(
                   .default=readr::col_character())) %>%
   dplyr::mutate(item_TGT=ifelse(CORR_ANS=="A", File1, File2),
                 item_OTH=ifelse(CORR_ANS=="A", File2, File1),
                 item_X=File3) %>%
-  dplyr::select(-File1, -File2, -File3, -Silence1, -Silence2) %>%
+  dplyr::select(-File1, -File2, -File3) %>%
   dplyr::mutate(tripletid=paste0(filename, "_", CORR_ANS)) %>%
   dplyr::select(-filename)
 

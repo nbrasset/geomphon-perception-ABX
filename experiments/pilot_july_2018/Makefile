@@ -46,50 +46,36 @@ $$TIMIT_AUDIO_EXTENSION distances/tmp/PAIRS_TMP.csv
 
 distances/tmp/distances__normed_filterbank__dtw_pathlength__by_pair.csv: \
 	distances/tmp distances/tmp/PAIRS_TMP.csv
-	python ../../src/wav_to_distance.py \
+	python ../../src/wav_to_distance.py --normalize-by-speaker \
 distances/tmp/PAIRS_TMP.csv 16000 $@
 
 distances/tmp/distances__unnormed_filterbank__dtw_pathlength__by_pair.csv: \
 	distances/tmp distances/tmp/PAIRS_TMP.csv
-	python ../../src/wav_to_distance.py \
---unnormalized \
-distances/tmp/PAIRS_TMP.csv 16000 $@
+	python ../../src/wav_to_distance.py distances/tmp/PAIRS_TMP.csv 16000 $@
 
 distances/tmp/distances__normed_mfcc__dtw_pathlength__by_pair.csv: \
 	distances/tmp distances/tmp/PAIRS_TMP.csv
-	python ../../src/wav_to_distance.py \
---nceps=13 \
-distances/tmp/PAIRS_TMP.csv 16000 $@
+	python ../../src/wav_to_distance.py --normalize-by-speaker --nceps=13 distances/tmp/PAIRS_TMP.csv 16000 $@
 
 distances/tmp/distances__unnormed_mfcc__dtw_pathlength__by_pair.csv: \
 	distances/tmp distances/tmp/PAIRS_TMP.csv
-	python ../../src/wav_to_distance.py \
---unnormalized --nceps=13 \
-distances/tmp/PAIRS_TMP.csv 16000 $@
+	python ../../src/wav_to_distance.py --nceps=13 distances/tmp/PAIRS_TMP.csv 16000 $@
 
 distances/tmp/distances__normed_filterbank__dtw_sum__by_pair.csv: \
 	distances/tmp distances/tmp/PAIRS_TMP.csv
-	python ../../src/wav_to_distance.py \
---distance-function=dtw_euclidean \
-distances/tmp/PAIRS_TMP.csv 16000 $@
+	python ../../src/wav_to_distance.py --normalize-by-speaker --distance-function=dtw_euclidean distances/tmp/PAIRS_TMP.csv 16000 $@
 
 distances/tmp/distances__unnormed_filterbank__dtw_sum__by_pair.csv: \
 	distances/tmp distances/tmp/PAIRS_TMP.csv
-	python ../../src/wav_to_distance.py \
---unnormalized --distance-function=dtw_euclidean \
-distances/tmp/PAIRS_TMP.csv 16000 $@
+	python ../../src/wav_to_distance.py --distance-function=dtw_euclidean distances/tmp/PAIRS_TMP.csv 16000 $@
 
 distances/tmp/distances__normed_mfcc__dtw_sum__by_pair.csv: \
 	distances/tmp distances/tmp/PAIRS_TMP.csv
-	python ../../src/wav_to_distance.py \
---nceps=13 --distance-function=dtw_euclidean \
-distances/tmp/PAIRS_TMP.csv 16000 $@
+	python ../../src/wav_to_distance.py --normalize-by-speaker --nceps=13 --distance-function=dtw_euclidean distances/tmp/PAIRS_TMP.csv 16000 $@
 
 distances/tmp/distances__unnormed_mfcc__dtw_sum__by_pair.csv: \
 	distances/tmp distances/tmp/PAIRS_TMP.csv
-	python ../../src/wav_to_distance.py \
---unnormalized --nceps=13 --distance-function=dtw_euclidean \
-distances/tmp/PAIRS_TMP.csv 16000 $@
+	python ../../src/wav_to_distance.py --nceps=13 --distance-function=dtw_euclidean distances/tmp/PAIRS_TMP.csv 16000 $@
 
 distances/distances__%.csv: distances/tmp/distances__%__by_pair.csv
 	@if [ -z ${TIMIT_FOLDER} ]; \

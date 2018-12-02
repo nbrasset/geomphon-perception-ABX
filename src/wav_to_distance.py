@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import sys
 import argparse
+import os.path as osp
 
 import numpy as np
 import pandas as pd
@@ -40,8 +41,10 @@ def load_wav(filename, wav_sampling_rate):
     found_sampling_rate, signal = scipy.io.wavfile.read(filename)
     if wav_sampling_rate != found_sampling_rate:
         # FIXME - this error message
-        raise AcousticFeatureError('Sampling rate should be {0}, not {1}. '
-                             'Please resample.'.format(wav_sampling_rate,
+        raise AcousticFeatureError('Error reading audio file {0}: '
+                             'Sampling rate should be {1}, not {2}. '
+                             'Please resample.'.format(
+                             filename, wav_sampling_rate,
                              found_sampling_rate))
     if len(signal.shape) > 1:
         raise AcousticFeatureError("Stereo wav files not supported")
@@ -49,9 +52,13 @@ def load_wav(filename, wav_sampling_rate):
 
 def get_item(df, row, frame_tolerance):
     # FIXME - fragile column names
-    rep = df[(df['_file'] == row['_file']) \
-            & (df['_time'] >= row['_onset'] - frame_tolerance) \
-            & (df['_time'] <= row['_offset'] + frame_tolerance)]
+    if '_onset' in row.index and '_offset' in row.index \
+       and '_time' in df.columns:
+        rep = df[(df['_file'] == row['_file']) \
+                 & (df['_time'] >= row['_onset'] - frame_tolerance) \
+                 & (df['_time'] <= row['_offset'] + frame_tolerance)]
+    else:
+        rep = df[df['_file'] == row['_file']]
     meta = pd.DataFrame([row])
     result = rep.merge(meta, on='_file', how='left')
     result['_item_frame'] = range(rep.shape[0])
@@ -89,6 +96,13 @@ def calculate_distances_all(pairs, reps, distance):
 def center_time(frame_numbers, frame_shift):
     return frame_numbers*frame_shift
 
+def replace_content(d, new_content):
+    result = d.copy()
+    result[sf.content_keys(d)] = new_content
+    return result
+
+def file_to_speaker(f):
+    return osp.splitext(osp.basename(f))[0].split("_")[0]
 
 def wav_to_features(filename, wav_sampling_rate, feature_frame_shift,
         feature_window_length, nfilt, nceps):
@@ -123,11 +137,13 @@ def BUILD_ARGPARSE():
             type=float, default=0.01)
     parser.add_argument('--window-size', help="FFT window width in seconds",
             type=float, default=0.025)
-    parser.add_argument('--normalized', help="Z-score over all files",
-                dest='normalize', action='store_true')
-    parser.add_argument('--unnormalized', help="Don't z-score",
-                dest='normalize', action='store_false')
-    parser.set_defaults(normalize=True)
+    parser.add_argument('--normalize-global', help="Z-score over all files",
+                dest='normalize', action='store_const', const="global")
+    parser.add_argument('--normalize-by-speaker',
+                help="Z-score within speaker (speaker id is assumed to be " +
+                "everything in the filename up to the first '_')",
+                dest='normalize', action='store_const', const="speaker")
+    parser.set_defaults(normalize="none")
     parser.add_argument('--nceps', help="Convert to this number of cepstral " \
             "coefficients (uses filterbank features if unspecified)", type=int,
             default=None)
@@ -193,11 +209,17 @@ columns don't match""".replace(
                  for w in corpus]
     file_rep_df = pd.concat(file_reps)
     # Normalize over corpus
-    if args.normalize:
-        zscored_feats = zscore(sf.content(file_rep_df))
-        file_rep_df[sf.content_keys(file_rep_df)] = zscored_feats
+    if args.normalize == "global":
+        file_rep_df = replace_content(file_rep_df,
+                                      zscore(sf.content(file_rep_df)))
+    if args.normalize == "speaker":
+        file_rep_df["_speaker"] = [file_to_speaker(f) for f in file_rep_df["_file"]]
+        file_rep_df = file_rep_df.groupby("_speaker")\
+                   .apply(lambda d: replace_content(d, zscore(sf.content(d))))
+        if "_speaker" in items.columns:
+            items = items.drop("_speaker", 1) # FIXME - Yes, really!
     item_reps = [get_item(file_rep_df, r[1], args.frame_rate/2) \
-            for r in items.iterrows()]
+                 for r in items.iterrows()]
     item_rep_df = pd.concat(item_reps)
     if args.representation_file:
         item_rep_df.to_csv(args.representation_file, index=False)
@@ -209,4 +231,5 @@ columns don't match""".replace(
         pairs.to_csv(sys.stdout, index=False)
     else:
         pairs.to_csv(args.output_file, index=False)
+
 
