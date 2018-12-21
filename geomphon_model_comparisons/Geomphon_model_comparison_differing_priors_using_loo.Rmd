@@ -1,0 +1,346 @@
+---
+title: "Geomphon model comparison differing priors using loo"
+output: html_document
+---
+
+```{r setup}
+library(plyr)
+library(dplyr)
+library(lme4)
+library(ggplot2)
+library(rstan)
+library(loo)
+  options(mc.cores= parallel::detectCores())
+```
+
+Read in data; 
+NB data here is not real data, instead is doubled version arbitrarily assigned to hindi and kabardian. 
+
+```{r data}
+#read in data 
+m1_dat<-read.csv("m1_dat.csv")
+
+#center numerical variables
+m1_dat$var2<-m1_dat$var2-mean(m1_dat$var2)
+
+```
+
+use parametric bootstrap to create three new response variables sampled from probabilities corresponding to three values for predictor var2 (=loc?)
+
+```{r bootstrap}
+model1<-glm(user_corr~var2, data=m1_dat)
+summary(model1)
+
+#make new response variable with effect zero of var 2 
+#assign Beta of 0 to var 2, then sample data 
+model1$coefficients
+model1$coefficients["var2"] <-0
+model1$coefficients
+
+m1_dat$pred_prob_zero_eff<-predict(model1, type="response")
+
+for (i in 1:nrow(m1_dat)){
+  m1_dat$resp_zero_eff[i]<-sample(c(0,1),1,prob=c((1-m1_dat$pred_prob_zero_eff[i]),
+                                                m1_dat$pred_prob_zero_eff[i]))
+  }
+
+#make new data with  positive effect of var 2
+#assign Beta of 0 to var 2, then sample data 
+model1$coefficients["var2"] <-2
+
+m1_dat$pred_prob_pos<-predict(model1, type="response")
+
+for (i in 1:nrow(m1_dat)){
+  m1_dat$resp_pos[i]<-sample(c(0,1),1,prob=c((1-m1_dat$pred_prob_pos[i]),
+                                                    m1_dat$pred_prob_pos[i]))
+  }
+
+#make new data with  negative effect of var 2 
+model1$coefficients["var2"] <- -2
+
+m1_dat$pred_prob_neg<-predict(model1, type="response")
+
+for (i in 1:nrow(m1_dat)){
+  m1_dat$resp_neg[i]<-sample(c(0,1),1,prob=c((1-m1_dat$pred_prob_neg[i]),
+                                                    m1_dat$pred_prob_neg[i]))
+  }
+```
+
+
+create model matricies, which will be the same across all models used here. (Models differ only in the specification of priors)
+
+```{r model matricies}
+x <- unname(model.matrix(~1+var2, data=m1_dat)) # matrix for fixed effects
+attr(x, "assign") <- NULL
+x_u <- unname(model.matrix(~1,m1_dat)) # matrix for random effects for subjects. right now intercepts only
+attr(x_u, "assign") <- NULL
+x_w <- unname(model.matrix(~1, m1_dat)) # matrix for random effects for items  right now intercepts only
+attr(x_w, "assign") <- NULL
+```
+
+
+Set up data lists for the three new data sets 
+
+```{r StanDatlists, echo=FALSE}
+################
+#Set up list, zero effect response 
+stanDat_zero_eff <- list(accuracy = as.integer(m1_dat$resp_zero_eff),         # dependent variable
+                
+                subj=as.numeric(factor(m1_dat$subject_id)),  # subject id
+                item=as.numeric(factor(m1_dat$trip_id_2)),   # item id
+                
+                N_obs = nrow(m1_dat),                     # number of observations
+                
+                N_coef = ncol(x),                      # number of fixed effects
+                N_coef_u = ncol(x_u),                    # number of random effects for subjects
+                N_coef_w = ncol(x_w),                    # number of random effects for items
+                
+                x = x,                                 # fixed effects matrix
+                x_u = x_u,                               # random effects matrix - subjects
+                x_w = x_w,                               # random effects matrix - items
+                
+                N_subj=length(unique(m1_dat$subject_id)),         # number of subjects
+                N_item=length(unique(m1_dat$trip_id_2)) )  # number of items
+
+################
+#Set up list, positive effect 
+stanDat_pos_eff <- list(accuracy = as.integer(m1_dat$resp_pos),         # dependent variable
+                
+                subj=as.numeric(factor(m1_dat$subject_id)),  # subject id
+                item=as.numeric(factor(m1_dat$trip_id_2)),   # item id
+                
+                N_obs = nrow(m1_dat),                     # number of observations
+                
+                N_coef = ncol(x),                      # number of fixed effects
+                N_coef_u = ncol(x_u),                    # number of random effects for subjects
+                N_coef_w = ncol(x_w),                    # number of random effects for items
+                
+                x = x,                                 # fixed effects matrix
+                x_u = x_u,                               # random effects matrix - subjects
+                x_w = x_w,                               # random effects matrix - items
+                
+                N_subj=length(unique(m1_dat$subject_id)),         # number of subjects
+                N_item=length(unique(m1_dat$trip_id_2)) )  # number of items
+
+################
+#Set up list, negative effect
+stanDat_neg_eff <- list(accuracy = as.integer(m1_dat$resp_neg),         # dependent variable
+                
+                subj=as.numeric(factor(m1_dat$subject_id)),  # subject id
+                item=as.numeric(factor(m1_dat$trip_id_2)),   # item id
+                
+                N_obs = nrow(m1_dat),                     # number of observations
+                
+                N_coef = ncol(x),                      # number of fixed effects
+                N_coef_u = ncol(x_u),                    # number of random effects for subjects
+                N_coef_w = ncol(x_w),                    # number of random effects for items
+                
+                x = x,                                 # fixed effects matrix
+                x_u = x_u,                               # random effects matrix - subjects
+                x_w = x_w,                               # random effects matrix - items
+                
+                N_subj=length(unique(m1_dat$subject_id)),         # number of subjects
+                N_item=length(unique(m1_dat$trip_id_2)) )  # number of items
+
+```
+
+Comparison is between different priors, each of which is run on each othe the three data sets created above. The priors differ as follows: 
+
+Fit 1: a truncated gaussian with mean zero and possible values <=0 
+Fit 2: a truncated gaussian with mean zero possible values >=0 
+Fit 3: a truncated gaussian with mean shifted slightly positive and possible values >=0
+Fit 4: a spike and slab prior with spike at zero and slab less than zero. 
+
+The goal is to ensure that we can correctly detect a difference btween a small positive effect and a negative or zero effect. 
+
+The relevant comparisons  of interest are: 
+Fit 1 vs. Fit 2 
+Fit 1 vs. Fit 3
+Fit 4 vs. Fit 2
+
+
+
+truncated gaussian priors (fit 1 and 2)  for all three data sets 
+```{r truncated_gaussians,echo=FALSE}
+fit1_zero_eff <- stan(file='trunc_less_eq_zero.stan', 
+            data=stanDat_zero_eff,
+            iter=3000, # number of iterations in each chain
+            chains=4, # number of chains
+            seed=789123) #random seed for repicability
+            #control=list(adapt_delta=0.99, max_treedepth = 15) # this is not obligatory, only in order to facilitate model convergence and avoid divergent transitions
+saveRDS(fit1_zero_eff , "fit1_zero_eff.rds")
+
+fit2_zero_eff <- stan(file='trunc_great_eq_zero.stan', 
+            data=stanDat_zero_eff,
+            iter=3000, # number of iterations in each chain
+            chains=4, # number of chains
+            seed=4938483) #random seed for repicability
+            #control=list(adapt_delta=0.99, max_treedepth = 15) # this is not obligatory, only in order to facilitate model convergence and avoid divergent transitions
+saveRDS(fit2_zero_eff , "fit2_zero_eff.rds")
+
+
+fit1_neg_eff <- stan(file='trunc_less_eq_zero.stan', 
+            data=stanDat_neg_eff,
+            iter=3000, # number of iterations in each chain
+            chains=4, # number of chains
+            seed=789123) #random seed for repicability
+            #control=list(adapt_delta=0.99, max_treedepth = 15) # this is not obligatory, only in order to facilitate model convergence and avoid divergent transitions
+saveRDS(fit1_neg_eff , "fit1_neg_eff.rds")
+
+fit2_neg_eff <- stan(file='trunc_great_eq_zero.stan', 
+            data=stanDat_neg_eff,
+            iter=3000, # number of iterations in each chain
+            chains=4, # number of chains
+            seed=4938483) #random seed for repicability
+            #control=list(adapt_delta=0.99, max_treedepth = 15) # this is not obligatory, only in order to facilitate model convergence and avoid divergent transitions
+saveRDS(fit2_neg_eff , "fit2_neg_eff.rds")
+
+
+fit1_pos_eff <- stan(file='trunc_less_eq_zero.stan', 
+            data=stanDat_pos_eff,
+            iter=3000, # number of iterations in each chain
+            chains=4, # number of chains
+            seed=789123) #random seed for repicability
+            #control=list(adapt_delta=0.99, max_treedepth = 15) # this is not obligatory, only in order to facilitate model convergence and avoid divergent transitions
+saveRDS(fit1_pos_eff , "fit1_pos_eff.rds")
+
+fit2_pos_eff <- stan(file='trunc_great_eq_zero.stan', 
+            data=stanDat_pos_eff,
+            iter=3000, # number of iterations in each chain
+            chains=4, # number of chains
+            seed=4938483) #random seed for repicability
+            #control=list(adapt_delta=0.99, max_treedepth = 15) # this is not obligatory, only in order to facilitate model convergence and avoid divergent transitions
+saveRDS(fit2_pos_eff , "fit2_pos_eff.rds")
+
+```
+
+
+
+Check traceplots and rhats for truncated gaussians. 
+
+```{r check_models}
+# checking chains for all truncated gaussians. 
+
+traceplot(fit1_zero_eff, inc_warmup=F)
+traceplot(fit2_zero_eff, inc_warmup=F)
+traceplot(fit1_pos_eff, inc_warmup=F)
+traceplot(fit2_pos_eff, inc_warmup=F)
+traceplot(fit1_neg_eff, inc_warmup=F)
+traceplot(fit2_neg_eff, inc_warmup=F)
+
+
+# checking that the Rhat is always 1 for all model parameters
+fit1_zero_eff_summ <- summary(fit1_zero_eff, probs=c(0.025,0.975))$summary
+rhats <- model_sum[,"Rhat"]
+round(summary(rhats),2) # everything should be 1 -- if not, model did not converge; in that case, try running the model again doubling the number of iterations per chain
+( na <- model_sum[is.na(rhats),"Rhat"] ) # if parameters without Rhat are only those used in the random effects correlations, then it's not a problem
+
+# checking that the Rhat is always 1 for all model parameters
+fit2_zero_eff_sum <- summary(fit2_zero_eff, probs=c(0.025,0.975))$summary
+rhats <- model_sum[,"Rhat"]
+round(summary(rhats),2) # everything should be 1 -- if not, model did not converge; in that case, try running the model again doubling the number of iterations per chain
+( na <- model_sum[is.na(rhats),"Rhat"] ) # if parameters without Rhat are only those used in the random effects correlations, then it's not a problem
+# checking that the Rhat is always 1 for all model parameters
+
+fit2_zero_eff_sum <- summary(fit2_zero_eff, probs=c(0.025,0.975))$summary
+rhats <- model_sum[,"Rhat"]
+round(summary(rhats),2) # everything should be 1 -- if not, model did not converge; in that case, try running the model again doubling the number of iterations per chain
+( na <- model_sum[is.na(rhats),"Rhat"] ) # if parameters without Rhat are only those used in the random effects correlations, then it's not a problem
+
+# checking that the Rhat is always 1 for all model parameters
+fit2_pos_eff_sum <- summary(fit2_pos_eff, probs=c(0.025,0.975))$summary
+rhats <- model_sum[,"Rhat"]
+round(summary(rhats),2) # everything should be 1 -- if not, model did not converge; in that case, try running the model again doubling the number of iterations per chain
+( na <- model_sum[is.na(rhats),"Rhat"] ) # if parameters without Rhat are only those used in the random effects correlations, then it's not a problem
+
+# checking that the Rhat is always 1 for all model parameters
+fit1_neg_eff_sum <- summary(fit1_neg_eff, probs=c(0.025,0.975))$summary
+rhats <- model_sum[,"Rhat"]
+round(summary(rhats),2) # everything should be 1 -- if not, model did not converge; in that case, try running the model again doubling the number of iterations per chain
+( na <- model_sum[is.na(rhats),"Rhat"] ) # if parameters without Rhat are only those used in the random effects correlations, then it's not a problem
+
+# checking that the Rhat is always 1 for all model parameters
+fit2_neg_eff_sum <- summary(fit2_neg_eff, probs=c(0.025,0.975))$summary
+rhats <- model_sum[,"Rhat"]
+round(summary(rhats),2) # everything should be 1 -- if not, model did not converge; in that case, try running the model again doubling the number of iterations per chain
+( na <- model_sum[is.na(rhats),"Rhat"] ) # if parameters without Rhat are only those used in the random effects correlations, then it's not a problem
+
+```
+
+
+ 
+
+```{r trunc gaussian results}
+
+plot(fit1_zero_eff)
+plot(fit2_zero_eff)
+plot(fit1_pos_eff)
+plot(fit1_pos_eff)
+plot(fit1_neg_eff)
+plot(fit1_neg_eff)
+```
+
+
+Fit shifted truncated gaussian (fit 3) for all three data sets 
+```{r truncated_gaussians,echo=FALSE}
+
+fit3_zero_eff <- stan(file='trunc_shift_great_eq_zero.stan', 
+            data=stanDat_zero_eff,
+            iter=3000, # number of iterations in each chain
+            chains=4, # number of chains
+            seed=789123) #random seed for repicability
+            #control=list(adapt_delta=0.99, max_treedepth = 15) # this is not obligatory, only in order to facilitate model convergence and avoid divergent transitions
+saveRDS(fit3_zero_eff , "fit3_zero_eff.rds")
+
+fit3_pos_eff <- stan(file='trunc_shift_great_eq_zero.stan', 
+            data=stanDat_pos_eff,
+            iter=3000, # number of iterations in each chain
+            chains=4, # number of chains
+            seed=4938483) #random seed for repicability
+            #control=list(adapt_delta=0.99, max_treedepth = 15) # this is not obligatory, only in order to facilitate model convergence and avoid divergent transitions
+saveRDS(fit3_pos_eff , "fit3_pos_eff.rds")
+
+
+fit3_neg_eff <- stan(file='trunc_shift_great_eq_zero.stan', 
+            data=stanDat_neg_eff,
+            iter=3000, # number of iterations in each chain
+            chains=4, # number of chains
+            seed=789123) #random seed for repicability
+            #control=list(adapt_delta=0.99, max_treedepth = 15) # this is not obligatory, only in order to facilitate model convergence and avoid divergent transitions
+saveRDS(fit3_pos_eff , "fit3_pos_eff.rds")
+
+```
+
+```{r check traceplots and rhats shifted truncated gaussain }
+
+traceplot(fit3_zero_eff, inc_warmup=F)
+traceplot(fit3_pos_eff, inc_warmup=F)
+traceplot(fit3_neg_eff, inc_warmup=F)
+
+# checking that the Rhat is always 1 for all model parameters
+fit3_zero_eff_summ <- summary(fit3_zero_eff, probs=c(0.025,0.975))$summary
+rhats <- model_sum[,"Rhat"]
+round(summary(rhats),2) # everything should be 1 -- if not, model did not converge; in that case, try running the model again doubling the number of iterations per chain
+( na <- model_sum[is.na(rhats),"Rhat"] ) # if parameters without Rhat are only those used in the random effects correlations, then it's not a problem
+# checking that the Rhat is always 1 for all model parameters
+
+fit3_pos_eff_summ <- summary(fit3_pos_eff, probs=c(0.025,0.975))$summary
+rhats <- model_sum[,"Rhat"]
+round(summary(rhats),2) # everything should be 1 -- if not, model did not converge; in that case, try running the model again doubling the number of iterations per chain
+( na <- model_sum[is.na(rhats),"Rhat"] ) # if parameters without Rhat are only those used in the random effects correlations, then it's not a problem
+
+# checking that the Rhat is always 1 for all model parameters
+fit3_neg_eff_summ <- summary(fit3_neg_eff, probs=c(0.025,0.975))$summary
+rhats <- model_sum[,"Rhat"]
+round(summary(rhats),2) # everything should be 1 -- if not, model did not converge; in that case, try running the model again doubling the number of iterations per chain
+( na <- model_sum[is.na(rhats),"Rhat"] ) # if parameters without Rhat are only those used in the random effects correlations, then it's not a problem
+
+```
+
+Model comparisons 
+
+```{r check traceplots and rhats shifted truncated gaussain }
+
+
+```
+
