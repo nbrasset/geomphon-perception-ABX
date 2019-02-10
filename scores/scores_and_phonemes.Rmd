@@ -82,7 +82,7 @@ added_consonants <- added_segments %>%
   dplyr::filter(consonantal == "+") %>%
   dplyr::filter(LONG == "-") %>% 
   dplyr::filter(!(nasal == "+" & sonorant == "-")) %>% 
-  dplyr::filter(freq >= 5) %>%
+  #dplyr::filter(freq >= 5) %>%
   dplyr::select_at(dplyr::vars(-feature_names))
 ```
 
@@ -108,6 +108,7 @@ stats <- added_consonants %>%
                                          "loc", stat_auc),
                 stat_glob=purrr::map_dbl(scores, apply_stat, english_scores,
                                          "glob", stat_auc))
+
 
 kbd_prime_df<-readr::read_csv("labels_kbd_prime.csv",
                  col_types=readr::cols(.default=readr::col_character()))
