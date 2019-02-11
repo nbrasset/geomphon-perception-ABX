@@ -4,7 +4,7 @@ library(doParallel)
 library(doMC)
 
 ARGS <- commandArgs(TRUE)
-masterdf<-read.csv("masterdf.csv") #ARGS[1]
+#masterdf<-read.csv("masterdf.csv") #ARGS[1]
 num_cores<-15 #ARGS[2]
 registerDoMC()
 options(cores=num_cores)

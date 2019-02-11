@@ -12,13 +12,15 @@ library(dplyr)
 library(tidyr)
 library(magrittr)
 library(readr)
+library(loo)
 
-ARGS <- commandArgs(TRUE)
+#ARGS <- commandArgs(TRUE)
 
-masterdf_file<-"model_scripts/masterdf.RData" #ARGS[1]
-outfile<-"loo_comparisons.csv" #ARGS[2]
+masterdf_file<-"~/Documents/GitHub/geomphon-perception-ABX/model_scripts/masterdf.RData" #ARGS[1]
+outfile<-"model_scripts/loo_comparisons.csv" #ARGS[2]
 
-masterdf<-load(masterdf_file)
+load(masterdf_file)
+
 
 fit_name_loo_o<- list()
 loo_o <- list()
