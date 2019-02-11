@@ -11,11 +11,14 @@ library(plyr)
 library(dplyr)
 library(tidyr)
 library(magrittr)
+library(readr)
 
 ARGS <- commandArgs(TRUE)
 
-masterdf<-"masterdf.csv"#ARGS[1]
+masterdf_file<-"model_scripts/masterdf.RData" #ARGS[1]
 outfile<-"loo_comparisons.csv" #ARGS[2]
+
+masterdf<-load(masterdf_file)
 
 fit_name_loo_o<- list()
 loo_o <- list()
@@ -59,4 +62,4 @@ loo_comp_df <- tibble::tibble(
   loo_comp=loo_comp_o
 )
 
-write.csv(loo_comp_df,file=outfile)
+write_csv(loo_comp_df,path=outfile)

@@ -10,13 +10,14 @@ library(plyr)
 library(dplyr)
 library(tidyr)
 library(magrittr)
+library(stringr)
 
-ARGS <- commandArgs(TRUE)
+#ARGS <- commandArgs(TRUE)
 
 
-dataset_folder<-("sampled_datasets") #ARGS[1] "sampled_datasets"
-model_folder<-("stan_models") #ARGS[2] "stan_models"
-outfile<-("masterdf.csv")#ARGS[3] "masterdf.csv"
+dataset_folder<-("model_scripts/sampled_datasets") #ARGS[1] "sampled_datasets"
+model_folder<-("model_scripts/stan_models") #ARGS[2] "stan_models"
+outfile<-("model_scripts/masterdf.RData")#ARGS[3] "masterdf.RData"
 
 
 vec_of_ds_filenames <- list.files(path=dataset_folder,recursive=T)
@@ -89,4 +90,4 @@ seed<- as.numeric(unlist(rep("123456",times=lenstandats*lenstanmods)))
 
 masterdf<-as.data.frame(cbind(stan_model_name,data_name,fit_file_name,data,iter,chains,seed))
 
-write.csv(masterdf, file=outfile)
+save(masterdf, file=outfile)
