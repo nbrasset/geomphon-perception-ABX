@@ -1,95 +1,90 @@
-//fit_1
+// Gaussian truncated to be <= 0 for certain predictors
 
 data {
-int<lower=0> N_obs;                    //number of observations
-int<lower=0> N_coef;                   //fixed effects
-int<lower=0> N_coef_u;                 //random effects for subjects
-int<lower=0> N_coef_w;                 // random effects for items
-
-// subjects
-int<lower=1> subj[N_obs];          //subject id  
-int<lower=1> N_subj;               //number of subjects
-
-// items
-int<lower=1> item[N_obs];          //item id
-int<lower=1> N_item;               //number of items
-
-matrix[N_obs, N_coef] x;           //fixed effects design matrix
-matrix[N_obs, N_coef_u] x_u;         //subject random effects design matrix
-matrix[N_obs, N_coef_w] x_w;         //item random effects design matrix
-
-int accuracy[N_obs];              // accuracy
+  int<lower=0> N_obs;            // number of observations
+  int<lower=0> N_cf_cns;         // number of constrained coefficients
+  int<lower=0> N_cf_oth;         // number of other coefficients    
+  int<lower=0> N_cf_u;           // number of coefs due to unmod. subj-level var
+  int<lower=0> N_cf_w;           // number of coefs due to unmod. item-level var 
+  
+  // subjects
+  int<lower=1> subj[N_obs];      // subject id  
+  int<lower=1> N_subj;           // number of subjects
+  
+  // items [WHAT IS AN ITEM??]
+  int<lower=1> item[N_obs];      // item id
+  int<lower=1> N_item;           // number of items
+  
+  matrix[N_obs, N_cf_cns] x_cns; // predictors: constrained  
+  matrix[N_obs, N_cf_oth] x_oth; // predictors: unconstrained
+  matrix[N_obs, N_cf_u] x_u;     // predictors ass. with unmod. subj-level var
+  matrix[N_obs, N_cf_w] x_w;     // predictors ass. with unmod. item-level var
+  
+  int accuracy[N_obs];           // DEPENDENT VARIABLE: accuracy
 }
 
-//NOTE: for our hypotheses, we want to constrain the value of beta.  so in order to have a truncated prior
-//we specify in the parameters block what values are impossible.
 
 parameters {
+  vector<upper=0>[N_cf_cns] beta_cns; // constrained betas
+  vector[N_cf_oth] beta_oth; // unconstrained betas
+  
+  vector<lower=0> [N_cf_u] sigma_u;   // subject-level sd
+  cholesky_factor_corr[N_cf_u] L_u;   // subject-level correlation (decomposed)
+  matrix[N_cf_u,N_subj] z_u;          // subject-level correlation (decomposed)
 
-// RIGHT NOW CONSTRAINED s.t. ALL BETAS ARE NEGATIVE.  
-vector<upper=0>[N_coef] beta;            // vector of fixed effects parameters 
+  vector<lower=0> [N_cf_w] sigma_w; // item-level sd
+  cholesky_factor_corr[N_cf_w] L_w; // item-level correlation (decomposed)
+  matrix[N_cf_w,N_item] z_w;          // item-level correlation (decomposed)
 
-
-vector<lower=0> [N_coef_u] sigma_u;     // subject sd
-cholesky_factor_corr[N_coef_u] L_u;   // correlation matrix for random intercepts and slopes subj
-matrix[N_coef_u,N_subj] z_u;
-
-
-vector<lower=0> [N_coef_w] sigma_w;     // item sd
-cholesky_factor_corr[N_coef_w] L_w;    // correlation matrix for random intercepts and slopes item
-matrix[N_coef_w,N_item] z_w;
-
-real sigma_e;                // residual sd
+  real sigma_e;                       // residual sd
 }
 
-transformed parameters{
+transformed parameters {
+  matrix[N_cf_u,N_subj] u;
+  matrix[N_cf_w,N_item] w;
+  vector[N_obs] mu;
 
-matrix[N_coef_u,N_subj] u;   // subjects random effects parameters 
-matrix[N_coef_w,N_item] w;   // items random effects parameters
-vector[N_obs] mu;
+  // subject-level VCV
+  {
+    matrix[N_cf_u,N_cf_u] Lambda_u;
+    Lambda_u = diag_pre_multiply(sigma_u, L_u);
+    u = Lambda_u * z_u;
+  }
 
-// variance-covariance matrix for the random effects of subjects (intercept, slopes & correlations)
-{matrix[N_coef_u,N_coef_u] Lambda_u;
-Lambda_u = diag_pre_multiply(sigma_u, L_u);
-u = Lambda_u * z_u;
-}
+  // item-level VCV
+  {
+    matrix[N_cf_w,N_cf_w] Lambda_w;
+    Lambda_w = diag_pre_multiply(sigma_w, L_w);
+    w = Lambda_w * z_w;
+  }
 
-// variance-covariance matrix for the random effects of items (intercept, slopes & correlations)
-{matrix[N_coef_w,N_coef_w] Lambda_w;
-Lambda_w = diag_pre_multiply(sigma_w, L_w);
-w = Lambda_w * z_w;
-}
+  mu = sigma_e + x_cns*beta_cns + x_oth*beta_oth;
 
-mu = sigma_e + x * beta; // first define mu in terms of error (sigma_e) and fixed effects only (beta)
-
-for (i in 1:N_obs){
-for (uu in 1:N_coef_u)
-mu[i] = mu[i] + x_u[i,uu] * u[uu, subj[i]]; // adding to mu the subjects random effects part 
-for (ww in 1:N_coef_w)
-mu[i] = mu[i] + x_w[i,ww] * w[ww, item[i]]; // adding to mu the items random effects part
-}
+  for (i in 1:N_obs) {
+    for (uu in 1:N_cf_u)
+      mu[i] = mu[i] + x_u[i,uu]*u[uu, subj[i]];
+    for (ww in 1:N_cf_w)
+      mu[i] = mu[i] + x_w[i,ww]*w[ww, item[i]];
+  }
 }
 
 
 model {
+  sigma_u ~ normal(0,1);
+  sigma_w ~ normal(0,1);
 
-// all priors here are weakly informative priors with a normal distribution (because the logit link function transforms the proportions into a normally distributed variable)
-// check what is the appropriate prior distribution for each of the variables in the data set and modify accordingly
+  sigma_e ~ normal(0,10); // between -10 and 10 on log odds scale
 
-sigma_u ~ normal(0,1);
-sigma_w ~ normal(0,1);
+  beta_cns ~ normal(0,10); 
+  beta_oth ~ normal(0,10); 
 
-sigma_e ~ normal(0,10); // the mean (0) lies between -10 and 10 on logit scale, i.e., between very close to 0 and very close to 1 on probability scale (hence, it's a weakly informative prior)
+  L_u ~ lkj_corr_cholesky(2.0); // uninformative: see ???
+  L_w ~ lkj_corr_cholesky(2.0);
 
-beta ~ normal(0,10); 
+  to_vector(z_u) ~ normal(0,1); // idea: ???
+  to_vector(z_w) ~ normal(0,1);
 
-L_u ~ lkj_corr_cholesky(2.0); // 2.0 prior indicates no prior knowledge about the correlations in the random effects
-L_w ~ lkj_corr_cholesky(2.0);
-
-to_vector(z_u) ~ normal(0,1);
-to_vector(z_w) ~ normal(0,1);
-
-accuracy ~ bernoulli_logit(mu); // likelihood (the data)
+  accuracy ~ bernoulli_logit(mu);
 }
 
 
@@ -97,25 +92,29 @@ accuracy ~ bernoulli_logit(mu); // likelihood (the data)
 // the following block generates some variables that might be interesting to look at
 //in some cases, but not necessarily
 generated quantities{
+  matrix[N_cf_u,N_cf_u] Cor_u;
+  matrix[N_cf_w,N_cf_w] Cor_w;
 
-matrix[N_coef_u,N_coef_u] Cor_u;
-matrix[N_coef_w,N_coef_w] Cor_w;
+  int pred_correct[N_obs];
+  real log_lik[N_obs];
+  real diffP_cns[N_cf_cns];
+  real diffP_oth[N_cf_oth];
 
-int pred_correct[N_obs];
-real log_lik[N_obs];
-real diffP[N_coef];
+  Cor_u = tcrossprod(L_u); // subjects random effects correlations
+  Cor_w = tcrossprod(L_w); // random effects correlations
 
-Cor_u = tcrossprod(L_u); // if you want to look at the subjects random effects correlations
-Cor_w = tcrossprod(L_w); // if you want to look at the items random effects correlations
+  for (j in 1:(N_cf_cns)) {
+    diffP_cns[j] = inv_logit(sigma_e + beta_cns[j]) -
+                   inv_logit(sigma_e - beta_cns[j]);
+  }
+  
+  for (j in 1:(N_cf_oth)) {
+    diffP_oth[j] = inv_logit(sigma_e + beta_oth[j]) -
+                   inv_logit(sigma_e - beta_oth[j]);
+  }
 
-// the following loop translates the beta coefficients from logit scale (beta) to probability scale (diffP)
-for (j in 1:(N_coef)){
-diffP[j] = inv_logit(sigma_e + beta[j]) - inv_logit(sigma_e - beta[j]);
-}
-
-// generating the model's log likelihood to be used, for example, in model comparison
-for (i in 1:N_obs){
-pred_correct[i] = bernoulli_rng(inv_logit(mu[i]));
-log_lik[i] = bernoulli_logit_lpmf(accuracy[i]|mu[i]);
-}
+  for (i in 1:N_obs){
+    pred_correct[i] = bernoulli_rng(inv_logit(mu[i]));
+    log_lik[i] = bernoulli_logit_lpmf(accuracy[i]|mu[i]);
+  }
 }

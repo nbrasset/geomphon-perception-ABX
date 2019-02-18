@@ -6,7 +6,6 @@
 # combinations of models #FIXME(should be just same dataset)
 
 
-rm(list=ls())
 library(plyr)
 library(dplyr)
 library(tidyr)
@@ -16,52 +15,45 @@ library(loo)
 
 #ARGS <- commandArgs(TRUE)
 
-masterdf_file<-"~/Documents/GitHub/geomphon-perception-ABX/model_scripts/masterdf.RData" #ARGS[1]
-outfile<-"model_scripts/loo_comparisons.csv" #ARGS[2]
+options(mc.cores=4) # FIXME
+
+masterdf_file<-"masterdf.RData" #ARGS[1]
+outfile<-"loo_comparisons.csv" #ARGS[2]
 
 load(masterdf_file)
 
 
-fit_name_loo_o<- list()
+fit_name_loo <- c()
 loo_o <- list()
 log_lik_o <- list()
 
-
+# FIXME - bad way to do this: will break when you hit comparisons
 for (i in 1:nrow(masterdf)){
-  fit<-readRDS(masterdf[["fit_file_name"]][[i]])
-  fit_name_loo_o[[i]]<-masterdf[["fit_file_name"]][[i]]
-  loo_o[[i]]<-loo(fit)
-  log_lik_o[[i]]<-extract_log_lik(
-    fit, parameter_name = "log_lik", merge_chains = TRUE)
+  fit_fn <- masterdf[["fit_file_name"]][[i]]
+  if (file.exists(fit_fn)) {
+    fit <- readRDS(fit_fn)
+    fit_name_loo[[i]] <- fit_fn
+    loo_o[[i]] <- loo(fit)
+    log_lik_o[[i]]<-extract_log_lik(fit,
+                                    parameter_name = "log_lik",
+                                    merge_chains = TRUE)
+    rm(fit)
+    gc()
+  }
 }
-
 
 loo_df <- tibble::tibble(
-  fit_name_loo=fit_name_loo_o,
   loo=loo_o,
-  log_lik=log_lik_o
+  log_lik=log_lik_o,
+  data_name=sapply(strsplit(fit_name_loo, "/"), function(x) x[2]), # FIXME
+  model_name=sapply(strsplit(fit_name_loo, "/"), function(x) x[3])
 )
 
 
-loo_list<-loo_df[["loo"]]
-loo_pairs<-combn(1:length(loo_list),2)
+loo_comparisons <- dplyr::inner_join(loo_df, loo_df, by="data_name",
+                                     suffix=c("_A", "_B")) %>%
+  dplyr::mutate(loo_comparison=purrr::map2(loo_A, loo_B, ~ compare(.x, .y)),
+                elpd_diff=purrr::map_dbl(loo_comparison, ~ .x[1]),
+                elpd_diff_se=purrr::map_dbl(loo_comparison, ~ .x[2])) %>%
+  dplyr::select(-loo_comparison)
 
-models_compared_o<-c()
-loo_comp_o <- list()
-
-for (i in 1:ncol(loo_pairs)){
-  loo_num_1<-loo_pairs[1,i]
-  loo_num_2<-loo_pairs[2,i]
-  name1<-loo_df$fit_name_loo[loo_num_1]
-  name2<-loo_df$fit_name_loo[loo_num_2]
-  models_compared_o[[i]]<-paste(name1,name2,sep="__")
-  loo_comp_o[[i]]<-compare(loo_list[[loo_num_1]], loo_list[[loo_num_2]])
-}
-
-
-loo_comp_df <- tibble::tibble(
-  models_compared=models_compared_o,
-  loo_comp=loo_comp_o
-)
-
-write_csv(loo_comp_df,path=outfile)

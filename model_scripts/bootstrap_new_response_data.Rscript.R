@@ -8,24 +8,53 @@
 
 #ARGS <- commandArgs(TRUE)
 
-m1_dat<-read.csv("model_scripts/m1_dat.csv")# ARGS[1] "m1_dat.csv"
-sample_binary<-"model_scripts/sample_binary_function.R"#ARGS[2] "sample_binary_function.R"
+m1_dat<-read.csv("m1_dat.csv")# ARGS[1] "m1_dat.csv"
+m1_dat_130 <- purrr::map_df(seq_len(5),
+                            ~ dplyr::mutate(m1_dat,
+                                            subject_id=paste0(subject_id, .)))
+sample_binary<-"sample_binary_function.R"#ARGS[2] "sample_binary_function.R"
 
 source(sample_binary)
 
-m1_dat$var1<-m1_dat$var1-mean(m1_dat$var1)
-m1_dat$var2<-m1_dat$var2-mean(m1_dat$var2)
-m1_dat$var3<-m1_dat$var3-mean(m1_dat$var3)
+#m1_dat$var1<-m1_dat$var1-mean(m1_dat$var1)
+#m1_dat$var2<-m1_dat$var2-mean(m1_dat$var2)
+#m1_dat$var3<-m1_dat$var3-mean(m1_dat$var3)
 
 
-zero_resp<-sample_binary(d = m1_dat,response_var = "user_corr",
-                         predictor_var = "var2", coef_value = 0)
-write.csv(zero_resp,file="model_scripts/sampled_datasets/zero_resp.csv")
+sample_binary(d = m1_dat,response_var = "user_corr",
+                         predictor_var = "var2", coef_value = 0) %>%
+write.csv(file="sampled_datasets/zero_resp.csv")
 
-pos_resp<-sample_binary(d = m1_dat,response_var = "user_corr",
-                        predictor_var = "var2", coef_value = 1)
-write.csv(pos_resp,file="model_scripts/sampled_datasets/pos_resp.csv")
+sample_binary(d = m1_dat,response_var = "user_corr",
+                        predictor_var = "var2", coef_value = 1) %>%
+write.csv(file="sampled_datasets/pos_resp.csv")
 
-neg_resp<-sample_binary(d = m1_dat,response_var = "user_corr",
-                        predictor_var = "var2", coef_value = -1)
-write.csv(neg_resp,file="model_scripts/sampled_datasets/neg_resp.csv")
+sample_binary(d = m1_dat,response_var = "user_corr",
+                        predictor_var = "var2", coef_value = -1) %>%
+write.csv(file="sampled_datasets/neg_resp.csv")
+
+sample_binary(d = m1_dat,response_var = "user_corr",
+                        predictor_var = "var2", coef_value = 2) %>%
+write.csv(file="sampled_datasets/pos_resp_2.csv")
+
+sample_binary(d = m1_dat,response_var = "user_corr",
+                        predictor_var = "var2", coef_value = -2) %>%
+write.csv(file="sampled_datasets/neg_resp_2.csv")
+
+
+sample_binary(d = m1_dat,response_var = "user_corr",
+              predictor_var = "var2", coef_value = 3) %>%
+  write.csv(file="sampled_datasets/pos_resp_3.csv")
+
+sample_binary(d = m1_dat,response_var = "user_corr",
+              predictor_var = "var2", coef_value = -3) %>%
+  write.csv(file="sampled_datasets/neg_resp_3.csv")
+
+
+sample_binary(d = m1_dat_130,response_var = "user_corr",
+              predictor_var = "var2", coef_value = 1) %>%
+  write.csv(file="sampled_datasets/pos_resp_s130.csv")
+
+sample_binary(d = m1_dat_130,response_var = "user_corr",
+              predictor_var = "var2", coef_value = -1) %>%
+  write.csv(file="sampled_datasets/neg_resp_s130.csv")
