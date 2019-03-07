@@ -47,9 +47,17 @@ create_masterdf <- function(vars, coef_vals,num_data_sets) {
   x <- c("coef_econ","coef_loc", "coef_glob")
   colnames(df) <- x
  
-  econ_pos<- case.when (coef_econ%% >0 ~"yes",
-                        coef_econ%% <=0 ~"no" )
-  
-  
+  df$pos_vars<- 
+    case_when(
+      df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "econ_glob_loc",
+      df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "econ_glob",
+      df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "econ_loc",
+      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "glob_loc",
+      df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "econ",
+      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "glob",
+      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "loc",
+      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "none")
+ 
+   
   return(df) 
 }
