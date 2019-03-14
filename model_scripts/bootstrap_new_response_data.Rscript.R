@@ -6,14 +6,16 @@
 # coefficient values of var 2 of 0,1, and -1. 
 
 
-#ARGS <- commandArgs(TRUE)
+#create a dataset 
 
-m1_dat<-read.csv("m1_dat.csv")# ARGS[1] "m1_dat.csv"
+
+m1_dat<-read.csv("m1_dat.csv")
 m1_dat_130 <- purrr::map_df(seq_len(5),
                             ~ dplyr::mutate(m1_dat,
                                             subject_id=paste0(subject_id, .)))
-sample_binary<-"sample_binary_function.R"#ARGS[2] "sample_binary_function.R"
 
+
+sample_binary<-"sample_binary_function.R"
 source(sample_binary)
 
 #m1_dat$var1<-m1_dat$var1-mean(m1_dat$var1)
