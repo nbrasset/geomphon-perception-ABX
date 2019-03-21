@@ -15,48 +15,35 @@ m1_dat_130 <- purrr::map_df(seq_len(5),
                                             subject_id=paste0(subject_id, .)))
 
 
-sample_binary<-"sample_binary_function.R"
-source(sample_binary)
+create_masterdf<-"create_masterdf_function.R"
+source(create_masterdf)
 
-#m1_dat$var1<-m1_dat$var1-mean(m1_dat$var1)
-#m1_dat$var2<-m1_dat$var2-mean(m1_dat$var2)
-#m1_dat$var3<-m1_dat$var3-mean(m1_dat$var3)
+master_df<- create_masterdf(vars=c("econ","glob","loc"),
+                             coef_vals=c(-1,0,1),
+                             num_data_sets = 2)
 
+sample_binary_three<-"sample_binary_three_vars_function.R"
+source(sample_binary_three)
 
-sample_binary(d = m1_dat,response_var = "user_corr",
-                         predictor_var = "var2", coef_value = 0) %>%
-write.csv(file="sampled_datasets/zero_resp.csv")
-
-sample_binary(d = m1_dat,response_var = "user_corr",
-                        predictor_var = "var2", coef_value = 1) %>%
-write.csv(file="sampled_datasets/pos_resp.csv")
-
-sample_binary(d = m1_dat,response_var = "user_corr",
-                        predictor_var = "var2", coef_value = -1) %>%
-write.csv(file="sampled_datasets/neg_resp.csv")
-
-sample_binary(d = m1_dat,response_var = "user_corr",
-                        predictor_var = "var2", coef_value = 2) %>%
-write.csv(file="sampled_datasets/pos_resp_2.csv")
-
-sample_binary(d = m1_dat,response_var = "user_corr",
-                        predictor_var = "var2", coef_value = -2) %>%
-write.csv(file="sampled_datasets/neg_resp_2.csv")
+sample_binary_three(d = m1_dat,response_var = "user_corr",
+              predictor_var = "var2", coef_value = 0) %>%
+  write.csv(file="sampled_datasets/zero_resp.csv")
 
 
-sample_binary(d = m1_dat,response_var = "user_corr",
-              predictor_var = "var2", coef_value = 3) %>%
-  write.csv(file="sampled_datasets/pos_resp_3.csv")
+#need an input for purr that is a vector of coefs pulled from master df
 
-sample_binary(d = m1_dat,response_var = "user_corr",
-              predictor_var = "var2", coef_value = -3) %>%
-  write.csv(file="sampled_datasets/neg_resp_3.csv")
+purrr::map(master_df$coef_econ, mean)
+
+for (i in 1:nrow(master_df)){
+  sample_binary(d = m1_dat,
+                response_var = "user_corr",
+                predictor_var = "var2", 
+                coef_value = 0) %>%
+    write.csv(file="sampled_datasets/zero_resp.csv")
+  
+}
+     
 
 
-sample_binary(d = m1_dat_130,response_var = "user_corr",
-              predictor_var = "var2", coef_value = 1) %>%
-  write.csv(file="sampled_datasets/pos_resp_s130.csv")
 
-sample_binary(d = m1_dat_130,response_var = "user_corr",
-              predictor_var = "var2", coef_value = -1) %>%
-  write.csv(file="sampled_datasets/neg_resp_s130.csv")
+
