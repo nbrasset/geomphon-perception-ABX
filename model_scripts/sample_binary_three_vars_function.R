@@ -8,9 +8,9 @@
 #' 
 #' @return data frame identical to `d`, with `response_var` replaced with
 #' values sampled from a logistic regression model fit to `d` that has 
-#' `response_var`as the response variable and `predictor_var` as the sole 
-#' predictor variable, with the value of the coefficient for `predictor_var` 
-#' replaced with `coef_value`
+#' `response_var`as the response variable and `predictor_vars` as the sole 
+#' predictor variable, with the value of the coefficient for `predictor_vars` 
+#' replaced with `coef_values`
 #' 
 #' 
 sample_binary_three <- function(d, response_var, predictor_vars, coef_values) {
@@ -20,14 +20,13 @@ sample_binary_three <- function(d, response_var, predictor_vars, coef_values) {
   if (!(response_var %in% names(d))) {
     stop(paste0("d must contain '", response_var, "' as a column"))
   }
-  #if (!(predictor_var %in% names(d))) {
-   # stop(paste0("d must contain '", predictor_var, "' as a column"))
-  #}
+  for (i in 1:3){
+    if (!(predictor_vars[i] %in% names(d))) {
+     stop(paste0("d must contain '", predictor_vars[i], "' as a column"))
+    }
+  }
   if (!identical(as.double(sort(unique(d[[response_var]]))), c(0,1))) {
     stop("response variable should consist of only 0 and 1")
-  }
-  if (!is.numeric(coef_value)) {
-    stop("value of coefficient must be numeric")
   }
   
   f <- paste(as.character(response_var),
