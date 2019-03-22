@@ -1,0 +1,39 @@
+subject_id,subject_language,18-29yrs,30-39yrs,40-49yrs,50-59yrs,60-69yrs,more_than_69yrs,handedness_L,handedness_R,lang_0-3,lang_speak,lang_understand,live_with_lang_yes,live_with_lang_no,hear_vis_Y,hear_vis_N,speech_prob_Y,speech_prob_N,ling_course_Y,ling_course_N,phonet_class_Y,phonet_class_N,phonog_class_Y
+X_NBOVZKXHYP,French_turkers,0,0,1,0,0,0,0,1,français,français anglais allemand,français anglais allemand,1,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_XLYPJZHSTG,French_turkers,0,0,1,0.0,0.0,0.0,0.0,1.0,Français,Français Anglais,Français Anglais Allemand,1.0,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_GSCFJIHBAT,French_turkers,1,0,0,0,0,0,0,1,Français,Français Anglais Arabe Espagnol Russe,Anglais Français Espagnol Arabe Russe,1,0.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,0.0,1.0
+X_GNFCPBLQWH,French_turkers,0,1,0,0,0,0,0,1,français arabe,français arabe anglais,français arabe anglais,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_XFJHTRAVDS,French_turkers,1,0,0,0,0,0,1,0,francais,fancais ANglais Allemand Espagnol,fancais ANglais Allemand Espagnol,1,0.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0,1.0,0.0
+X_RAJNVIKESZ,French_turkers,0,1,0,0,0,0,0,1,Français,Français Anglais,Français Anglais,0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,0.0,0.0
+X_VTOCLMQXBG,French_turkers,0,1,0,0,0,0,1,0,Français,Français Anglais,Français Anglais Allemand Espagnol,0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,0.0,0.0
+X_IQXSHNGZCM,French_turkers,1,0,0,0,0,0,0,1,Français,Français Anglais Espagnol,Français Anglais Espagnol,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_FOEUYGLXMN,French_turkers,0,1,0,0,0,0,0,1,1.0,Francais,Francais Anglais,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_DZKTGHQUVX,French_turkers,1,0,0,0,0,0,0,1,français,français,français anglais,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_AOWFGVKSRL,French_turkers,1,0,0,0,0,0,0,1,Français,Français,Français Anglais,0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,0.0,0.0
+X_JELXPGUQHS,French_turkers,0,1,0,0,0,0,0,1,français,français,français,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_OZPVJCDNWB,English_turkers,1,0,0,0,0,0,0,1,English,English,English,1,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_VSADHMNRTY,English_turkers,1,0,0,0,0,0,0,1,1.0,english,english,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_QSIDGNJYEP,English_turkers,1,0,0,0,0,0,0,1,english,english,english,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_YEQIXKGTAS,English_turkers,0,1,0,0,0,0,1,0,english,english,english,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_AXWEZDQOFS,English_turkers,0,0,0,1,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_PEONHBIQRV,English_turkers,0,1,0,0,0,0,0,1,english,english,english,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0
+X_PGVFRHIYSB,English_turkers,0,1,0,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_KBXGIJULTR,English_turkers,0,1,0,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_QPUMCYKHDR,English_turkers,0,1,0,0,0,0,1,0,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_FWBUSNJKYC,English_turkers,0,0,1,0,0,0,0,1,english,english,english,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_HWGYAJIBSR,English_turkers,0,0,0,0,1,0,0,1,english ,english ,english ,1,0.0,0.0,1.0,0.0,1.0,1.0,0.0,0.0,1.0,0.0
+X_WGBDQTUZRF,English_turkers,0,1,0,0,0,0,1,0,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_HEBZOCRNSI,English_turkers,1,0,0,0,0,0,0,1,english,english spanish,english spanish,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_ZNYPAJQFXM,English_turkers,1,0,0,0,0,0,0,1,3.0,english,english,1,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_GQNFZYRPUA,English_turkers,0,0,0,1,0,0,0,1,English,English French,English French,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_BLEVGUCNMR,English_turkers,0,1,0,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_MLZWYRESFX,English_turkers,1,0,0,0,0,0,0,1,english,english,english,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_YTNIQGBFUK,English_turkers,1,0,0,0,0,0,1,0,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_URNLHXMGBD,English_turkers,1,0,0,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_IORUAGCTBP,English_turkers,0,0,1,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,1.0,0.0,0.0,1.0,0.0,1.0,0.0
+X_DJXTPWAMFN,English_turkers,0,1,0,0.0,0.0,0.0,0.0,1.0,english,english,english,1.0,0.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_BUGXOYJZHC,English_turkers,1,0,0,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_AKLYBHVNXS,English_turkers,1,0,0,0,0,0,0,1,1.0,1,1,1,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0
+X_JFHIRBXWTS,English_turkers,0,0,1,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_ICEAYUQSRH,English_turkers,1,0,0,0,0,0,0,1,English,English,English,0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+X_MUVEAKSGPH,English_turkers,1,0,0,0,0,0,0,1,english,english,english,1,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0
