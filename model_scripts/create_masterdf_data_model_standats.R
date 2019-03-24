@@ -51,9 +51,6 @@ dataset_list <- lapply(full_files, read.csv)
 
 list_of_Standats = list()
 
-#
-#pos constrained 
-#neg constrained
 
 for (i in 1:length(dataset_list)){
   
@@ -62,15 +59,17 @@ for (i in 1:length(dataset_list)){
   
   #read which variables are pos and neg from master_df
   
-  pos_vars<-
+  # take variables into formula., enter (NOT AS STRING BUT AS OBJECT) info formula 
+  # or create pos and neg formula?? maybe. 
   
-  x_cns_pos <- unname(model.matrix(~var2-1,ds)) # constrained positive
+  #take out the underscore, change it for a plus sign, and then
+  #or if the answer is none, skip entirely
+  
+  x_cns_pos <- unname(model.matrix(~var1-1,ds)) # constrained positive
   attr(x_cns_pos, "assign") <- NULL
   
-  x_cns_neg<- unname(model.matrix(~var2-1,ds)) # constrained negative 
+  x_cns_neg<- unname(model.matrix(~var2+var3-1,ds)) # constrained negative 
   attr(x_cns_neg, "assign") <- NULL
-  
-  
   
   x_oth <- unname(model.matrix(~1,ds)) # unconstrained
   attr(x_oth, "assign") <- NULL
@@ -92,12 +91,14 @@ for (i in 1:length(dataset_list)){
                   
                   N_obs = nrow(ds),
                   
-                  N_cf_cns = ncol(x_cns),
+                  N_cf_cns_pos = ncol(x_cns_pos),
+                  N_cf_cns_neg = ncol(x_cns_neg),
                   N_cf_oth = ncol(x_oth),
                   N_cf_u = ncol(x_u),
                   N_cf_w = ncol(x_w),
                   
-                  x_cns = x_cns,
+                  x_cns_pos = x_cns_pos,
+                  x_cns_neg = x_cns_neg,
                   x_oth = x_oth,
                   x_u = x_u,
                   x_w = x_w,
@@ -110,30 +111,29 @@ for (i in 1:length(dataset_list)){
 
 
 
-
-vec_names_stan_models<-list.files(path=model_folder, pattern="*.stan")
-lenstanmods<-length(vec_names_stan_models)
-lenstandats<-length(list_of_Standats)
-
-
-stan_model_name<- rep(vec_names_stan_models,each=lenstandats)
-
-
-data_name<-rep_len(vec_of_ds_filenames,length.out=lenstandats*lenstanmods)
-
-
-fit_file_name<-paste("modelfits/",
-                     str_replace(data_name,"\\..*",""),
-                     "/",
-                     str_replace(stan_model_name,"\\..*",""),
-                     ".rds",
-                     sep="")
+fit_stan_mod <- function(i){
+model<-rstan::stan(file = "stan_models/master_model.stan",
+            data = list_of_Standats[[1]],
+            chains = 1,
+            iter = 300,
+            seed = 123
+)
+saveRDS(model,file =master_df[["standat_filename"]][[1]]) 
+}
 
 
-data<- rep_len(list_of_Standats,length.out=lenstandats*lenstanmods)
-iter<- as.numeric(unlist(rep("2000",times=lenstandats*lenstanmods))) #FIXME(shortened)
-chains<-as.numeric( unlist(rep("4",times=lenstandats*lenstanmods))) #FIXME(shortened)
-seed<- as.numeric(unlist(rep("123456",times=lenstandats*lenstanmods)))
+num_fits <- nrow(master_df)
+
+
+DUMMY <- foreach(i = 1:num_fits) %dopar% fit_stan_mod(i)
+
+
+
+# FIXME: don't run models we've already fit
+
+#make anew df of how to run the model.   
+  
+#then use timux to run the model. 
 
 
 
