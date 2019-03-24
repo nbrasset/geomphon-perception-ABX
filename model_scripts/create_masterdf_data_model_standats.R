@@ -51,21 +51,14 @@ dataset_list <- lapply(full_files, read.csv)
 
 list_of_Standats = list()
 
-
 for (i in 1:length(dataset_list)){
-  
   ds<-dataset_list[[i]]
   name<-vec_of_ds_filenames[i]
   
-  #read which variables are pos and neg from master_df
+  #add a column in master_df that has the right name of pos and neg vars
+  #FIXME make sure null case is what it is supposed to be
   
-  # take variables into formula., enter (NOT AS STRING BUT AS OBJECT) info formula 
-  # or create pos and neg formula?? maybe. 
-  
-  #take out the underscore, change it for a plus sign, and then
-  #or if the answer is none, skip entirely
-  
-  x_cns_pos <- unname(model.matrix(~var1-1,ds)) # constrained positive
+  x_cns_pos <- unname(model.matrix(~-1,ds)) # constrained positive
   attr(x_cns_pos, "assign") <- NULL
   
   x_cns_neg<- unname(model.matrix(~var2+var3-1,ds)) # constrained negative 
@@ -112,27 +105,26 @@ for (i in 1:length(dataset_list)){
 
 
 fit_stan_mod <- function(i){
+  
 model<-rstan::stan(file = "stan_models/master_model.stan",
             data = list_of_Standats[[1]],
             chains = 1,
             iter = 300,
             seed = 123
 )
-saveRDS(model,file =master_df[["standat_filename"]][[1]]) 
+saveRDS(model,file =paste("modelfits/",
+                          master_df[["standat_filename"]][[1]],sep=""))
 }
+
 
 
 num_fits <- nrow(master_df)
 
-
 DUMMY <- foreach(i = 1:num_fits) %dopar% fit_stan_mod(i)
 
 
-
 # FIXME: don't run models we've already fit
-
 #make anew df of how to run the model.   
-  
 #then use timux to run the model. 
 
 
