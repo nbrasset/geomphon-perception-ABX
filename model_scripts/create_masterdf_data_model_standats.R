@@ -7,6 +7,7 @@
 
 #create a dataset 
 
+library(magrittr)
 
 m1_dat<-read.csv("m1_dat.csv")
 
@@ -48,7 +49,6 @@ vec_of_ds_filenames <- list.files(path=dataset_folder,recursive=T)
 full_files <- paste(dataset_folder,vec_of_ds_filenames,sep="/")
 dataset_list <- lapply(full_files, read.csv) 
 
-
 list_of_Standats = list()
 
 #
@@ -60,11 +60,16 @@ for (i in 1:length(dataset_list)){
   ds<-dataset_list[[i]]
   name<-vec_of_ds_filenames[i]
   
+  #read which variables are pos and neg from master_df
+  
+  pos_vars<-
+  
   x_cns_pos <- unname(model.matrix(~var2-1,ds)) # constrained positive
   attr(x_cns_pos, "assign") <- NULL
   
   x_cns_neg<- unname(model.matrix(~var2-1,ds)) # constrained negative 
-  attr(x_cns_pos, "assign") <- NULL
+  attr(x_cns_neg, "assign") <- NULL
+  
   
   
   x_oth <- unname(model.matrix(~1,ds)) # unconstrained
