@@ -57,7 +57,12 @@ for (i in 1:length(dataset_list)){
   
   #add a column in master_df that has the right name of pos and neg vars
   #FIXME make sure null case is what it is supposed to be
+  #pos_vars
+  #master_df[["pos_vars"]][[1]]
+  #add a master df neg_vars column too.  
   
+  
+
   x_cns_pos <- unname(model.matrix(~-1,ds)) # constrained positive
   attr(x_cns_pos, "assign") <- NULL
   
@@ -101,7 +106,6 @@ for (i in 1:length(dataset_list)){
   
   list_of_Standats[[i]] <- newlist
 }
-
 
 
 fit_stan_mod <- function(i){

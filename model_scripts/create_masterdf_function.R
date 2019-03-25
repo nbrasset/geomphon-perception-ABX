@@ -48,17 +48,37 @@ create_masterdf <- function(vars, coef_vals,num_data_sets) {
   x <- c("coef_econ","coef_loc", "coef_glob")
   colnames(df) <- x
  
-  df$pos_vars<- 
+  #df$pos_vars<- 
+    # dplyr::case_when(
+    #   df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "econ_glob_loc",
+    #   df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "econ_glob",
+    #   df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "econ_loc",
+    #   df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "glob_loc",
+    #   df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "econ",
+    #   df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "glob",
+    #   df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "loc",
+    #   df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "none")
+ df$pos_vars<-
     dplyr::case_when(
-      df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "econ_glob_loc",
-      df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "econ_glob",
-      df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "econ_loc",
-      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "glob_loc",
-      df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "econ",
-      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "glob",
-      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "loc",
-      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "none")
- 
+    df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "var1+var2+var3",
+    df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "var1+var2",
+    df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "var1+var3",
+    df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "var2+var3",
+    df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "var1",
+    df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "var2",
+    df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "var3",
+    df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "")
+  
+ df$neg_vars<-
+   dplyr::case_when(
+     df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "",
+     df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "var3",
+     df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "var2",
+     df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "var1",
+     df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "var2+var3",
+     df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "var1+var3",
+     df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "var1+var2",
+     df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "var1+var2+var3")
   
   #expand by the list of all the models 
   model_list<-as.data.frame(c("econ_glob_loc", "econ_glob", "econ_loc","glob_loc","econ", 
