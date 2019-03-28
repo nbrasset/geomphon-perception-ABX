@@ -7,7 +7,7 @@
 
 #create a dataset 
 
-library(magrittr)
+`%>%`<-magrittr::`%>%`
 
 m1_dat<-read.csv("m1_dat.csv")
 
@@ -52,21 +52,18 @@ dataset_list <- lapply(full_files, read.csv)
 list_of_Standats = list()
 
 for (i in 1:length(dataset_list)){
+ 
   ds<-dataset_list[[i]]
   name<-vec_of_ds_filenames[i]
   
-  #add a column in master_df that has the right name of pos and neg vars
-  #FIXME make sure null case is what it is supposed to be
-  #pos_vars
-  #master_df[["pos_vars"]][[1]]
-  #add a master df neg_vars column too.  
+  #FIXME check null case
+  pos_formula<-as.formula(paste("~",master_df[["pos_vars"]][[1]],"-1"))
   
-  
-
-  x_cns_pos <- unname(model.matrix(~-1,ds)) # constrained positive
+  x_cns_pos <- unname(model.matrix(pos_formula,ds)) # constrained positive
   attr(x_cns_pos, "assign") <- NULL
   
-  x_cns_neg<- unname(model.matrix(~var2+var3-1,ds)) # constrained negative 
+  neg_formula<-as.formula(paste("~",master_df[["neg_vars"]][[1]],"-1"))
+  x_cns_neg<- unname(model.matrix(neg_formula,ds)) # constrained negative 
   attr(x_cns_neg, "assign") <- NULL
   
   x_oth <- unname(model.matrix(~1,ds)) # unconstrained
@@ -108,28 +105,31 @@ for (i in 1:length(dataset_list)){
 }
 
 
+
 fit_stan_mod <- function(i){
   
 model<-rstan::stan(file = "stan_models/master_model.stan",
-            data = list_of_Standats[[1]],
+            data = list_of_Standats[[i]],
             chains = 1,
             iter = 300,
-            seed = 123
+            seed = 75019
 )
 saveRDS(model,file =paste("modelfits/",
                           master_df[["standat_filename"]][[1]],sep=""))
 }
 
 
+library(doParallel)
+options(cores=4) #set this appropriate to your system
+registerDoParallel()
 
-num_fits <- nrow(master_df)
+#num_fits <- nrow(master_df)
 
-DUMMY <- foreach(i = 1:num_fits) %dopar% fit_stan_mod(i)
+DUMMY <- foreach(i = 1:2) %dopar% fit_stan_mod(i)
 
 
 # FIXME: don't run models we've already fit
-#make anew df of how to run the model.   
-#then use timux to run the model. 
-
+#FIXME use timux
+#Add 
 
 
