@@ -9,15 +9,35 @@
 
 `%>%`<-magrittr::`%>%`
 
-##
-#create csv dataset
-#######
+####################
+#create csv dataset#
+####################
+
+design_df <- readr::read_csv("exp_design_Hindi_with_acoustic_distance.csv")
+
+num_subjs = 30 
+num_trials = 150
 
 
+subj_list <- list()
+for (i in 1:30) {
+    subj_list[i] = paste("subject",i,sep = "_")
+}
+subj_list <- rep(subj_list, times=num_trials)
+
+
+
+full_design <- expand.grid(design_df, subj_list)
 
 m1_dat<-read.csv("m1_dat.csv")
 
-#create master df
+
+
+
+
+##################
+#create master df#
+##################
 create_masterdf<-"create_masterdf_function.R"
 source(create_masterdf)
 master_df<- create_masterdf(vars=c("econ","glob","loc"),
