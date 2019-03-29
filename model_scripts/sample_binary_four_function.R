@@ -3,17 +3,17 @@
 #'
 #' @param d A data frame
 #' @param response_var The name of a column in `d` containing only 0 and 1
-#' @param predictor_vars The name of three columns in `d`
+#' @param predictor_vars The name of four columns in `d`
 #' @param coef_values The coefficient value to use for sampling
 #' 
 #' @return data frame identical to `d`, with `response_var` replaced with
 #' values sampled from a logistic regression model fit to `d` that has 
-#' `response_var`as the response variable and `predictor_vars` as the sole 
-#' predictor variable, with the value of the coefficient for `predictor_vars` 
+#' `response_var`as the response variable and `predictor_vars` as the  
+#' predictor variables, with the value of the coefficient for `predictor_vars` 
 #' replaced with `coef_values`
 #' 
 #' 
-sample_binary_three <- function(d, response_var, predictor_vars, coef_values) {
+sample_binary_four <- function(d, response_var, predictor_vars, coef_values) {
   if (!is.data.frame(d)) {
     stop("d is not a data frame")
   }
@@ -36,6 +36,8 @@ sample_binary_three <- function(d, response_var, predictor_vars, coef_values) {
              as.character(predictor_vars[2]),
              "+",
              as.character(predictor_vars[3]),
+             "+",
+             as.character(predictor_vars[4]),
              sep="")
   
   
@@ -43,7 +45,7 @@ sample_binary_three <- function(d, response_var, predictor_vars, coef_values) {
   m$coefficients[predictor_vars[1]] <- coef_values[1]
   m$coefficients[predictor_vars[2]] <- coef_values[2]
   m$coefficients[predictor_vars[3]] <- coef_values[3]
-  
+  m$coefficients[predictor_vars[4]] <- coef_values[4]
   pred_prob <- predict(m, type="response", newdata=d)
   for (i in 1:nrow(d)){
     d[[response_var]][i] <- sample(c(0,1), 1,
