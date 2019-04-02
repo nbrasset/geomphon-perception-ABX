@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-#last edit Mar 29 2019 by Amelia
+#last edit Apr 01 2019 by Amelia
 
 
 `%>%`<-magrittr::`%>%`
@@ -14,6 +14,8 @@ source(create_masterdf)
 master_df<- create_masterdf(vars=c("econ","glob","loc"),
                             coef_vals=c(-1,0,1),
                             num_data_sets = 2)
+#FIXME address number of data sets 
+
 
 ####################
 #create csv dataset#
@@ -25,26 +27,33 @@ num_subjs = 30
 num_reps_trials = 3 #number of times the whole design is repeated
 num_trials = nrow(design_df) * num_reps_trials 
 
-subj_list <- list()
+# FIXME add noise to the repetitions of the acoustic distance 
+#FIXME make these not lists 
+
+subjs<- c()
 for (i in 1:num_subjs) {
-    subj_list[i] = paste("subject",i,sep = "_")
+    subjs[i] = paste("subject",i,sep = "_")
 }
 
-trial_list <- list()
+trials <- c()
 for (i in 1:num_trials) {
-  trial_list[i] = paste("trial",i,sep = "_")
+  trials[i] = paste("trial",i,sep = "_")
 }
 
-subs_trials <- expand.grid(subj_list, trial_list)
+
+subs_trials <- expand.grid(subjs, trials)
 rep_design<- design_df[rep(seq_len(nrow(design_df)), num_reps_trials*num_subjs), ]
 
 response_var <-c(sample(c(0,1), nrow(rep_design), replace = TRUE))
 
-full_design <- cbind(subs_trials,rep_design,response_var)
+full_design <- as.data.frame(cbind(subs_trials,rep_design,response_var))
 
-#Nb these responses are dummy responses for the moment. 
-#will be filled in in the sampling step  #FIXME streamline
 
+
+
+
+#Nb these responses are dummy responses for the moment,but must exist 
+#for the sampling function   #FIXME streamline
 
 
 ######################
@@ -53,27 +62,35 @@ full_design <- cbind(subs_trials,rep_design,response_var)
 sample_binary_four<-"sample_binary_four_function.R"
 source(sample_binary_four)
 
-coef_dist <- 2 #effect of acoustic distance. 
+coef_dist <- -.2784  #effect of acoustic distance. 
+#taken from 
 
-
-uniq_filenames <- list(unique(master_df$csv_filename))
-
+uniq_filenames <- unique(master_df$csv_filename)
 
 for (i in 1:length(uniq_filenames)){
-  sample_binary_four(d = full_design,
+  data_i <- sample_binary_four(d = full_design,
                 response_var = "response_var",
                 predictor_vars = c("Econ","Glob","Loc","acoustic_distance"),
                 coef_values = c(master_df$coef_econ[i],
                                 master_df$coef_glob[i],
                                 master_df$coef_loc[i],
-                                1
-                                )
-                ) %>%
-    write.csv(file=paste("sampled_datasets/",
-                         uniq_filenames[i],
-                         sep=""))
+                                coef_dist
+                                ))
+    write.csv(data_i, file=paste0("sampled_datasets","/",uniq_filenames[i]))
 }
-     
 
 
 
+
+data_i<-readr::read_csv("sampled_datasets/econ_0_loc_0_glob_0.csv")
+data_k<-readr::read_csv("sampled_datasets/econ_1_loc_0_glob_1.csv")
+data_j<-readr::read_csv("sampled_datasets/econ_1_loc_1_glob_1.csv")
+
+summ_acc_i <- dplyr::group_by(data_i, Phone_NOTENG, Phone_ENG, Econ, Loc, Glob, acoustic_distance) %>% dplyr::summarize(acc=mean(response_var)) %>% dplyr::ungroup()
+ggplot2::ggplot(summ_acc_i, ggplot2::aes(x=acoustic_distance, y=acc, label=paste(Phone_NOTENG, Phone_ENG, sep=":"))) + ggplot2::geom_text() #+ggplot2::xlim(-2,1)+ggplot2::ylim(0,.9)
+
+summ_acc_k <- dplyr::group_by(data_k, Phone_NOTENG, Phone_ENG, Econ, Loc, Glob, acoustic_distance) %>% dplyr::summarize(acc=mean(response_var)) %>% dplyr::ungroup()
+ggplot2::ggplot(summ_acc_k, ggplot2::aes(x=acoustic_distance, y=acc, label=paste(Phone_NOTENG, Phone_ENG, sep=":"))) + ggplot2::geom_text()#+ggplot2::xlim(-2,1)+ggplot2::ylim(0,.9)
+
+summ_acc_j <- dplyr::group_by(data_j, Phone_NOTENG, Phone_ENG, Econ, Loc, Glob, acoustic_distance) %>% dplyr::summarize(acc=mean(response_var)) %>% dplyr::ungroup()
+ggplot2::ggplot(summ_acc_j, ggplot2::aes(x=acoustic_distance, y=acc, label=paste(Phone_NOTENG, Phone_ENG, sep=":"))) + ggplot2::geom_text()#+ggplot2::xlim(-2,1)+ggplot2::ylim(0,.9)
