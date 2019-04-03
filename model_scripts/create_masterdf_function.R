@@ -50,24 +50,25 @@ create_masterdf <- function(vars, coef_vals,num_data_sets) {
  
 df$pos_vars<-
   dplyr::case_when(
-   df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "econ+glob+loc",
-    df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "econ+loc",
-    df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "glob+loc",
-    df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "econ",
-    df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "glob",
-    df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "loc",
-    df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "none")
+    df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "Econ+Glob+Loc",
+    df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "Econ+Glob",
+    df$coef_econ >  0 & df$coef_glob <=  0 & df$coef_loc > 0 ~ "Econ+Loc",
+    df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "Glob+Loc",
+    df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "Econ",
+    df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "Glob",
+    df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "Loc",
+    df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "")
   
   df$neg_vars<-
     dplyr::case_when(
       df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "",
-      df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "loc",
-      df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "glob",
-      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "econ",
-      df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "glob+loc",
-      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "econ+loc",
-      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "econ+glob",
-      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "econ+glob+loc")
+      df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "Loc",
+      df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "Glob",
+      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "Econ",
+      df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "Glob+Loc",
+      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "Econ+Loc",
+      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "Econ+Glob",
+      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "Econ+Glob+Loc")
   
 
   #expand by the list of all the models 
@@ -82,7 +83,7 @@ df$pos_vars<-
                                    df_mods$pos_vars!=df_mods$model~"no")
   
   
-  #create standat name column
+  #create model name column
   df_mods$model_name<-paste("econ_",df_mods$coef_econ,
                                   "_loc_",df_mods$coef_loc,
                                   "_glob_",df_mods$coef_glob,
