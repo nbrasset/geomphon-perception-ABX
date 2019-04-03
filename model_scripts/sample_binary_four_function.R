@@ -5,6 +5,7 @@
 #' @param response_var The name of a column in `d` containing only 0 and 1
 #' @param predictor_vars The name of four columns in `d`
 #' @param coef_values The coefficient value to use for sampling
+#' @param intercept a numeric. value of intercept
 #' 
 #' @return data frame identical to `d`, with `response_var` replaced with
 #' values sampled from a logistic regression model fit to `d` that has 
@@ -13,7 +14,7 @@
 #' replaced with `coef_values`
 #' 
 #' 
-sample_binary_four <- function(d, response_var, predictor_vars, coef_values) {
+sample_binary_four <- function(d, response_var, predictor_vars, coef_values,intercept) {
   if (!is.data.frame(d)) {
     stop("d is not a data frame")
   }
@@ -28,6 +29,7 @@ sample_binary_four <- function(d, response_var, predictor_vars, coef_values) {
   if (!identical(as.double(sort(unique(d[[response_var]]))), c(0,1))) {
     stop("response variable should consist of only 0 and 1")
   }
+  
   
   f <- paste(as.character(response_var),
              "~", 
@@ -48,7 +50,7 @@ sample_binary_four <- function(d, response_var, predictor_vars, coef_values) {
   #1.3592 on logit scale 
   
   m <- glm(formula(f), data=d, family="binomial")
-  m$coefficients["(Intercept)"]<- 0.75 #1.3592
+  m$coefficients["(Intercept)"]<- intercept
   m$coefficients[predictor_vars[1]] <- coef_values[1]
   m$coefficients[predictor_vars[2]] <- coef_values[2]
   m$coefficients[predictor_vars[3]] <- coef_values[3]

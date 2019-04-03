@@ -1,23 +1,24 @@
+#using sampled .csv datafile and model parameters taken from master_df
+#make standats, save them, and then run the models 
 
 create_standat<-"create_standat_function.R"
 source(create_standat)
 
 
+
 ###########
 ##FIXME DEBUGGING CODE
-my_standat<-create_standat(data_file="sampled_datasets/econ_0_loc_0_glob_0.csv",
+my_standat<-create_standat(data_file="hindi_kab_for_comparison/econ_0_loc_0_glob_0.csv",
                pos_vars= master_df$pos_vars[200],
                neg_vars= master_df$neg_vars[200])
 
-
-mymod <-rstan::stan(file="stan_models/master_model.stan",
+library(rstan) #this works, whereas rstan::stan does not.  interesting. 
+mymod <-stan(file="stan_models/master_model.stan",
              data = my_standat,
              chains = 2,
              iter = 300,
              seed = 472)
 
-#DEBUGGING^^^^^^
-##################
 
 
 
@@ -35,6 +36,8 @@ fit_and_save_stan_mod <- function(stan_model_filename,
                      seed = seed)
   saveRDS(model, file=output_filename)
 }
+
+
 
 
 library(doParallel)
