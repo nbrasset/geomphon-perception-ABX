@@ -5,41 +5,40 @@ create_standat<-"create_standat_function.R"
 source(create_standat)
 
 
+hk_standat_list<-list()
+data_folder<-"hindi_kab_for_comparison"
 
-###########
-##FIXME DEBUGGING CODE
-my_standat<-create_standat(data_file="hindi_kab_for_comparison/econ_0_loc_0_glob_0.csv",
-               pos_vars= master_df$pos_vars[200],
-               neg_vars= master_df$neg_vars[200])
-
-library(rstan) #this works, whereas rstan::stan does not.  interesting. 
-mymod <-stan(file="stan_models/master_model.stan",
-             data = my_standat,
-             chains = 2,
-             iter = 300,
-             seed = 472)
-
-
+for (i in 1:nrow(master_df)){
+  hk_standat_list[[i]] <- create_standat(data_file= paste(data_folder,
+                                                        master_df$csv_filename[i],
+                                                        sep ="/"),
+                                       pos_vars= master_df$pos_vars[i],
+                                       neg_vars= master_df$neg_vars[i])
+  master_df$hindi_kab[i] <- paste(data_folder,
+                               master_df$csv_filename[i],
+                               sep ="/")
+                            }
 
 
-fit_and_save_stan_mod <- function(stan_model_filename,
-                         standat,
-                         chains,
-                         iterations,
-                         seed,
-                         output_filename) 
-  { # UPDATE THIS
-  model <- rstan::stan(stan_model_filename,
-                     data = standat,
-                     chains = chains,
-                     iter = iterations,
-                     seed = seed)
-  saveRDS(model, file=output_filename)
+library(rstan)
+
+fit_save_stan_mod <- "fit_save_stan_mod_function.R"
+source(fit_save_stan_mod)
+                    
+for(i in 1:3){
+  
+  fit_and_save_stan_mod(stan_model_filename = "stan_models/master_model.stan",
+                        data = hk_standat_list[i],
+                        chains = 2,
+                        iter = 400,
+                        seed = 12347)
 }
 
 
 
 
+
+#######
 library(doParallel)
 options(cores=4) #set this appropriate to your system
 registerDoParallel()

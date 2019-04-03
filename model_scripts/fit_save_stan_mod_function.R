@@ -19,7 +19,6 @@ fit_and_save_stan_mod <- function(stan_model_filename,
                                   seed,
                                   output_filename) {
   
-                                  
     model <- rstan::stan(stan_model_filename,
                          data = standat,
                          chains = chains,
