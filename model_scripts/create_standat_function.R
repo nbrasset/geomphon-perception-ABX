@@ -11,6 +11,7 @@
 
 create_standat <- function(data_file, pos_vars, neg_vars) {
   dataset <- readr::read_csv(data_file)
+  master_df <- readr::read_csv("master_df.csv")
   
   #FIXME check null case
   pos_formula <- as.formula(paste("~", pos_vars, "-1"))

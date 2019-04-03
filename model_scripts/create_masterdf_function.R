@@ -15,21 +15,7 @@
 #' 
 #' 
 #'
-#'#reshape, dplyr, zoo
 
-#initialize empty data frame
-
-#fill in coeffs * num datasets 
-
-#calculate and fill in positive_vars
-
-#based on positive_vars fill in model_correct
-
-#for each block of  coeffs, repeat for each model 
-
-#create the name of the csv for the data (data is NOT created here)
-
-#create the name of the standat (standat is NOT created here)
 
 
 create_masterdf <- function(vars, coef_vals,num_data_sets) {
