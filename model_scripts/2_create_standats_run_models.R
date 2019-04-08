@@ -5,8 +5,20 @@ create_standat<-"create_standat_function.R"
 source(create_standat)
 
 
-hk_standat_list<-list()
+
 data_folder<-"hindi_kab_for_comparison"
+
+
+#write a small function that maps pos vars and neg vars to 
+
+
+
+
+hk_standat_list<-list()
+
+#do this with purr/ mutate  purrr::map 
+#
+
 
 for (i in 1:nrow(master_df)){
   hk_standat_list[[i]] <- create_standat(data_file= paste(data_folder,
@@ -19,26 +31,47 @@ for (i in 1:nrow(master_df)){
                                sep ="/")
                             }
 
+######################
+#fit  and save models#
+######################
+
+
+#apply function to standats to get right model.  
+
+
 
 library(rstan)
 
 fit_save_stan_mod <- "fit_save_stan_mod_function.R"
 source(fit_save_stan_mod)
+
                     
-for(i in 1:3){
-  
-  fit_and_save_stan_mod(stan_model_filename = "stan_models/master_model.stan",
-                        data = hk_standat_list[i],
-                        chains = 2,
-                        iter = 400,
-                        seed = 12347)
+for(i in 1:3) {
+  fit_save_stan_mod(stan_model_filename = "stan_models/master_model.stan",
+                    standat = hk_standat_list[i],
+                    chains = 2,
+                    iter = 400,
+                    seed = 12347,
+                    output_filename = paste("hindi_kab_rds",
+                                            "/",
+                                            stringr::str_remove(master_df$csv_filename[i], ".csv"),
+                                            ".rds",
+                                            sep=""))
 }
 
 
 
+my_mod<-fit_save_stan_mod(stan_model_filename = "stan_models/master_model.stan",
+                  standat = hk_standat_list[[18]],
+                  chains = 2,
+                  iter = 300,
+                  seed = 12347,
+                  output_filename = paste("my_name_is_output.rds"))
 
 
-#######
+
+
+#############
 library(doParallel)
 options(cores=4) #set this appropriate to your system
 registerDoParallel()
@@ -50,6 +83,8 @@ iterations <- 200
 seed <- 10
 data_dir <- "sampled_datasets"
 model_fit_dir <- "modelfits"
+
+
 
 
 #num_fits <- nrow(master_df)

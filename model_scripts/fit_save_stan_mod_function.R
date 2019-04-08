@@ -12,7 +12,7 @@
 #
 
 
-fit_and_save_stan_mod <- function(stan_model_filename,
+fit_save_stan_mod <- function(stan_model_filename,
                                   standat,
                                   chains,
                                   iterations,
