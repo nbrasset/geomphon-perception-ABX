@@ -1,16 +1,15 @@
 #using sampled .csv datafile and model parameters taken from master_df
 #make standats, save them, and then run the models 
 
-create_standat<-"create_standat_function.R"
+create_standat<-"create_standat_function_pos_neg.R"
 source(create_standat)
-
 
 
 data_folder<-"hindi_kab_for_comparison"
 
 
-#write a small function that maps pos vars and neg vars to 
-
+#write a small function that maps pos vars and neg vars to the correct model 
+#file to fill in
 
 
 
@@ -19,6 +18,7 @@ hk_standat_list<-list()
 #do this with purr/ mutate  purrr::map 
 #
 
+#
 
 for (i in 1:nrow(master_df)){
   hk_standat_list[[i]] <- create_standat(data_file= paste(data_folder,

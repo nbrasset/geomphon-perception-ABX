@@ -48,7 +48,6 @@ create_standat <- function(data_file, pos_vars, neg_vars) {
     print ("No constrained variables: something has gone wrong")
   }
 
-  
   if (!is.na(pos_vars)) {
     pos_formula <- as.formula(paste("~", pos_vars, "-1"))
     x_cns_pos <- unname(model.matrix(pos_formula, dataset)) # constrained positive
@@ -59,12 +58,12 @@ create_standat <- function(data_file, pos_vars, neg_vars) {
   }
   
   if (!is.na(neg_vars)) {
-    pos_formula <- as.formula(paste("~", neg_vars, "-1"))
+    neg_formula <- as.formula(paste("~", neg_vars, "-1"))
     x_cns_neg <- unname(model.matrix(neg_formula, dataset)) # constrained positive
     attr(x_cns_neg, "assign") <- NULL
     
     stan_list[["x_cns_neg"]] <- x_cns_neg
-    stan_list["N_cf_cns_neg"] <- ncol(x_neg_pos)
+    stan_list["N_cf_cns_neg"] <- ncol(x_cns_neg)
   }
   
   
