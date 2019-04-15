@@ -7,21 +7,17 @@ source(create_standat)
 
 data_folder<-"hindi_kab_for_comparison"
 
-
+#Now in masterdf--should it be?? FIXME
 #write a small function that maps pos vars and neg vars to the correct model 
 #file to fill in
 
-
-
-hk_standat_list<-list()
-
 #do this with purr/ mutate  purrr::map 
-#
 
-#
+
+
 
 for (i in 1:nrow(master_df)){
-  hk_standat_list[[i]] <- create_standat(data_file= paste(data_folder,
+  master_df$standat_hk[[i]] <- create_standat(data_file= paste(data_folder,
                                                         master_df$csv_filename[i],
                                                         sep ="/"),
                                        pos_vars= master_df$pos_vars[i],
@@ -31,13 +27,11 @@ for (i in 1:nrow(master_df)){
                                sep ="/")
                             }
 
+
+
 ######################
 #fit  and save models#
 ######################
-
-
-#apply function to standats to get right model.  
-
 
 
 library(rstan)
@@ -47,17 +41,18 @@ source(fit_save_stan_mod)
 
                     
 for(i in 1:3) {
-  fit_save_stan_mod(stan_model_filename = "stan_models/master_model.stan",
-                    standat = hk_standat_list[i],
+  fit_save_stan_mod(stan_model_filename = master_df$stanfile[i],
+                    standat = master_df$standat_hk[i],
                     chains = 2,
                     iter = 400,
                     seed = 12347,
                     output_filename = paste("hindi_kab_rds",
                                             "/",
-                                            stringr::str_remove(master_df$csv_filename[i], ".csv"),
+                                            master_df$model_data_name[i],
                                             ".rds",
                                             sep=""))
 }
+
 
 
 

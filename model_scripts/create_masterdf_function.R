@@ -56,30 +56,48 @@ df$pos_vars<-
       df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "Econ+Glob",
       df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "Econ+Glob+Loc")
   
+  df$pos_vars<-
+    dplyr::case_when(
+      df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "Econ+Glob+Loc",
+      df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "Econ+Glob",
+      df$coef_econ >  0 & df$coef_glob <=  0 & df$coef_loc > 0 ~ "Econ+Loc",
+      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "Glob+Loc",
+      df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "Econ",
+      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "Glob",
+      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "Loc",
+      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "")
 
   #expand by the list of all the models 
   model_list<-as.data.frame(c("econ_glob_loc", "econ_glob", "econ_loc","glob_loc","econ", 
                 "glob","loc","none"))
   df_mods<-reshape::expand.grid.df(model_list,df)
-  names(df_mods)[1]<- 'model'
+  names(df_mods)[1]<- 'model_name'
   
   
   #add a model correct column
-  df_mods$modelcorrect<-dplyr::case_when(df_mods$pos_vars==df_mods$model~ "yes",
-                                   df_mods$pos_vars!=df_mods$model~"no")
+  df_mods$modelcorrect<-dplyr::case_when(df_mods$pos_vars==df_mods$model_name~ "yes",
+                                   df_mods$pos_vars!=df_mods$model_name~"no"
+                                   )
   
+  #add a stan file column
+  df_mods$stanfile<-dplyr::case_when(df_mods$model_name=="none"~ "stan_models/master_neg.stan",
+                                     df_mods$model_name=="econ_glob_loc"~ "stan_models/master_pos.stan",
+                                     df_mods$model_name!="econ_glob_loc"&df_mods$model_name!="none"~"stan_models/master_model.stan"
+                                     )
   
   #create model name column
-  df_mods$model_name<-paste("econ_",df_mods$coef_econ,
+  df_mods$model_data_name<-paste("econ_",df_mods$coef_econ,
                                   "_loc_",df_mods$coef_loc,
                                   "_glob_",df_mods$coef_glob,
-                                  "_mod_",df_mods$model, sep="")
+                                  "_mod_",df_mods$model_name, sep=""
+                            )
   
   #create csv name 
   df_mods$csv_filename<-paste("econ_",df_mods$coef_econ,
                                   "_loc_",df_mods$coef_loc,
                                   "_glob_",df_mods$coef_glob,
-                                  ".csv", sep="")
+                                  ".csv", sep=""
+                              )
   
   #multiply the whole thing by the number of datasets wanted. 
   
