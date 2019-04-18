@@ -15,12 +15,6 @@
 #'
 
 
-
-vars=c("econ","glob","loc"),
-coef_vals=c(-1,0,1),
-num_data_sets = 2
-
-
 create_masterdf <- function(vars, coef_vals,num_data_sets) {
   if (!is.vector(vars)) {
     stop("vars must be a list")
