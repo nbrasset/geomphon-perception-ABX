@@ -18,6 +18,8 @@ master_df<- create_masterdf(vars=c("econ","glob","loc"),
 readr::write_csv(master_df, path="master_df.csv")
 
 
+
+
 ####################
 #create csv dataset#
 ####################
@@ -77,7 +79,7 @@ for (i in 1:length(uniq_filenames)){
                                               coef_dist),
                               intercept = 1.3592
                               )
-    write.csv(data_i, file=paste0("hindi_kab_for_comparison","/",uniq_filenames[i]))
+    readr::write_csv(data_i,paste0("hindi_kab_for_comparison","/",uniq_filenames[i]))
 }
 
 

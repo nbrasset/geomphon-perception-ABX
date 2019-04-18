@@ -15,8 +15,7 @@
 #' 
 #' 
 #'
-
-
+#'
 
 create_masterdf <- function(vars, coef_vals,num_data_sets) {
   if (!is.vector(vars)) {
@@ -29,50 +28,41 @@ create_masterdf <- function(vars, coef_vals,num_data_sets) {
     stop("num_data_sets must be numeric")
   }
   
-  
-  df<-expand.grid(coef_vals,coef_vals, coef_vals)
+  df<-expand.grid(coef_vals,coef_vals,coef_vals)
   x <- c("coef_econ","coef_loc", "coef_glob")
   colnames(df) <- x
- 
-df$pos_vars<-
-  dplyr::case_when(
-    df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "Econ+Glob+Loc",
-    df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "Econ+Glob",
-    df$coef_econ >  0 & df$coef_glob <=  0 & df$coef_loc > 0 ~ "Econ+Loc",
-    df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "Glob+Loc",
-    df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "Econ",
-    df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "Glob",
-    df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "Loc",
-    df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "")
-  
-  df$neg_vars<-
-    dplyr::case_when(
-      df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "",
-      df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "Loc",
-      df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "Glob",
-      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "Econ",
-      df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "Glob+Loc",
-      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "Econ+Loc",
-      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "Econ+Glob",
-      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "Econ+Glob+Loc")
-  
-  df$pos_vars<-
-    dplyr::case_when(
-      df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "Econ+Glob+Loc",
-      df$coef_econ >  0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "Econ+Glob",
-      df$coef_econ >  0 & df$coef_glob <=  0 & df$coef_loc > 0 ~ "Econ+Loc",
-      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc >  0 ~ "Glob+Loc",
-      df$coef_econ >  0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "Econ",
-      df$coef_econ <= 0 & df$coef_glob >  0 & df$coef_loc <= 0 ~ "Glob",
-      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc >  0 ~ "Loc",
-      df$coef_econ <= 0 & df$coef_glob <= 0 & df$coef_loc <= 0 ~ "")
 
+    
   #expand by the list of all the models 
   model_list<-as.data.frame(c("econ_glob_loc", "econ_glob", "econ_loc","glob_loc","econ", 
-                "glob","loc","none"))
+                                "glob","loc","none"))
   df_mods<-reshape::expand.grid.df(model_list,df)
   names(df_mods)[1]<- 'model_name'
   
+  
+df_mods$pos_vars<-
+  dplyr::case_when(
+     df_mods$model_name =="econ_glob_loc" ~ "Econ+Glob+Loc",
+     df_mods$model_name =="econ_glob"~ "Econ+Glob",
+     df_mods$model_name =="econ_loc"  ~ "Econ+Loc",
+     df_mods$model_name =="glob_loc" ~ "Glob+Loc",
+     df_mods$model_name =="econ" ~ "Econ",
+     df_mods$model_name =="glob"~ "Glob",
+     df_mods$model_name =="loc"~ "Loc",
+     df_mods$model_name =="none"~ "")
+
+  df_mods$neg_vars<-
+    dplyr::case_when(
+      df_mods$model_name =="econ_glob_loc" ~  "",
+      df_mods$model_name =="econ_glob"~"Loc",
+      df_mods$model_name =="econ_loc"~ "Glob",
+      df_mods$model_name =="glob_loc"~ "Econ",
+      df_mods$model_name =="econ"~"Glob+Loc",
+      df_mods$model_name =="glob"~"Econ+Loc",
+      df_mods$model_name =="loc"~"Econ+Glob",
+      df_mods$model_name =="none"~ "Econ+Glob+Loc")
+  
+
   
   #add a model correct column
   df_mods$modelcorrect<-dplyr::case_when(df_mods$pos_vars==df_mods$model_name~ "yes",

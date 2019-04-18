@@ -7,24 +7,27 @@ source(create_standat)
 
 data_folder<-"hindi_kab_for_comparison"
 
-#Now in masterdf--should it be?? FIXME
-#write a small function that maps pos vars and neg vars to the correct model 
-#file to fill in
 
 #do this with purr/ mutate  purrr::map 
 
+master_df<-readr::read_csv("master_df.csv")
 
 
+master_df$standat_hk <- vector(mode="list", length=nrow(master_df))
+master_df$hindi_kab <- NA
 
 for (i in 1:nrow(master_df)){
+  
   master_df$standat_hk[[i]] <- create_standat(data_file= paste(data_folder,
                                                         master_df$csv_filename[i],
                                                         sep ="/"),
-                                       pos_vars= master_df$pos_vars[i],
-                                       neg_vars= master_df$neg_vars[i])
+                                        pos_vars= master_df$pos_vars[i],
+                                        neg_vars= master_df$neg_vars[i])
+                                       
   master_df$hindi_kab[i] <- paste(data_folder,
                                master_df$csv_filename[i],
                                sep ="/")
+  
                             }
 
 
@@ -35,14 +38,13 @@ for (i in 1:nrow(master_df)){
 
 
 library(rstan)
-
 fit_save_stan_mod <- "fit_save_stan_mod_function.R"
 source(fit_save_stan_mod)
 
-                    
+                
 for(i in 1:3) {
   fit_save_stan_mod(stan_model_filename = master_df$stanfile[i],
-                    standat = master_df$standat_hk[i],
+                    standat = master_df$standat_hk[[i]],
                     chains = 2,
                     iter = 400,
                     seed = 12347,
@@ -56,15 +58,9 @@ for(i in 1:3) {
 
 
 
-my_mod<-fit_save_stan_mod(stan_model_filename = "stan_models/master_model.stan",
-                  standat = hk_standat_list[[18]],
-                  chains = 2,
-                  iter = 300,
-                  seed = 12347,
-                  output_filename = paste("my_name_is_output.rds"))
 
 
-
+traceplot(mod)
 
 #############
 library(doParallel)
@@ -78,7 +74,6 @@ iterations <- 200
 seed <- 10
 data_dir <- "sampled_datasets"
 model_fit_dir <- "modelfits"
-
 
 
 
