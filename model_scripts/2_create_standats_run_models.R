@@ -22,7 +22,7 @@ master_df$hindi_kab <- NA
 
 
 
-for (i in 1:nrow(master_df)){
+for (i in 1:nrow(master_df)) {
   
   master_df$standat_hk[[i]] <- create_standat(data_file= paste(data_folder,
                                                         master_df$csv_filename[i],
@@ -44,7 +44,7 @@ for (i in 1:nrow(master_df)){
 ######################
 library(rstan)
 library(doParallel)
-options(cores=4) #set this appropriate to your system
+options(cores=10) #set this appropriate to your system
 registerDoParallel()
 
 fit_save_stan_mod <- "fit_save_stan_mod_function.R"
@@ -63,4 +63,28 @@ DUMMY <- foreach(i = 1:2) %dopar%
                                                     ".rds",
                                                     sep=""))
   
-traceplot(mod)
+listofbatches <- 
+#define batches 
+for (batch in listofbatches){
+  
+    for (i in min(batch):max(batch)) {
+      
+      filelist = list.files("hindi_kab_rds")
+      out_name = paste("hindi_kab_rds",
+                                  "/",
+                                  master_df$model_data_name[i],
+                                  ".rds",
+                                  sep="")
+      
+      if (!contains(filelist,out_name)){
+        fit_save_stan_mod(stan_model_filename = master_df$stanfile[i],
+                          standat             = master_df$standat_hk[[i]],
+                          chains              = 2,
+                          iter                = 400,
+                          seed                = 12347,
+                          output_filename     = out_name)
+      } else {
+        i = i+1 
+      }
+    }
+}
