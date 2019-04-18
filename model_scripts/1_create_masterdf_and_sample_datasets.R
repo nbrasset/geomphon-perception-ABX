@@ -10,13 +10,12 @@
 ##################
 
 
-create_masterdf<-"create_masterdf_function.R"
+create_masterdf<-"create_masterdf_function_pos_neg.R"
 source(create_masterdf)
 master_df<- create_masterdf(vars=c("econ","glob","loc"),
                             coef_vals=c(-1,0,1),
                             num_data_sets = 2)
 readr::write_csv(master_df, path="master_df.csv")
-
 
 
 

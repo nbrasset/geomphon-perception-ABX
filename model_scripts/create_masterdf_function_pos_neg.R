@@ -8,14 +8,18 @@
 #' @param num_data_sets  number of dfs to be sampled for each coef value
 #'     (sampling occurs in a different script)
 #
-#' @return data frame of length [num_data_sets]*with `coefs_econ`, `coefs_loc`
-#' with an ID for each dataset, specifying which variables have positive 
-#' expected values (pos_vars), which model should be correct, 
-#'
+#' @return data frame 
 #' 
 #' 
 #'
 #'
+
+
+
+vars=c("econ","glob","loc"),
+coef_vals=c(-1,0,1),
+num_data_sets = 2
+
 
 create_masterdf <- function(vars, coef_vals,num_data_sets) {
   if (!is.vector(vars)) {
@@ -62,11 +66,17 @@ df_mods$pos_vars<-
       df_mods$model_name =="loc"~"Econ+Glob",
       df_mods$model_name =="none"~ "Econ+Glob+Loc")
   
+  
+#add a model correct column
+df_mods$modelcorrect<-dplyr::case_when(df_mods$pos_vars == df_mods$model_name~ "yes",
+                                       df_mods$pos_vars != df_mods$model_name~"no"
+)
+
 
   
   #add a model correct column
-  df_mods$modelcorrect<-dplyr::case_when(df_mods$pos_vars==df_mods$model_name~ "yes",
-                                   df_mods$pos_vars!=df_mods$model_name~"no"
+  df_mods$modelcorrect<-dplyr::case_when(df_mods$pos_vars == df_mods$model_name~ "yes",
+                                   df_mods$pos_vars != df_mods$model_name~"no"
                                    )
   
   #add a stan file column
@@ -74,6 +84,7 @@ df_mods$pos_vars<-
                                      df_mods$model_name=="econ_glob_loc"~ "stan_models/master_pos.stan",
                                      df_mods$model_name!="econ_glob_loc"&df_mods$model_name!="none"~"stan_models/master_model.stan"
                                      )
+  
   
   #create model name column
   df_mods$model_data_name<-paste("econ_",df_mods$coef_econ,
@@ -89,10 +100,16 @@ df_mods$pos_vars<-
                                   ".csv", sep=""
                               )
   
+  
   #multiply the whole thing by the number of datasets wanted. 
-  
- full_df<- zoo::coredata(df_mods)[rep(seq(nrow(df_mods)),2),]
+ full_df<- zoo::coredata(df_mods)[rep(seq(nrow(df_mods)),num_data_sets),]
  full_df<-do.call("rbind", replicate(num_data_sets, df_mods, simplify = FALSE))
-  
+ 
+ 
+ #add batch number column 
+ 
+ 
+ #add seed column 
+ 
 return(full_df) 
 }
