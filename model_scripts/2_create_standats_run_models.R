@@ -6,6 +6,7 @@ source(create_standat)
 
 
 data_folder<-"hindi_kab_for_comparison"
+
 master_df<-readr::read_csv("master_df.csv")
 
 
@@ -13,28 +14,32 @@ master_df$standat_hk <- vector(mode="list", length=nrow(master_df))
 master_df$hindi_kab <- NA
 
 
-# master_df$standat_hk<-purrr::map(,create_standat(data_file= paste(data_folder,
+#write a fucntion to create this function, 
+#write a function that takes three inputs and then it will stick them in as the three 
+#arguments, then you can use purrr. 
+
+# #master_df$standat_hk<-purrr::pmap( ,create_standat(data_file= paste(data_folder,
 #                                                                        master_df$csv_filename[i],
 #                                                                        sep ="/"),
-#                                                       pos_vars= master_df$pos_vars[i],
-#                                                       neg_vars= master_df$neg_vars[i]))
-# 
+#                                                        pos_vars= master_df$pos_vars[i],
+#                                                        neg_vars= master_df$neg_vars[i]))
 
 
 
-for (i in 1:nrow(master_df)){
+
+for (i in 1:nrow(master_df)) {
   
   master_df$standat_hk[[i]] <- create_standat(data_file= paste(data_folder,
-                                                        master_df$csv_filename[i],
-                                                        sep ="/"),
-                                        pos_vars= master_df$pos_vars[i],
-                                        neg_vars= master_df$neg_vars[i])
-                                       
-  master_df$hindi_kab[i] <- paste(data_folder,
-                               master_df$csv_filename[i],
-                               sep ="/")
+                                                               master_df$csv_filename[i],
+                                                               sep ="/"),
+                                              pos_vars= master_df$pos_vars[i],
+                                              neg_vars= master_df$neg_vars[i])
   
-                            }
+  master_df$hindi_kab[i] <- paste(data_folder,
+                                  master_df$csv_filename[i],
+                                  sep ="/")
+}
+
 
 
 
@@ -51,16 +56,37 @@ fit_save_stan_mod <- "fit_save_stan_mod_function.R"
 source(fit_save_stan_mod)
 
 
-DUMMY <- foreach(i = 1:2) %dopar% 
-  fit_save_stan_mod(stan_model_filename = master_df$stanfile[i],
-                        standat             = master_df$standat_hk[[i]],
-                        chains              = 2,
-                        iter                = 400,
-                        seed                = 12347,
-                        output_filename     = paste("hindi_kab_rds",
-                                                    "/",
-                                                    master_df$model_data_name[i],
-                                                    ".rds",
-                                                    sep=""))
+#listofbatches <- for (i in 1:nrow(master_df)) {
   
-traceplot(mod)
+  
+#}
+
+  #define batches 
+#  for (batch in listofbatches){
+    
+    
+    #foreach (i = min(batch):max(batch))
+    
+    foreach (i = 1:3) %dopar% {
+      filelist = list.files("hindi_kab_rds")
+      filename = paste(master_df$model_data_name[i],
+                      ".rds",
+                      sep="")
+      out_file = paste("hindi_kab_rds",
+                                  "/",
+                                  master_df$model_data_name[i],
+                                  ".rds",
+                                  sep="")
+      
+        if (!filename %in% filelist){
+          fit_save_stan_mod(stan_model_filename = master_df$stanfile[i],
+                            standat             = master_df$standat_hk[[i]],
+                            chains              = 1,
+                            iter                = 100,
+                            seed                = 12347,
+                            output_filename     = out_file)
+        } else {
+         print(paste(out_file,"already exists, skipping model",sep=" "))
+        }
+     }
+ # }
