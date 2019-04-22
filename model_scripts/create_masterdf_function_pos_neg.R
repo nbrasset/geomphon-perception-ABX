@@ -104,6 +104,7 @@ df_mods$modelcorrect<-dplyr::case_when(df_mods$pos_vars == df_mods$model_name~ "
  
  
  #add seed column 
+ full_df$seed<-runif(nrow(full_df),min = 1, max =10000)
  
 return(full_df) 
 }
