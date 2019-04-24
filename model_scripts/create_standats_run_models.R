@@ -49,7 +49,8 @@ for (i in 1:nrow(master_df)) {
 ######################
 library(rstan)
 library(doParallel)
-options(cores=10) #set this appropriate to your system/ batch size
+options(cores=8) #ceiling number of cores to use total
+options(mc.cores = 4)#cores per model (= should equal numb of chains) 
 registerDoParallel()
 
 fit_save_stan_mod <- "fit_save_stan_mod_function.R"
