@@ -58,7 +58,8 @@ source(fit_save_stan_mod)
 
 #batchname 
 batchlist<- list(c(1:5),
-            c(6:10))
+            c(6:10),
+            c(11:15))
             # c(21:30),
             # c(31:40),
             # c(41:50),
