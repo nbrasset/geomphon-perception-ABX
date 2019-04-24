@@ -95,7 +95,6 @@ generated quantities{
   
   int pred_correct[N_obs];
   real log_lik[N_obs];
-  real diffP_cns_pos[N_cf_cns_pos];
   real diffP_cns_neg[N_cf_cns_neg];
   real diffP_oth[N_cf_oth];
   
