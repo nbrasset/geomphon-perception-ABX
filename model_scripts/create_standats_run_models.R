@@ -9,6 +9,7 @@ ARGS <- commandArgs(TRUE)
 
 DATA_FOLDER <-ARGS[1]# "hindi_kab_for_comparison"#  
 MASTER <- ARGS[2] #"master_df.csv" #  
+RDS_FOLDER<- ARGS[3] # "hindi_kab_rds"
 
 
 ################
@@ -146,14 +147,14 @@ batchlist<- list(c(1:5),
 #                  c(431:432),
 
 
-filelist = list.files("hindi_kab_rds")
+filelist = list.files(RDS_FOLDER)
 
 for (batch in batchlist){
       DUMMY <- foreach(i = min(batch):max(batch)) %dopar% {
         filename = paste(master_df$model_data_name[i],
                          ".rds",
                          sep="")
-        out_file = paste("hindi_kab_rds",
+        out_file = paste(RDS_FOLDER,
                          "/",
                          master_df$model_data_name[i],
                          ".rds",
