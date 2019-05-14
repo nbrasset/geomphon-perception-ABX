@@ -7,9 +7,9 @@
 
 ARGS <- commandArgs(TRUE)
 
-DATA_FOLDER <-ARGS[1]# "hindi_kab_for_comparison"#  
-MASTER <- ARGS[2] #"master_df.csv" #  
-RDS_FOLDER<- ARGS[3] # "hindi_kab_rds"
+DATA_FOLDER <-  ARGS[1]#"hindi_kab_for_comparison"# 
+MASTER <- ARGS[2] # "master_df.csv" # 
+RDS_FOLDER<- ARGS[3] # "hindi_kab_rds" # 
 
 
 ################
