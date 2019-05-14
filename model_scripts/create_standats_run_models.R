@@ -33,8 +33,8 @@ for (i in 1:nrow(master_df)) {
   master_df$standat_hk[[i]] <- create_standat(data_file= paste(DATA_FOLDER,
                                                         master_df$csv_filename[i],
                                                         sep ="/"),
-                                        pos_vars= master_df$pos_vars[i],
-                                        neg_vars= master_df$neg_vars[i])
+                                        pos_vars= master_df$model_pos_vars[i],
+                                        neg_vars= master_df$model_neg_vars[i])
                                        
   master_df$hindi_kab[i] <- paste(DATA_FOLDER,
                                master_df$csv_filename[i],

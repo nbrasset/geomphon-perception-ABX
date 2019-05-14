@@ -38,18 +38,20 @@ create_masterdf <- function(vars, coef_vals,num_data_sets) {
   names(df_mods)[1]<- 'model_name'
   
   
-df_mods$pos_vars<-
-  dplyr::case_when(
-     df_mods$model_name =="econ_glob_loc" ~ "Econ+Glob+Loc",
-     df_mods$model_name =="econ_glob"~ "Econ+Glob",
-     df_mods$model_name =="econ_loc"  ~ "Econ+Loc",
-     df_mods$model_name =="glob_loc" ~ "Glob+Loc",
-     df_mods$model_name =="econ" ~ "Econ",
-     df_mods$model_name =="glob"~ "Glob",
-     df_mods$model_name =="loc"~ "Loc",
-     df_mods$model_name =="none"~ "")
 
-  df_mods$neg_vars<-
+  
+  df_mods$model_pos_vars<-
+    dplyr::case_when(
+      df_mods$model_name =="econ_glob_loc"~ "Econ+Glob+Loc",
+      df_mods$model_name =="econ_glob"~ "Econ+Glob",
+      df_mods$model_name =="econ_loc"  ~ "Econ+Loc",
+      df_mods$model_name =="glob_loc" ~ "Glob+Loc",
+      df_mods$model_name =="econ" ~ "Econ",
+      df_mods$model_name =="glob"~ "Glob",
+      df_mods$model_name =="loc"~ "Loc",
+      df_mods$model_name =="none"~ "")
+  
+  df_mods$model_neg_vars<-
     dplyr::case_when(
       df_mods$model_name =="econ_glob_loc" ~  "",
       df_mods$model_name =="econ_glob"~"Loc",
@@ -60,25 +62,39 @@ df_mods$pos_vars<-
       df_mods$model_name =="loc"~"Econ+Glob",
       df_mods$model_name =="none"~ "Econ+Glob+Loc")
   
+  df_mods$data_pos_vars<-
+    dplyr::case_when(
+      df_mods$coef_econ>0 & df_mods$coef_glob>0 & df_mods$coef_loc>0 ~ "Econ+Glob+Loc",
+      df_mods$coef_econ>0 & df_mods$coef_glob>0 & df_mods$coef_loc<=0 ~ "Econ+Glob",
+      df_mods$coef_econ>0 & df_mods$coef_glob<=0 & df_mods$coef_loc>0 ~ "Econ+Loc",
+      df_mods$coef_econ<=0 & df_mods$coef_glob>0 & df_mods$coef_loc>0 ~  "Glob+Loc",
+      df_mods$coef_econ>0 & df_mods$coef_glob<=0 & df_mods$coef_loc<=0 ~  "Econ",
+      df_mods$coef_econ<=0 & df_mods$coef_glob>0 & df_mods$coef_loc<=0 ~ "Glob",
+      df_mods$coef_econ<=0 & df_mods$coef_glob<=0 & df_mods$coef_loc>0 ~ "Loc",
+      df_mods$coef_econ<=0 & df_mods$coef_glob<=0 & df_mods$coef_loc<=0 ~  "")
+  
+  df_mods$data_neg_vars<-
+    dplyr::case_when(
+      df_mods$coef_econ<=0 & df_mods$coef_glob<=0 & df_mods$coef_loc<=0 ~ "Econ+Glob+Loc",
+      df_mods$coef_econ<=0 & df_mods$coef_glob<=0 & df_mods$coef_loc>0 ~ "Econ+Glob",
+      df_mods$coef_econ<=0 & df_mods$coef_glob>0 & df_mods$coef_loc<=0 ~ "Econ+Loc",
+      df_mods$coef_econ>0 & df_mods$coef_glob<=0 & df_mods$coef_loc<=0 ~  "Glob+Loc",
+      df_mods$coef_econ<=0 & df_mods$coef_glob>0 & df_mods$coef_loc>0 ~  "Econ",
+      df_mods$coef_econ>0 & df_mods$coef_glob<=0 & df_mods$coef_loc>0 ~ "Glob",
+      df_mods$coef_econ>0 & df_mods$coef_glob>0 & df_mods$coef_loc<=0 ~ "Loc",
+      df_mods$coef_econ>0 & df_mods$coef_glob>0 & df_mods$coef_loc>0 ~  "")
+  
   
 #add a model correct column
-df_mods$modelcorrect<-dplyr::case_when(df_mods$pos_vars == df_mods$model_name~ "yes",
-                                       df_mods$pos_vars != df_mods$model_name~"no"
+df_mods$modelcorrect<-dplyr::case_when(df_mods$model_pos_vars == df_mods$data_pos_vars~ "yes",
+                                       df_mods$model_pos_vars != df_mods$data_pos_vars~"no"
 )
 
-
-  
-  #add a model correct column
-  df_mods$modelcorrect<-dplyr::case_when(df_mods$pos_vars == df_mods$model_name~ "yes",
-                                   df_mods$pos_vars != df_mods$model_name~"no"
-                                   )
-  
   #add a stan file column
   df_mods$stanfile<-dplyr::case_when(df_mods$model_name=="none"~ "stan_models/master_neg.stan",
                                      df_mods$model_name=="econ_glob_loc"~ "stan_models/master_pos.stan",
                                      df_mods$model_name!="econ_glob_loc"&df_mods$model_name!="none"~"stan_models/master_model.stan"
                                      )
-  
   
   #create model name column
   df_mods$model_data_name<-paste("econ_",df_mods$coef_econ,
@@ -99,9 +115,7 @@ df_mods$modelcorrect<-dplyr::case_when(df_mods$pos_vars == df_mods$model_name~ "
  full_df<- zoo::coredata(df_mods)[rep(seq(nrow(df_mods)),num_data_sets),]
  full_df<-do.call("rbind", replicate(num_data_sets, df_mods, simplify = FALSE))
  
- 
- #add batch number column 
- 
+
  
  #add seed column 
  full_df$seed<-runif(nrow(full_df),min = 1, max =10000)
