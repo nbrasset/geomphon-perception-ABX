@@ -92,13 +92,13 @@ model {
 
 // the following block generates some variables that might be interesting to look at
 //in some cases, but not necessarily
-//generated quantities{
+generated quantities{
 //  matrix[N_cf_u,N_cf_u] Cor_u;
 //  matrix[N_cf_w,N_cf_w] Cor_w;
 
 
 //  int pred_correct[N_obs];
-//  real log_lik[N_obs];
+  real log_lik[N_obs];
 //  real diffP_cns_pos[N_cf_cns_pos];
 //  real diffP_cns_neg[N_cf_cns_neg];
 //  real diffP_oth[N_cf_oth];
@@ -116,9 +116,9 @@ model {
  //                 inv_logit(sigma_e - beta_oth[j]);
  // }
 
-//  for (i in 1:N_obs){
- //   pred_correct[i] = bernoulli_rng(inv_logit(mu[i]));
-  //  log_lik[i] = bernoulli_logit_lpmf(accuracy[i]|mu[i]);
- // }
+ for (i in 1:N_obs){
+ //  pred_correct[i] = bernoulli_rng(inv_logit(mu[i]));
+  log_lik[i] = bernoulli_logit_lpmf(accuracy[i]|mu[i]);
+ }
 
-//}
+}
